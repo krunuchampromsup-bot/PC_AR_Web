@@ -1,161 +1,53 @@
 <!DOCTYPE html>
 <html lang="th">
 <head> 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Computer Hardware AR</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-        }
-
-        body {
-            font-family: 'Prompt', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding-bottom: 80px; /* เว้นที่ให้แถบเมนูล่าง */
-        }
-
-        /* Header Style */
-        .hero {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            border-radius: 0 0 30px 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .hero h1 { margin: 0; font-size: 1.8rem; }
-        .hero p { opacity: 0.8; font-weight: 300; margin: 10px 0; }
-        
-        .scoreBox {
-            background: rgba(255,255,255,0.1);
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 500;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* Grid Layout */
-        .menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            padding: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        /* Card Design */
-        .card {
-            background: var(--card-bg);
-            text-decoration: none;
-            color: inherit;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-color: var(--primary-color);
-        }
-
-        .card img {
-            width: 100%;
-            max-width: 100px;
-            height: 100px;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-
-        .card span {
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 1.1rem;
-        }
-
-        /* Bottom Nav */
-        .bottom {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .bottom a {
-            text-decoration: none;
-            color: #64748b;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .bottom a:hover { color: var(--primary-color); }
-
-        /* Responsive */
-        @media (max-width: 400px) {
-            .menu { grid-template-columns: 1fr 1fr; padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Smart Computer Hardware AR</title>
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 <header class="hero">
-    <h1>💻 Smart Computer Hardware AR</h1>
-    <p>สื่อการเรียนรู้ฮาร์ดแวร์คอมพิวเตอร์ | ปวช.</p>
-    <div class="scoreBox">คะแนนสะสม: <span id="totalScore">0</span> คะแนน</div>
+  <h1>💻 Smart Computer Hardware AR</h1>
+  <p>สื่อการเรียนรู้ฮาร์ดแวร์คอมพิวเตอร์ | ปวช.</p>
+  <div class="scoreBox">คะแนนสะสม: <span id="totalScore">0</span> คะแนน</div>
 </header>
 
 <section class="menu">
-    <a href="cpu.html" class="card">
-        <img src="cpu.png" alt="CPU">
-        <span>CPU</span>
+  <a href="cpu.html" class="card">CPU
+	<img src="cpu.png" alt="CPU">
+  	<span>CPU</span>
     </a>
-    <a href="ram.html" class="card">
-        <img src="ram.png" alt="RAM">
-        <span>RAM</span>
+  <a href="ram.html" class="card">RAM
+	<img src="ram.png" alt="RAM">
+  	<span>RAM</span>
     </a>
-    <a href="ssd.html" class="card">
-        <img src="ssd.png" alt="SSD">
-        <span>SSD</span>
+  <a href="ssd.html" class="card">SSD
+	<img src="ssd.png" alt="SSD">
+  	<span>SSD</span>
     </a>
-    <a href="psu.html" class="card">
-        <img src="PSU.png" alt="PSU">
-        <span>PSU</span>
+  <a href="psu.html" class="card">PSU
+	<img src="PUS.png" alt="PUS">
+  	<span>PSU</span>
     </a>
-    <a href="case.html" class="card">
-        <img src="CASE.png" alt="CASE">
-        <span>CASE</span>
+  <a href="case.html" class="card">CASE
+	<img src="case.png" alt="CASE">
+  	<span>CASE</span>
     </a>
-    <a href="mainboard.html" class="card">
-        <img src="MAINBOARD.png" alt="MAINBOARD">
-        <span>MAINBOARD</span>
+  <a href="mainboard.html" class="card">MAINBOARD
+	<img src="MAINBOARD.png" alt="MAINBOARD">
+  	<span>MAINBOARD</span>
     </a>
+
 </section>
 
 <nav class="bottom">
-    <a href="about.html">เกี่ยวกับโครงการ</a>
-    <a href="leaderboard.html">Leaderboard</a>
-    <a href="teacher.html" style="opacity:.4;">Teacher Mode</a>
+  <a href="about.html">เกี่ยวกับโครงการ</a>
+  <a href="leaderboard.html">Leaderboard</a>
+  <a href="teacher.html" style="opacity:.4;font-size:.9rem;">Teacher Mode</a>
+
+
 </nav>
 
 <script src="js/score.js"></script>
