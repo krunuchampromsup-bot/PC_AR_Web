@@ -1,0 +1,79 @@
+body{
+  margin:0;
+  font-family:'Prompt',sans-serif;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:#fff;
+}
+.hero{text-align:center;padding:50px;}
+.menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  padding:40px;
+}
+.card{
+  background:rgba(255,255,255,.15);
+  border-radius:20px;
+  padding:35px;
+  text-align:center;
+  font-size:1.3rem;
+  text-decoration:none;
+  color:white;
+  transition:.3s;
+}
+.card:hover{transform:scale(1.08);}
+.lesson{max-width:900px;margin:auto;padding:30px;}
+.btn{
+  display:inline-block;
+  background:#00c6ff;
+  padding:12px 30px;
+  border-radius:30px;
+  color:#000;
+  text-decoration:none;
+  font-weight:bold;
+}
+.back{display:block;margin-top:30px;color:#9be7ff;}
+/* รูปอุปกรณ์ในเมนู */
+.card img{
+  width:110px;
+  height:auto;
+  margin-bottom:15px;
+  filter: drop-shadow(0 0 12px rgba(0,198,255,.7));
+}
+
+/* ชื่ออุปกรณ์ */
+.card span{
+  display:block;
+  font-size:1.2rem;
+  font-weight:600;
+  letter-spacing:1px;
+}
+
+/* คะแนนสะสม */
+.scoreBox{
+  margin-top:20px;
+  display:inline-block;
+  padding:10px 25px;
+  border-radius:30px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(0,198,255,.6);
+  box-shadow:0 0 15px rgba(0,198,255,.5);
+}
+
+/* เมนูล่าง */
+.bottom{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  justify-content:space-around;
+  background:rgba(0,0,0,.6);
+  padding:15px 0;
+}
+
+.bottom a{
+  color:#9be7ff;
+  text-decoration:none;
+  font-weight:500;
+}
+
