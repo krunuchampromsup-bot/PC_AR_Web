@@ -24,12 +24,10 @@
             min-height: 100vh;
         }
 
-        /* --- ส่วนหัวที่ปรับปรุงให้เด่นชัด (High Impact Header) --- */
         .hero {
             text-align: center;
             padding: 60px 20px;
             position: relative;
-            animation: fadeInDown 1s ease-out;
         }
 
         .hero h1 {
@@ -40,35 +38,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
-            letter-spacing: 2px;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            margin-top: 10px;
-            color: #a5b4fc;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 4px;
-            background: var(--neon-blue);
-            box-shadow: 0 0 20px var(--neon-blue);
-            border-radius: 2px;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Grid Layout 2 แถว แถวละ 3 --- */
         .menu {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -97,10 +68,11 @@
             box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2);
         }
 
-        .card img { width: 90px; height: 90px; margin-bottom: 10px; }
+        /* รูปภาพหน้าหลัก */
+        .card > img { width: 90px; height: 90px; margin-bottom: 10px; }
         .card span { font-size: 1.2rem; font-weight: 600; display: block; }
 
-        /* --- Pop-up Spec & AR Button --- */
+        /* --- Pop-up แก้ไขตรงนี้ --- */
         .spec-popup {
             position: absolute;
             top: 50%; left: 50%;
@@ -115,6 +87,17 @@
             pointer-events: none;
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+        }
+
+        /* กำหนดขนาดรูปในป๊อปอัพ */
+        .spec-popup img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .card:hover .spec-popup {
@@ -132,7 +115,7 @@
             padding: 10px; border-radius: 50px; font-size: 0.9rem; transition: 0.3s;
         }
 
-        .ar-btn:hover { box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); }
+        .ar-btn:hover { box-shadow: 0 0 15px var(--neon-blue); }
 
         @media (max-width: 850px) { .menu { grid-template-columns: repeat(2, 1fr); } }
     </style>
@@ -165,8 +148,8 @@
     <div class="card" onmouseover="playHover()">
         <img src="ram.png" alt="RAM">
         <span>RAM</span>
-        <img src="ram.png">
         <div class="spec-popup">
+            <img src="ram.png">
             <div class="spec-header">Memory (RAM)</div>
             <div class="spec-list">
                 • หน่วยความจำชั่วคราว<br>
@@ -180,8 +163,8 @@
     <div class="card" onmouseover="playHover()">
         <img src="ssd.png" alt="SSD">
         <span>SSD</span>
-        <img src="ssd.png">
         <div class="spec-popup">
+            <img src="ssd.png">
             <div class="spec-header">Solid State Drive</div>
             <div class="spec-list">
                 • เก็บข้อมูลถาวรความเร็วสูง<br>
@@ -195,8 +178,8 @@
     <div class="card" onmouseover="playHover()">
         <img src="psu.png" alt="PSU">
         <span>PSU</span>
-        <img src="PUS.png">
         <div class="spec-popup">
+            <img src="psu.png">
             <div class="spec-header">Power Supply Unit</div>
             <div class="spec-list">
                 • แหล่งจ่ายไฟให้อุปกรณ์ทั้งหมด<br>
@@ -210,8 +193,8 @@
     <div class="card" onmouseover="playHover()">
         <img src="case.png" alt="CASE">
         <span>CASE</span>
-        <img src="CASE.png">
         <div class="spec-popup">
+            <img src="case.png">
             <div class="spec-header">Computer Case</div>
             <div class="spec-list">
                 • กล่องบรรจุอุปกรณ์ภายใน<br>
@@ -225,8 +208,8 @@
     <div class="card" onmouseover="playHover()">
         <img src="mainboard.png" alt="MAINBOARD">
         <span>MAINBOARD</span>
-        <img src="MAINBOARD.png">
         <div class="spec-popup">
+            <img src="mainboard.png">
             <div class="spec-header">Mainboard</div>
             <div class="spec-list">
                 • แผงวงจรหลักเชื่อมทุกส่วนเข้าด้วยกัน<br>
@@ -248,4 +231,3 @@
 
 </body>
 </html>
-
