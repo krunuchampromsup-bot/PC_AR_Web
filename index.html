@@ -3,195 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Computer Hardware AR</title>
+    <title>Smart Computer Hardware AR - Interactive Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS ส่วนกลางและการปรับแต่งความสวยงาม --- */
         :root {
-            --bg-color: #050a18;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --primary-blue: #00d2ff;
-            --accent-blue: #3a7bd5;
-            --text-color: #ffffff;
+            --bg-dark: #050a14;
+            --neon-blue: #00f2ff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(0, 242, 255, 0.3);
+            --btn-grad: linear-gradient(45deg, #00d2ff, #3a7bd5);
         }
 
         body {
             font-family: 'Prompt', sans-serif;
-            background: radial-gradient(circle at top, #102a43, #050a18);
-            color: var(--text-color);
+            background: var(--bg-dark);
+            color: white;
             margin: 0;
-            padding: 0;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #10213d 0%, #050a14 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 50px 20px;
-            width: 100%;
-        }
+        .hero { text-align: center; padding: 40px 20px; }
+        .hero h1 { color: var(--neon-blue); text-shadow: 0 0 15px rgba(0, 242, 255, 0.5); margin-bottom: 5px; }
 
-        .hero h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            background: linear-gradient(to right, #00d2ff, #9cedff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 20px rgba(0, 210, 255, 0.2);
-        }
-
-        .hero p {
-            opacity: 0.8;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-
-        /* Score Box */
-        .scoreBox {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 10px 25px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-top: 20px;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        #totalScore {
-            color: var(--primary-blue);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        /* Menu Grid: จัด 2 แถว แถวละ 3 */
         .menu {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 25px;
-            padding: 40px 20px;
-            max-width: 1100px;
-            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto 50px auto;
+            padding: 20px;
         }
 
-        /* Card Styling */
         .card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass);
+            border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 30px;
+            padding: 35px 20px;
             text-decoration: none;
             color: white;
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
         }
 
         .card:hover {
+            border-color: var(--neon-blue);
             transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--primary-blue);
-            box-shadow: 0 15px 35px rgba(0, 210, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
         }
 
-        .card img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
+        .card img { width: 90px; height: 90px; margin-bottom: 10px; }
+
+        /* --- Pop-up Spec & AR Button --- */
+        .spec-popup {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 260px;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(7, 15, 30, 0.98);
+            border: 2px solid var(--neon-blue);
+            border-radius: 20px;
+            padding: 20px;
+            opacity: 0;
+            z-index: 100;
+            pointer-events: none; /* ป้องกันไม่ให้เมาส์ไปโดนป๊อปอัพแล้วการ์ดหลุด Hover */
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+        }
+
+        /* เมื่อ Hover ให้ Popup ค้างไว้และคลิกปุ่มด้านในได้ */
+        .card:hover .spec-popup {
+            transform: translate(-50%, -80%) scale(1);
+            opacity: 1;
+            pointer-events: auto; /* เปิดให้กดปุ่มได้ */
+        }
+
+        .spec-popup img { width: 100px; height: 100px; }
+
+        .spec-header {
+            color: var(--neon-blue);
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .spec-list {
+            font-size: 0.85rem;
+            text-align: left;
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+            line-height: 1.6;
+            color: #ccd6f6;
         }
 
-        .card span {
-            font-size: 1.3rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-
-        /* Bottom Nav */
-        .bottom {
-            margin-top: auto;
-            padding: 30px;
+        /* --- ปุ่มกด AR 3D --- */
+        .ar-btn {
             display: flex;
-            gap: 20px;
-            opacity: 0.7;
-        }
-
-        .bottom a {
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--btn-grad);
             color: white;
             text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 50px;
             font-size: 0.9rem;
+            font-weight: 500;
             transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
         }
 
-        .bottom a:hover {
-            color: var(--primary-blue);
-            opacity: 1;
+        .ar-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-blue);
         }
 
-        /* ปรับแต่งสำหรับมือถือ */
-        @media (max-width: 850px) {
-            .menu {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 500px) {
-            .menu {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 800px) {
+            .menu { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
-
 <body>
+
+<audio id="hoverSound" src="https://www.soundjay.com/buttons/sounds/button-28.mp3" preload="auto"></audio>
 
 <header class="hero">
     <h1>💻 Smart Computer Hardware AR</h1>
-    <p>สื่อการเรียนรู้ฮาร์ดแวร์คอมพิวเตอร์ | ระดับชั้น ปวช.</p>
-    <div class="scoreBox">คะแนนสะสม: <span id="totalScore">0</span> คะแนน</div>
+    <p>สื่อการเรียนรู้ยุคใหม่ ระดับชั้น ปวช.</p>
 </header>
 
 <section class="menu">
-    <a href="cpu.html" class="card">
+    <div class="card" onmouseover="playHover()">
         <img src="cpu.png" alt="CPU">
         <span>CPU</span>
-    </a>
-    <a href="ram.html" class="card">
+        <div class="spec-popup">
+            <img src="cpu.png">
+            <div class="spec-header">Central Processing Unit</div>
+            <div class="spec-list">
+                • ความเร็วการประมวลผล (GHz)<br>
+                • จำนวน Core และ Threads<br>
+                • แคช (L3 Cache) ขนาดใหญ่
+            </div>
+            <a href="ar-cpu.html" class="ar-btn">
+                <span>🧊 ดูโมเดล AR 3D</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="card" onmouseover="playHover()">
         <img src="ram.png" alt="RAM">
         <span>RAM</span>
-    </a>
-    <a href="ssd.html" class="card">
+        <div class="spec-popup">
+            <img src="ram.png">
+            <div class="spec-header">Memory (RAM)</div>
+            <div class="spec-list">
+                • ความจุ (8GB, 16GB, 32GB)<br>
+                • ความเร็วบัส (Bus Speed)<br>
+                • เทคโนโลยี DDR4 / DDR5
+            </div>
+            <a href="ar-ram.html" class="ar-btn">
+                <span>🧊 ดูโมเดล AR 3D</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="card" onmouseover="playHover()">
         <img src="ssd.png" alt="SSD">
         <span>SSD</span>
-    </a>
-    <a href="psu.html" class="card">
-        <img src="psu.png" alt="PSU">
-        <span>PSU</span>
-    </a>
-    <a href="case.html" class="card">
-        <img src="case.png" alt="CASE">
-        <span>CASE</span>
-    </a>
-    <a href="mainboard.html" class="card">
-        <img src="mainboard.png" alt="MAINBOARD">
-        <span>MAINBOARD</span>
-    </a>
-</section>
+        <div class="spec-popup">
+            <img src="ssd.png">
+            <div class="spec-header">Solid State Drive</div>
+            <div class="spec-list">
+                • ความเร็วการอ่าน/เขียนข้อมูล<br>
+                • อินเทอร์เฟซ NVMe PCIe<br>
+                • ความทนทานในการใช้งาน
+            </div>
+            <a href="ar-ssd.html" class="ar-btn">
+                <span>🧊 ดูโมเดล AR 3D</span>
+            </a>
+        </div>
+    </div>
 
-<nav class="bottom">
-    <a href="about.html">เกี่ยวกับโครงการ</a>
-    <a href="leaderboard.html">Leaderboard</a>
-    <a href="teacher.html" style="opacity:.4;">Teacher Mode</a>
-</nav>
+    </section>
 
-<script src="js/score.js"></script>
+<script>
+    function playHover() {
+        const sound = document.getElementById("hoverSound");
+        sound.currentTime = 0;
+        sound.play();
+    }
+</script>
+
 </body>
 </html>
