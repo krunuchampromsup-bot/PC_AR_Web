@@ -1,55 +1,78 @@
 <!DOCTYPE html>
 <html lang="th">
 <head> 
-<meta charset="UTF-8">
-<title>Smart Computer Hardware AR</title>
-<link rel="stylesheet" href="css/style.css">
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Computer Hardware AR</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-<header class="hero">
-  <h1>💻 Smart Computer Hardware AR</h1>
-  <p>สื่อการเรียนรู้ฮาร์ดแวร์คอมพิวเตอร์ | ปวช.</p>
-  <div class="scoreBox">คะแนนสะสม: <span id="totalScore">0</span> คะแนน</div>
-</header>
+    <header class="hero">
+        <div class="header-content">
+            <h1>💻 Smart Computer Hardware AR</h1>
+            <p>สื่อการเรียนรู้ฮาร์ดแวร์คอมพิวเตอร์ระดับชั้น ปวช.</p>
+        </div>
+        <div class="score-container">
+            <div class="score-label">คะแนนสะสม</div>
+            <div id="totalScore" class="score-value">0</div>
+        </div>
+    </header>
 
-<section class="menu">
-  <a href="cpu.html" class="card">CPU
-	<img src="cpu.png" alt="CPU">
-  	<span>CPU</span>
-    </a>
-  <a href="ram.html" class="card">RAM
-	<img src="ram.png" alt="RAM">
-  	<span>RAM</span>
-    </a>
-  <a href="ssd.html" class="card">SSD
-	<img src="ssd.png" alt="SSD">
-  	<span>SSD</span>
-    </a>
-  <a href="psu.html" class="card">PSU
-	<img src="PUS.png" alt="PUS">
-  	<span>PSU</span>
-    </a>
-  <a href="case.html" class="card">CASE
-	<img src="case.png" alt="CASE">
-  	<span>CASE</span>
-    </a>
-  <a href="mainboard.html" class="card">MAINBOARD
-	<img src="MAINBOARD.png" alt="MAINBOARD">
-  	<span>MAINBOARD</span>
-    </a>
+    <main class="container">
+        <section class="menu-grid">
+            <a href="cpu.html" class="card">
+                <div class="card-icon"><img src="cpu.png" alt="CPU"></div>
+                <div class="card-info">
+                    <span>CPU</span>
+                    <small>หน่วยประมวลผลกลาง</small>
+                </div>
+            </a>
+            <a href="ram.html" class="card">
+                <div class="card-icon"><img src="ram.png" alt="RAM"></div>
+                <div class="card-info">
+                    <span>RAM</span>
+                    <small>หน่วยความจำหลัก</small>
+                </div>
+            </a>
+            <a href="ssd.html" class="card">
+                <div class="card-icon"><img src="ssd.png" alt="SSD"></div>
+                <div class="card-info">
+                    <span>SSD / HDD</span>
+                    <small>หน่วยเก็บข้อมูล</small>
+                </div>
+            </a>
+            <a href="psu.html" class="card">
+                <div class="card-icon"><img src="psu.png" alt="PSU"></div>
+                <div class="card-info">
+                    <span>PSU</span>
+                    <small>แหล่งจ่ายไฟ</small>
+                </div>
+            </a>
+            <a href="case.html" class="card">
+                <div class="card-icon"><img src="case.png" alt="CASE"></div>
+                <div class="card-info">
+                    <span>CASE</span>
+                    <small>ตัวเรือนคอมพิวเตอร์</small>
+                </div>
+            </a>
+            <a href="mainboard.html" class="card">
+                <div class="card-icon"><img src="mainboard.png" alt="MAINBOARD"></div>
+                <div class="card-info">
+                    <span>MAINBOARD</span>
+                    <small>แผงวงจรหลัก</small>
+                </div>
+            </a>
+        </section>
+    </main>
 
-</section>
+    <footer class="bottom-nav">
+        <a href="about.html">เกี่ยวกับโครงการ</a>
+        <a href="leaderboard.html" class="active">Leaderboard</a>
+        <a href="teacher.html" class="admin-link">Teacher Mode</a>
+    </footer>
 
-<nav class="bottom">
-  <a href="about.html">เกี่ยวกับโครงการ</a>
-  <a href="leaderboard.html">Leaderboard</a>
-  <a href="teacher.html" style="opacity:.4;font-size:.9rem;">Teacher Mode</a>
-
-
-</nav>
-
-<script src="js/score.js"></script>
+    <script src="js/score.js"></script>
 </body>
 </html>
