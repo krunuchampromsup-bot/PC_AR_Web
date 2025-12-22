@@ -3,104 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR View - CPU Test</title>
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
-    
+    <title>CPU AR Experience - Smart Computer Hardware</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --neon-blue: #00f2ff;
-        }
-        body {
-            margin: 0;
-            background-color: #050a14;
-            font-family: 'Prompt', sans-serif;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        header {
-            padding: 20px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
-        }
-
-        model-viewer {
-            width: 100%;
-            flex-grow: 1;
-            background-color: transparent;
-            --poster-color: transparent;
-        }
-
-        .ar-button {
-            background-color: var(--neon-blue);
-            border-radius: 50px;
-            border: none;
-            padding: 12px 24px;
-            position: absolute;
-            bottom: 50px;
+        body { margin: 0; overflow: hidden; font-family: 'Prompt', sans-serif; }
+        .ui-overlay {
+            position: fixed;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            color: #050a14;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+            z-index: 1000;
+            text-align: center;
+            width: 90%;
         }
-
         .back-btn {
-            position: absolute;
-            top: 25px;
-            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
             color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
             text-decoration: none;
-            font-size: 0.9rem;
-            background: rgba(255,255,255,0.1);
-            padding: 8px 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.2);
-            z-index: 10;
+            border: 1px solid #00f2ff;
+            display: inline-block;
+            margin-bottom: 10px;
         }
-
-        .back-btn:hover {
-            background: var(--neon-blue);
-            color: #050a14;
-        }
-
         .info-panel {
-            padding: 30px;
-            background: rgba(7, 15, 30, 0.9);
-            border-top: 2px solid var(--neon-blue);
+            background: rgba(5, 10, 20, 0.8);
+            border: 1px solid #00f2ff;
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            backdrop-filter: blur(5px);
         }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="back-btn">← ย้อนกลับ</a>
-
-    <header>
-        <h2>CPU - Test Model View</h2>
-    </header>
-
-    <model-viewer 
-        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
-        ar 
-        ar-modes="webxr scene-viewer quick-look" 
-        camera-controls 
-        auto-rotate 
-        shadow-intensity="1">
-        
-        <button slot="ar-button" class="ar-button">
-            ✨ ส่องดูโมเดลในโลกจริง (AR)
-        </button>
-    </model-viewer>
-
-    <div class="info-panel">
-        <h3 style="color: var(--neon-blue); margin-top: 0;">คำแนะนำการใช้งาน</h3>
-        <p>คุณกำลังดูโมเดลทดสอบ (Astronaut) หากต้องการเปลี่ยนเป็นรูป CPU ให้เปลี่ยนลิงก์ใน src เป็นไฟล์โมเดล CPU ของคุณในภายหลังครับ</p>
+    <div class="ui-overlay">
+        <a href="index.html" class="back-btn">⬅ กลับหน้าหลัก</a>
+        <div class="info-panel">
+            <h2 style="margin: 0; color: #00f2ff;">Intel Core i9</h2>
+            <p style="font-size: 0.9rem; margin: 5px 0;">ส่องกล้องไปที่รูป CPU บนแผ่นพับเพื่อดูโมเดล 3D</p>
+        </div>
     </div>
+
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        
+        <a-assets>
+            <a-asset-item id="cpu-model" src="https://raw.githack.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb"></a-asset-item>
+        </a-assets>
+
+        <a-marker preset="hiro">
+            <a-box position='0 0.5 0' material='color: #00f2ff; opacity: 0.8;' animation="property: rotation; to: 0 360 0; loop: true; dur: 5000">
+                <a-text value="CPU 3D MODEL" align="center" position="0 0.8 0" scale="0.5 0.5 0.5" color="#ffffff"></a-text>
+            </a-box>
+            
+            <a-light type="ambient" color="#fff"></a-light>
+            <a-light type="directional" position="1 1 1" intensity="0.5"></a-light>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
 
 </body>
 </html>
