@@ -1,78 +1,197 @@
 <!DOCTYPE html>
 <html lang="th">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Computer Hardware AR</title>
-    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS ส่วนกลางและการปรับแต่งความสวยงาม --- */
+        :root {
+            --bg-color: #050a18;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --primary-blue: #00d2ff;
+            --accent-blue: #3a7bd5;
+            --text-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: radial-gradient(circle at top, #102a43, #050a18);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(to right, #00d2ff, #9cedff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 20px rgba(0, 210, 255, 0.2);
+        }
+
+        .hero p {
+            opacity: 0.8;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Score Box */
+        .scoreBox {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        #totalScore {
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Menu Grid: จัด 2 แถว แถวละ 3 */
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            padding: 40px 20px;
+            max-width: 1100px;
+            width: 90%;
+        }
+
+        /* Card Styling */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-blue);
+            box-shadow: 0 15px 35px rgba(0, 210, 255, 0.2);
+        }
+
+        .card img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+        }
+
+        .card span {
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* Bottom Nav */
+        .bottom {
+            margin-top: auto;
+            padding: 30px;
+            display: flex;
+            gap: 20px;
+            opacity: 0.7;
+        }
+
+        .bottom a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .bottom a:hover {
+            color: var(--primary-blue);
+            opacity: 1;
+        }
+
+        /* ปรับแต่งสำหรับมือถือ */
+        @media (max-width: 850px) {
+            .menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 500px) {
+            .menu {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <header class="hero">
-        <div class="header-content">
-            <h1>💻 Smart Computer Hardware AR</h1>
-            <p>สื่อการเรียนรู้ฮาร์ดแวร์คอมพิวเตอร์ระดับชั้น ปวช.</p>
-        </div>
-        <div class="score-container">
-            <div class="score-label">คะแนนสะสม</div>
-            <div id="totalScore" class="score-value">0</div>
-        </div>
-    </header>
 
-    <main class="container">
-        <section class="menu-grid">
-            <a href="cpu.html" class="card">
-                <div class="card-icon"><img src="cpu.png" alt="CPU"></div>
-                <div class="card-info">
-                    <span>CPU</span>
-                    <small>หน่วยประมวลผลกลาง</small>
-                </div>
-            </a>
-            <a href="ram.html" class="card">
-                <div class="card-icon"><img src="ram.png" alt="RAM"></div>
-                <div class="card-info">
-                    <span>RAM</span>
-                    <small>หน่วยความจำหลัก</small>
-                </div>
-            </a>
-            <a href="ssd.html" class="card">
-                <div class="card-icon"><img src="ssd.png" alt="SSD"></div>
-                <div class="card-info">
-                    <span>SSD / HDD</span>
-                    <small>หน่วยเก็บข้อมูล</small>
-                </div>
-            </a>
-            <a href="psu.html" class="card">
-                <div class="card-icon"><img src="psu.png" alt="PSU"></div>
-                <div class="card-info">
-                    <span>PSU</span>
-                    <small>แหล่งจ่ายไฟ</small>
-                </div>
-            </a>
-            <a href="case.html" class="card">
-                <div class="card-icon"><img src="case.png" alt="CASE"></div>
-                <div class="card-info">
-                    <span>CASE</span>
-                    <small>ตัวเรือนคอมพิวเตอร์</small>
-                </div>
-            </a>
-            <a href="mainboard.html" class="card">
-                <div class="card-icon"><img src="mainboard.png" alt="MAINBOARD"></div>
-                <div class="card-info">
-                    <span>MAINBOARD</span>
-                    <small>แผงวงจรหลัก</small>
-                </div>
-            </a>
-        </section>
-    </main>
+<header class="hero">
+    <h1>💻 Smart Computer Hardware AR</h1>
+    <p>สื่อการเรียนรู้ฮาร์ดแวร์คอมพิวเตอร์ | ระดับชั้น ปวช.</p>
+    <div class="scoreBox">คะแนนสะสม: <span id="totalScore">0</span> คะแนน</div>
+</header>
 
-    <footer class="bottom-nav">
-        <a href="about.html">เกี่ยวกับโครงการ</a>
-        <a href="leaderboard.html" class="active">Leaderboard</a>
-        <a href="teacher.html" class="admin-link">Teacher Mode</a>
-    </footer>
+<section class="menu">
+    <a href="cpu.html" class="card">
+        <img src="cpu.png" alt="CPU">
+        <span>CPU</span>
+    </a>
+    <a href="ram.html" class="card">
+        <img src="ram.png" alt="RAM">
+        <span>RAM</span>
+    </a>
+    <a href="ssd.html" class="card">
+        <img src="ssd.png" alt="SSD">
+        <span>SSD</span>
+    </a>
+    <a href="psu.html" class="card">
+        <img src="psu.png" alt="PSU">
+        <span>PSU</span>
+    </a>
+    <a href="case.html" class="card">
+        <img src="case.png" alt="CASE">
+        <span>CASE</span>
+    </a>
+    <a href="mainboard.html" class="card">
+        <img src="mainboard.png" alt="MAINBOARD">
+        <span>MAINBOARD</span>
+    </a>
+</section>
 
-    <script src="js/score.js"></script>
+<nav class="bottom">
+    <a href="about.html">เกี่ยวกับโครงการ</a>
+    <a href="leaderboard.html">Leaderboard</a>
+    <a href="teacher.html" style="opacity:.4;">Teacher Mode</a>
+</nav>
+
+<script src="js/score.js"></script>
 </body>
 </html>
