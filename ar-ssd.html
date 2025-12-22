@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR View - SSD (Solid State Drive)</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+        }
+        body {
+            margin: 0;
+            background-color: #050a14;
+            font-family: 'Prompt', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            padding: 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        model-viewer {
+            width: 100%;
+            flex-grow: 1;
+            background-color: transparent;
+            --poster-color: transparent;
+        }
+
+        .ar-button {
+            background-color: var(--neon-blue);
+            border-radius: 50px;
+            border: none;
+            padding: 12px 24px;
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #050a14;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 25px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            background: var(--neon-blue);
+            color: #050a14;
+        }
+
+        .info-panel {
+            padding: 30px;
+            background: rgba(7, 15, 30, 0.9);
+            border-top: 2px solid var(--neon-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← ย้อนกลับ</a>
+
+    <header>
+        <h2>SSD - Solid State Drive</h2>
+    </header>
+
+    <model-viewer 
+        src="ssd.glb" 
+        ar 
+        ar-modes="webxr scene-viewer quick-look" 
+        camera-controls 
+        auto-rotate 
+        shadow-intensity="1">
+        
+        <button slot="ar-button" class="ar-button">
+            ✨ ส่องดู SSD ในโลกจริง (AR)
+        </button>
+    </model-viewer>
+
+    <div class="info-panel">
+        <h3 style="color: var(--neon-blue); margin-top: 0;">เกร็ดความรู้เรื่อง SSD</h3>
+        <p>SSD คืออุปกรณ์เก็บข้อมูลความเร็วสูงที่ใช้ชิปหน่วยความจำ (Flash Memory) แทนจานหมุนแบบเดิม ทำให้บูตเครื่องและเปิดโปรแกรมต่างๆ ได้รวดเร็วมาก อีกทั้งยังมีความทนทานและประหยัดไฟกว่า Hard Disk ทั่วไปครับ</p>
+    </div>
+
+</body>
+</html>
