@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Computer Hardware AR - Interactive Edition</title>
+    <title>Smart Computer Hardware AR - Professional</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,16 +24,58 @@
             min-height: 100vh;
         }
 
-        .hero { text-align: center; padding: 40px 20px; }
-        .hero h1 { color: var(--neon-blue); text-shadow: 0 0 15px rgba(0, 242, 255, 0.5); margin-bottom: 5px; }
+        /* --- ส่วนหัวที่ปรับปรุงให้เด่นชัด (High Impact Header) --- */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            animation: fadeInDown 1s ease-out;
+        }
 
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 10px;
+            color: #a5b4fc;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue);
+            border-radius: 2px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Grid Layout 2 แถว แถวละ 3 --- */
         .menu {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto 50px auto;
-            padding: 20px;
+            max-width: 1050px;
+            margin: 40px auto 100px auto;
+            padding: 0 20px;
         }
 
         .card {
@@ -52,10 +94,11 @@
         .card:hover {
             border-color: var(--neon-blue);
             transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2);
         }
 
         .card img { width: 90px; height: 90px; margin-bottom: 10px; }
+        .card span { font-size: 1.2rem; font-weight: 600; display: block; }
 
         /* --- Pop-up Spec & AR Button --- */
         .spec-popup {
@@ -69,61 +112,29 @@
             padding: 20px;
             opacity: 0;
             z-index: 100;
-            pointer-events: none; /* ป้องกันไม่ให้เมาส์ไปโดนป๊อปอัพแล้วการ์ดหลุด Hover */
+            pointer-events: none;
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* เมื่อ Hover ให้ Popup ค้างไว้และคลิกปุ่มด้านในได้ */
         .card:hover .spec-popup {
-            transform: translate(-50%, -80%) scale(1);
+            transform: translate(-50%, -85%) scale(1);
             opacity: 1;
-            pointer-events: auto; /* เปิดให้กดปุ่มได้ */
+            pointer-events: auto;
         }
 
-        .spec-popup img { width: 100px; height: 100px; }
+        .spec-header { color: var(--neon-blue); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .spec-list { font-size: 0.85rem; text-align: left; margin-bottom: 15px; color: #ccd6f6; line-height: 1.6; }
 
-        .spec-header {
-            color: var(--neon-blue);
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .spec-list {
-            font-size: 0.85rem;
-            text-align: left;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            color: #ccd6f6;
-        }
-
-        /* --- ปุ่มกด AR 3D --- */
         .ar-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: var(--btn-grad);
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: var(--btn-grad); color: white; text-decoration: none;
+            padding: 10px; border-radius: 50px; font-size: 0.9rem; transition: 0.3s;
         }
 
-        .ar-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px var(--neon-blue);
-        }
+        .ar-btn:hover { box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); }
 
-        @media (max-width: 800px) {
-            .menu { grid-template-columns: repeat(2, 1fr); }
-        }
+        @media (max-width: 850px) { .menu { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -131,8 +142,8 @@
 <audio id="hoverSound" src="https://www.soundjay.com/buttons/sounds/button-28.mp3" preload="auto"></audio>
 
 <header class="hero">
-    <h1>💻 Smart Computer Hardware AR</h1>
-    <p>สื่อการเรียนรู้ยุคใหม่ ระดับชั้น ปวช.</p>
+    <h1>Smart Computer Hardware AR</h1>
+    <p>สื่อการเรียนรู้อัจฉริยะ สำหรับนักเรียนชั้น ปวช.</p>
 </header>
 
 <section class="menu">
@@ -140,16 +151,13 @@
         <img src="cpu.png" alt="CPU">
         <span>CPU</span>
         <div class="spec-popup">
-            <img src="cpu.png">
             <div class="spec-header">Central Processing Unit</div>
             <div class="spec-list">
-                • ความเร็วการประมวลผล (GHz)<br>
-                • จำนวน Core และ Threads<br>
-                • แคช (L3 Cache) ขนาดใหญ่
+                • หัวใจหลักในการประมวลผล<br>
+                • วัดความเร็วเป็น GHz<br>
+                • ยิ่ง Core เยอะ ยิ่งทำงานเร็ว
             </div>
-            <a href="ar-cpu.html" class="ar-btn">
-                <span>🧊 ดูโมเดล AR 3D</span>
-            </a>
+            <a href="ar-cpu.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
     </div>
 
@@ -157,16 +165,13 @@
         <img src="ram.png" alt="RAM">
         <span>RAM</span>
         <div class="spec-popup">
-            <img src="ram.png">
             <div class="spec-header">Memory (RAM)</div>
             <div class="spec-list">
-                • ความจุ (8GB, 16GB, 32GB)<br>
-                • ความเร็วบัส (Bus Speed)<br>
-                • เทคโนโลยี DDR4 / DDR5
+                • หน่วยความจำชั่วคราว<br>
+                • ช่วยให้เปิดหลายแอปพร้อมกันได้<br>
+                • ความเร็ววัดเป็น Bus (MHz)
             </div>
-            <a href="ar-ram.html" class="ar-btn">
-                <span>🧊 ดูโมเดล AR 3D</span>
-            </a>
+            <a href="ar-ram.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
     </div>
 
@@ -174,20 +179,58 @@
         <img src="ssd.png" alt="SSD">
         <span>SSD</span>
         <div class="spec-popup">
-            <img src="ssd.png">
             <div class="spec-header">Solid State Drive</div>
             <div class="spec-list">
-                • ความเร็วการอ่าน/เขียนข้อมูล<br>
-                • อินเทอร์เฟซ NVMe PCIe<br>
-                • ความทนทานในการใช้งาน
+                • เก็บข้อมูลถาวรความเร็วสูง<br>
+                • บูต Windows ภายในไม่กี่วินาที<br>
+                • ทนทานกว่า Hard Disk ทั่วไป
             </div>
-            <a href="ar-ssd.html" class="ar-btn">
-                <span>🧊 ดูโมเดล AR 3D</span>
-            </a>
+            <a href="ar-ssd.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
     </div>
 
-    </section>
+    <div class="card" onmouseover="playHover()">
+        <img src="psu.png" alt="PSU">
+        <span>PSU</span>
+        <div class="spec-popup">
+            <div class="spec-header">Power Supply Unit</div>
+            <div class="spec-list">
+                • แหล่งจ่ายไฟให้อุปกรณ์ทั้งหมด<br>
+                • วัดกำลังเป็น Watt (W)<br>
+                • มาตรฐานความคุ้มค่า 80 Plus
+            </div>
+            <a href="ar-psu.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
+        </div>
+    </div>
+
+    <div class="card" onmouseover="playHover()">
+        <img src="case.png" alt="CASE">
+        <span>CASE</span>
+        <div class="spec-popup">
+            <div class="spec-header">Computer Case</div>
+            <div class="spec-list">
+                • กล่องบรรจุอุปกรณ์ภายใน<br>
+                • ช่วยจัดระเบียบและระบายความร้อน<br>
+                • มีช่องพอร์ตเชื่อมต่อหน้าเครื่อง
+            </div>
+            <a href="ar-case.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
+        </div>
+    </div>
+
+    <div class="card" onmouseover="playHover()">
+        <img src="mainboard.png" alt="MAINBOARD">
+        <span>MAINBOARD</span>
+        <div class="spec-popup">
+            <div class="spec-header">Mainboard</div>
+            <div class="spec-list">
+                • แผงวงจรหลักเชื่อมทุกส่วนเข้าด้วยกัน<br>
+                • มี Socket สำหรับ CPU และ RAM<br>
+                • ควบคุมการรับส่งข้อมูลทั้งหมด
+            </div>
+            <a href="ar-mainboard.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
+        </div>
+    </div>
+</section>
 
 <script>
     function playHover() {
