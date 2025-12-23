@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Admin - SmartCom Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; background: #f0f2f5; color: #333; margin: 0; padding: 20px; }
+        .admin-container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #1a73e8; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; }
+        .stats { display: flex; gap: 20px; margin-bottom: 20px; }
+        .stat-card { flex: 1; padding: 20px; background: #e8f0fe; border-radius: 10px; text-align: center; }
+        .stat-card h2 { margin: 0; color: #1967d2; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; color: #5f6368; }
+        tr:hover { background-color: #f1f3f4; }
+        .btn-reset { background: #d93025; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; float: right; }
+        .btn-reset:hover { background: #b21f16; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <button class="btn-reset" onclick="resetData()">ล้างข้อมูลคะแนนทั้งหมด</button>
+    <h1>📊 หน้าจัดการคะแนน (สำหรับคุณครูนุช)</h1>
+    
+    <div class="stats">
+        <div class="stat-card">
+            <p>นักเรียนที่สอบแล้ว</p>
+            <h2 id="total-students">0</h2>
+        </div>
+        <div class="stat-card">
+            <p>คะแนนเฉลี่ยทั้งห้อง</p>
+            <h2 id="avg-score">0.00</h2>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ลำดับ</th>
+                <th>ชื่อนักเรียน</th>
+                <th>คะแนน (10)</th>
+                <th>เวลาที่ใช้ (วินาที)</th>
+                <th>วันที่/เวลา</th>
+            </tr>
+        </thead>
+        <tbody id="admin-table-body">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    // ✅ ใช้ Config เดียวกับใน quiz.html
+    const firebaseConfig = {
+        apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
+        authDomain: "smartcom-ar-quiz.firebaseapp.com",
+        projectId: "smartcom-ar-quiz",
+        storageBucket: "smartcom-ar-quiz.appspot.com",
+        messagingSenderId: "367243958931", 
+        appId: "1:367243958931:web:3e3c66f54668b8ec66b8ec" 
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function loadData() {
+        database.ref('scores/').orderByChild('score').on('value', (snapshot) => {
+            const tbody = document.getElementById('admin-table-body');
+            tbody.innerHTML = "";
+            let list = [];
+            let totalScore = 0;
+            let count = 0;
+
+            snapshot.forEach((child) => {
+                const data = child.val();
+                list.push(data);
+                totalScore += data.score;
+                count++;
+            });
+
+            list.reverse(); // เรียงคะแนนมากไปน้อย
+
+            list.forEach((item, index) => {
+                const date = new Date(item.timestamp).toLocaleString('th-TH');
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${item.name}</strong></td>
+                        <td>${item.score}</td>
+                        <td>${item.time}</td>
+                        <td style="font-size: 0.8rem; color: gray;">${date}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('total-students').innerText = count;
+            document.getElementById('avg-score').innerText = count > 0 ? (totalScore / count).toFixed(2) : "0.00";
+        });
+    }
+
+    function resetData() {
+        if(confirm("⚠️ คุณครูแน่ใจไหมว่าต้องการลบคะแนนนักเรียนทั้งหมด? (ไม่สามารถเรียกคืนได้)")) {
+            database.ref('scores/').remove().then(() => {
+                alert("ล้างข้อมูลเรียบร้อยแล้วครับ");
+            });
+        }
+    }
+
+    loadData();
+</script>
+
+</body>
+</html>
