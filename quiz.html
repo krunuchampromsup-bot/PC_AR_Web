@@ -5,22 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hardware Quiz Game - T.Nuch SmartCom</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         :root { --neon: #00f2ff; --pink: #ff00cc; }
         body { font-family: 'Prompt', sans-serif; background: #050a14; color: white; text-align: center; margin: 0; }
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid var(--neon); }
-        input { padding: 10px; border-radius: 10px; border: none; width: 80%; margin: 10px 0; font-family: 'Prompt'; }
-        .btn { padding: 15px 30px; background: var(--neon); color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem; margin: 10px; }
-        .choice-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.1); border: 1px solid var(--neon); color: white; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; }
+        .container { max-width: 600px; margin: 50px auto; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid var(--neon); box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
+        input { padding: 12px; border-radius: 10px; border: 1px solid var(--neon); width: 80%; margin: 10px 0; background: #0a1a33; color: white; font-family: 'Prompt'; }
+        .btn { padding: 15px 30px; background: var(--neon); color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem; margin: 10px; transition: 0.3s; }
+        .btn:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--neon); }
+        .choice-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.1); border: 1px solid var(--neon); color: white; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; }
         .choice-btn:hover { background: var(--neon); color: black; }
-        #timer { font-size: 1.5rem; color: var(--pink); font-weight: bold; }
+        #timer { font-size: 1.5rem; color: var(--pink); font-weight: bold; margin-bottom: 10px; }
         .hidden { display: none; }
+        
+        /* สไตล์ตารางคะแนน (Leaderboard) */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 12px; border-bottom: 1px solid rgba(0, 242, 255, 0.1); text-align: center; }
+        th { background: rgba(0, 242, 255, 0.2); color: var(--neon); }
     </style>
 </head>
 <body>
 
 <div class="container" id="setup-screen">
-    <h2>🎮 Hardware Quiz Game</h2>
+    <h2 style="color: var(--neon)">🎮 Hardware Quiz Game</h2>
     <p>กรุณากรอกชื่อเพื่อเริ่มทดสอบ (10 ข้อ)</p>
     <input type="text" id="player-name" placeholder="ชื่อของคุณ...">
     <br>
@@ -36,13 +46,37 @@
 
 <div class="container hidden" id="result-screen">
     <h2 style="color: var(--neon);">ยินดีด้วย! ทำภารกิจสำเร็จ</h2>
-    <p id="final-score"></p>
+    <p id="final-score" style="font-size: 1.2rem;"></p>
     <p id="final-time"></p>
-    <button class="btn" onclick="location.reload()">เล่นอีกครั้ง</button>
-    <a href="index.html" style="color: white; display: block; margin-top: 20px;">กลับหน้าหลัก</a>
+
+    <h3 style="color: var(--pink); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">🏆 อันดับคะแนนล่าสุด</h3>
+    <table id="score-table">
+        <thead>
+            <tr><th>ชื่อ</th><th>คะแนน</th><th>เวลา</th></tr>
+        </thead>
+        <tbody id="leaderboard-body">
+            </tbody>
+    </table>
+
+    <button class="btn" onclick="location.reload()" style="margin-top: 20px;">เล่นอีกครั้ง</button>
+    <a href="index.html" style="color: white; display: block; margin-top: 20px; text-decoration: none;">← กลับหน้าหลัก</a>
 </div>
 
 <script>
+    // ✅ 2. ตั้งค่า Firebase Config (ครูนุชนำรหัสจากรูปที่ 4 มาตรวจสอบอีกครั้งนะครับ)
+    const firebaseConfig = {
+        apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
+        authDomain: "smartcom-ar-quiz.firebaseapp.com",
+        projectId: "smartcom-ar-quiz",
+        storageBucket: "smartcom-ar-quiz.appspot.com",
+        messagingSenderId: "367243958931", 
+        appId: "1:367243958931:web:3e3c66f54668b8ec66b8ec" 
+    };
+
+    // เริ่มการทำงาน Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
     const questions = [
         { q: "อุปกรณ์ใดเปรียบเสมือน 'สมอง' ของคอมพิวเตอร์?", c: ["RAM", "CPU", "SSD"], a: 1 },
         { q: "หน่วยความจำสำรองที่ช่วยให้เปิดเครื่องเร็วขึ้นคือ?", c: ["SSD", "PSU", "Mainboard"], a: 0 },
@@ -101,11 +135,46 @@
 
     function finishGame() {
         clearInterval(timerInterval);
+        const name = document.getElementById('player-name').value;
+        
+        // ✅ 3. บันทึกคะแนนลง Firebase Database
+        database.ref('scores/').push({
+            name: name,
+            score: score,
+            time: seconds,
+            timestamp: Date.now()
+        }).then(() => {
+            console.log("บันทึกคะแนนสำเร็จ");
+            loadLeaderboard(); // โหลดอันดับขึ้นมาโชว์
+        });
+
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        const name = document.getElementById('player-name').value;
         document.getElementById('final-score').innerText = `คุณ ${name} ได้คะแนน: ${score} / 10`;
         document.getElementById('final-time').innerText = `ใช้เวลาไปทั้งหมด: ${seconds} วินาที`;
+    }
+
+    // ✅ 4. ฟังก์ชันดึงข้อมูลคะแนนมาแสดง (Leaderboard)
+    function loadLeaderboard() {
+        // ดึงข้อมูล 10 อันดับแรก โดยเรียงตามคะแนน (score)
+        database.ref('scores/').orderByChild('score').limitToLast(10).on('value', (snapshot) => {
+            const list = [];
+            snapshot.forEach((child) => {
+                list.push(child.val());
+            });
+            
+            // เรียงลำดับจากคะแนนมากไปน้อย
+            list.reverse(); 
+
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = list.map(item => `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.score}</td>
+                    <td>${item.time} วินาที</td>
+                </tr>
+            `).join('');
+        });
     }
 </script>
 
