@@ -1,71 +1,5 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hardware Quiz Game - T.Nuch SmartCom</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-    <style>
-        :root { --neon: #00f2ff; --pink: #ff00cc; --success: #2ecc71; --error: #e74c3c; }
-        body { font-family: 'Prompt', sans-serif; background: #050a14; color: white; text-align: center; margin: 0; }
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid var(--neon); box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
-        input { padding: 12px; border-radius: 10px; border: 1px solid var(--neon); width: 80%; margin: 10px 0; background: #0a1a33; color: white; font-family: 'Prompt'; }
-        .btn { padding: 15px 30px; background: var(--neon); color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem; margin: 10px; transition: 0.3s; }
-        .btn:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--neon); }
-        .choice-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.1); border: 1px solid var(--neon); color: white; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; }
-        /* สไตล์ปุ่มเมื่อตรวจคำตอบ */
-        .choice-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
-        .choice-btn.wrong { background: var(--error) !important; color: white; border-color: var(--error); }
-        
-        #timer { font-size: 1.5rem; color: var(--pink); font-weight: bold; margin-bottom: 10px; }
-        .hidden { display: none; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; }
-        th, td { padding: 12px; border-bottom: 1px solid rgba(0, 242, 255, 0.1); text-align: center; }
-        th { background: rgba(0, 242, 255, 0.2); color: var(--neon); }
-    </style>
-</head>
-<body>
-
-<audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
-<audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
-<audio id="snd-finish" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
-
-<div class="container" id="setup-screen">
-    <h2 style="color: var(--neon)">🎮 Hardware Quiz Game</h2>
-    <div id="setup-content">
-        <p>กรุณากรอกชื่อเพื่อเริ่มทดสอบ (10 ข้อ)</p>
-        <input type="text" id="player-name" placeholder="ชื่อของคุณ...">
-        <br>
-        <button class="btn" onclick="startQuiz()">เริ่มเกม!</button>
-    </div>
-</div>
-
-<div class="container hidden" id="quiz-screen">
-    <div id="timer">เวลา: 0 วินาที</div>
-    <h3 id="question-text">คำถามจะปรากฏที่นี่</h3>
-    <div id="choices-container"></div>
-    <p>ข้อที่ <span id="current-pos">1</span> / 10</p>
-</div>
-
-<div class="container hidden" id="result-screen">
-    <h2 id="result-header" style="color: var(--neon);">ยินดีด้วย! ทำภารกิจสำเร็จ</h2>
-    <p id="final-score" style="font-size: 1.2rem;"></p>
-    <p id="final-time"></p>
-    <h3 style="color: var(--pink); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">🏆 อันดับคะแนนล่าสุด</h3>
-    <table id="score-table">
-        <thead>
-            <tr><th>ชื่อ</th><th>คะแนน</th><th>เวลา</th></tr>
-        </thead>
-        <tbody id="leaderboard-body"></tbody>
-    </table>
-    <a href="index.html" style="color: white; display: block; margin-top: 20px; text-decoration: none;">← กลับหน้าหลัก</a>
-</div>
-
 <script>
+    // ✅ 1. ตั้งค่า Firebase Config (ใช้รหัสเดิมของครูนุช)
     const firebaseConfig = {
         apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
         authDomain: "smartcom-ar-quiz.firebaseapp.com",
@@ -84,24 +18,44 @@
         }
     };
 
-    const questions = [
-        { q: "อุปกรณ์ใดเปรียบเสมือน 'สมอง' ของคอมพิวเตอร์?", c: ["RAM", "CPU", "SSD"], a: 1 },
-        { q: "หน่วยความจำสำรองที่ช่วยให้เปิดเครื่องเร็วขึ้นคือ?", c: ["SSD", "PSU", "Mainboard"], a: 0 },
-        { q: "อุปกรณ์ใดทำหน้าที่เก็บข้อมูลชั่วคราวขณะใช้งาน?", c: ["SSD", "CPU", "RAM"], a: 2 },
-        { q: "ถ้าคอมพิวเตอร์ไม่มีอุปกรณ์นี้ จะจ่ายไฟเข้าเครื่องไม่ได้?", c: ["CASE", "PSU", "RAM"], a: 1 },
-        { q: "แผงวงจรขนาดใหญ่ที่เชื่อมอุปกรณ์ทุกชิ้นเข้าด้วยกันคือ?", c: ["Mainboard", "SSD", "CPU"], a: 0 },
-        { q: "ตัวถังที่ช่วยป้องกันฝุ่นและระบายความร้อนเรียกว่า?", c: ["PSU", "Mainboard", "CASE"], a: 2 },
-        { q: "ความเร็วของ CPU มีหน่วยวัดเป็นอะไร?", c: ["Watt", "GHz", "GB"], a: 1 },
-        { q: "RAM ย่อมาจากคำว่าอะไร?", c: ["Read Access Memory", "Random Access Memory", "Real Action Memory"], a: 1 },
-        { q: "อุปกรณ์ใดต่อไปนี้ทนทานต่อแรงกระแทกได้ดีกว่า?", c: ["Hard Disk", "SSD", "CD-ROM"], a: 1 },
-        { q: "Socket บนเมนบอร์ดมีไว้สำหรับใส่สิ่งใด?", c: ["CPU", "Power Cable", "Case Fan"], a: 0 }
+    // คลังคำถาม (เก็บไว้ในตัวแปรต้นฉบับ)
+    const rawQuestions = [
+        { q: "อุปกรณ์ใดเปรียบเสมือน 'สมอง' ของคอมพิวเตอร์?", c: ["RAM", "CPU", "SSD"], a: "CPU" },
+        { q: "หน่วยความจำสำรองที่ช่วยให้เปิดเครื่องเร็วขึ้นคือ?", c: ["SSD", "PSU", "Mainboard"], a: "SSD" },
+        { q: "อุปกรณ์ใดทำหน้าที่เก็บข้อมูลชั่วคราวขณะใช้งาน?", c: ["SSD", "CPU", "RAM"], a: "RAM" },
+        { q: "ถ้าคอมพิวเตอร์ไม่มีอุปกรณ์นี้ จะจ่ายไฟเข้าเครื่องไม่ได้?", c: ["CASE", "PSU", "RAM"], a: "PSU" },
+        { q: "แผงวงจรขนาดใหญ่ที่เชื่อมอุปกรณ์ทุกชิ้นเข้าด้วยกันคือ?", c: ["Mainboard", "SSD", "CPU"], a: "Mainboard" },
+        { q: "ตัวถังที่ช่วยป้องกันฝุ่นและระบายความร้อนเรียกว่า?", c: ["PSU", "Mainboard", "CASE"], a: "CASE" },
+        { q: "ความเร็วของ CPU มีหน่วยวัดเป็นอะไร?", c: ["Watt", "GHz", "GB"], a: "GHz" },
+        { q: "RAM ย่อมาจากคำว่าอะไร?", c: ["Read Access Memory", "Random Access Memory", "Real Action Memory"], a: "Random Access Memory" },
+        { q: "อุปกรณ์ใดต่อไปนี้ทนทานต่อแรงกระแทกได้ดีกว่า?", c: ["Hard Disk", "SSD", "CD-ROM"], a: "SSD" },
+        { q: "Socket บนเมนบอร์ดมีไว้สำหรับใส่สิ่งใด?", c: ["CPU", "Power Cable", "Case Fan"], a: "CPU" }
     ];
 
+    let questions = []; // ตัวแปรสำหรับเก็บคำถามที่สุ่มแล้ว
     let currentQ = 0; let score = 0; let seconds = 0; let timerInterval; let isAnswering = false;
+
+    // ✅ ฟังก์ชันสุ่มอาเรย์ (Fisher-Yates Shuffle)
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
     function startQuiz() {
         const name = document.getElementById('player-name').value;
         if(!name) return alert("กรุณาใส่ชื่อก่อนครับ");
+
+        // ✅ ทำการสุ่มคำถามก่อนเริ่มเกม
+        questions = shuffle([...rawQuestions]); 
+        
+        // ✅ สุ่มตัวเลือกในแต่ละคำถามด้วย
+        questions.forEach(item => {
+            item.c = shuffle([...item.c]);
+        });
+
         document.getElementById('setup-screen').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
         timerInterval = setInterval(() => {
@@ -118,37 +72,41 @@
         document.getElementById('current-pos').innerText = currentQ + 1;
         const container = document.getElementById('choices-container');
         container.innerHTML = "";
-        qData.c.forEach((choice, index) => {
+
+        qData.c.forEach((choice) => {
             const btn = document.createElement('button');
             btn.className = "choice-btn";
             btn.innerText = choice;
-            btn.onclick = () => checkAnswer(index, btn);
+            btn.onclick = () => checkAnswer(choice, btn); // เช็คจากข้อความคำตอบแทน Index
             container.appendChild(btn);
         });
     }
 
-    function checkAnswer(idx, selectedBtn) {
-        if(isAnswering) return; // ป้องกันการกดเบิ้ล
+    function checkAnswer(userChoice, selectedBtn) {
+        if(isAnswering) return;
         isAnswering = true;
         
-        const correctIdx = questions[currentQ].a;
+        const qData = questions[currentQ];
         const allBtns = document.querySelectorAll('.choice-btn');
 
-        if(idx === correctIdx) {
+        if(userChoice === qData.a) {
             score++;
             selectedBtn.classList.add('correct');
             document.getElementById('snd-correct').play();
         } else {
             selectedBtn.classList.add('wrong');
-            allBtns[correctIdx].classList.add('correct'); // เฉลยข้อที่ถูก
+            // วนหาปุ่มที่ถูกเพื่อเฉลยสีเขียว
+            allBtns.forEach(btn => {
+                if(btn.innerText === qData.a) btn.classList.add('correct');
+            });
             document.getElementById('snd-wrong').play();
         }
 
         setTimeout(() => {
             currentQ++;
-            if(currentQ < 10) showQuestion();
+            if(currentQ < questions.length) showQuestion();
             else finishGame();
-        }, 800); // รอ 0.8 วินาทีให้เด็กดูเฉลยก่อนไปข้อถัดไป
+        }, 800);
     }
 
     function finishGame() {
@@ -204,6 +162,3 @@
         });
     }
 </script>
-
-</body>
-</html>
