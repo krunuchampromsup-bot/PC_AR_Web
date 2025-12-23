@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Quiz Game - T.Nuch SmartCom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon: #00f2ff; --pink: #ff00cc; }
+        body { font-family: 'Prompt', sans-serif; background: #050a14; color: white; text-align: center; margin: 0; }
+        .container { max-width: 600px; margin: 50px auto; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid var(--neon); }
+        input { padding: 10px; border-radius: 10px; border: none; width: 80%; margin: 10px 0; font-family: 'Prompt'; }
+        .btn { padding: 15px 30px; background: var(--neon); color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem; margin: 10px; }
+        .choice-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.1); border: 1px solid var(--neon); color: white; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; }
+        .choice-btn:hover { background: var(--neon); color: black; }
+        #timer { font-size: 1.5rem; color: var(--pink); font-weight: bold; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="setup-screen">
+    <h2>🎮 Hardware Quiz Game</h2>
+    <p>กรุณากรอกชื่อเพื่อเริ่มทดสอบ (10 ข้อ)</p>
+    <input type="text" id="player-name" placeholder="ชื่อของคุณ...">
+    <br>
+    <button class="btn" onclick="startQuiz()">เริ่มเกม!</button>
+</div>
+
+<div class="container hidden" id="quiz-screen">
+    <div id="timer">เวลา: 0 วินาที</div>
+    <h3 id="question-text">คำถามจะปรากฏที่นี่</h3>
+    <div id="choices-container"></div>
+    <p>ข้อที่ <span id="current-pos">1</span> / 10</p>
+</div>
+
+<div class="container hidden" id="result-screen">
+    <h2 style="color: var(--neon);">ยินดีด้วย! ทำภารกิจสำเร็จ</h2>
+    <p id="final-score"></p>
+    <p id="final-time"></p>
+    <button class="btn" onclick="location.reload()">เล่นอีกครั้ง</button>
+    <a href="index.html" style="color: white; display: block; margin-top: 20px;">กลับหน้าหลัก</a>
+</div>
+
+<script>
+    const questions = [
+        { q: "อุปกรณ์ใดเปรียบเสมือน 'สมอง' ของคอมพิวเตอร์?", c: ["RAM", "CPU", "SSD"], a: 1 },
+        { q: "หน่วยความจำสำรองที่ช่วยให้เปิดเครื่องเร็วขึ้นคือ?", c: ["SSD", "PSU", "Mainboard"], a: 0 },
+        { q: "อุปกรณ์ใดทำหน้าที่เก็บข้อมูลชั่วคราวขณะใช้งาน?", c: ["SSD", "CPU", "RAM"], a: 2 },
+        { q: "ถ้าคอมพิวเตอร์ไม่มีอุปกรณ์นี้ จะจ่ายไฟเข้าเครื่องไม่ได้?", c: ["CASE", "PSU", "RAM"], a: 1 },
+        { q: "แผงวงจรขนาดใหญ่ที่เชื่อมอุปกรณ์ทุกชิ้นเข้าด้วยกันคือ?", c: ["Mainboard", "SSD", "CPU"], a: 0 },
+        { q: "ตัวถังที่ช่วยป้องกันฝุ่นและระบายความร้อนเรียกว่า?", c: ["PSU", "Mainboard", "CASE"], a: 2 },
+        { q: "ความเร็วของ CPU มีหน่วยวัดเป็นอะไร?", c: ["Watt", "GHz", "GB"], a: 1 },
+        { q: "RAM ย่อมาจากคำว่าอะไร?", c: ["Read Access Memory", "Random Access Memory", "Real Action Memory"], a: 1 },
+        { q: "อุปกรณ์ใดต่อไปนี้ทนทานต่อแรงกระแทกได้ดีกว่า?", c: ["Hard Disk", "SSD", "CD-ROM"], a: 1 },
+        { q: "Socket บนเมนบอร์ดมีไว้สำหรับใส่สิ่งใด?", c: ["CPU", "Power Cable", "Case Fan"], a: 0 }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let seconds = 0;
+    let timerInterval;
+
+    function startQuiz() {
+        const name = document.getElementById('player-name').value;
+        if(!name) return alert("กรุณาใส่ชื่อก่อนครับ");
+        
+        document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        
+        timerInterval = setInterval(() => {
+            seconds++;
+            document.getElementById('timer').innerText = `เวลา: ${seconds} วินาที`;
+        }, 1000);
+        
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const qData = questions[currentQ];
+        document.getElementById('question-text').innerText = qData.q;
+        document.getElementById('current-pos').innerText = currentQ + 1;
+        const container = document.getElementById('choices-container');
+        container.innerHTML = "";
+        
+        qData.c.forEach((choice, index) => {
+            const btn = document.createElement('button');
+            btn.className = "choice-btn";
+            btn.innerText = choice;
+            btn.onclick = () => checkAnswer(index);
+            container.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(idx) {
+        if(idx === questions[currentQ].a) score++;
+        currentQ++;
+        if(currentQ < 10) showQuestion();
+        else finishGame();
+    }
+
+    function finishGame() {
+        clearInterval(timerInterval);
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        const name = document.getElementById('player-name').value;
+        document.getElementById('final-score').innerText = `คุณ ${name} ได้คะแนน: ${score} / 10`;
+        document.getElementById('final-time').innerText = `ใช้เวลาไปทั้งหมด: ${seconds} วินาที`;
+    }
+</script>
+
+</body>
+</html>
