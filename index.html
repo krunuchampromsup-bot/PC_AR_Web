@@ -12,6 +12,7 @@
             --glass: rgba(255, 255, 255, 0.05);
             --border: rgba(0, 242, 255, 0.3);
             --btn-grad: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            --pink-neon: #ff00cc;
         }
 
         body {
@@ -45,7 +46,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 25px;
             max-width: 1050px;
-            margin: 40px auto 100px auto;
+            margin: 40px auto 50px auto; /* ลดระยะห่างด้านล่างลงเพื่อรับกับปุ่ม Quiz */
             padding: 0 20px;
         }
 
@@ -60,6 +61,7 @@
             position: relative;
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             backdrop-filter: blur(10px);
+            cursor: pointer;
         }
 
         .card:hover {
@@ -68,11 +70,9 @@
             box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2);
         }
 
-        /* รูปภาพหน้าหลัก */
         .card > img { width: 90px; height: 90px; margin-bottom: 10px; }
         .card span { font-size: 1.2rem; font-weight: 600; display: block; }
 
-        /* --- Pop-up แก้ไขตรงนี้ --- */
         .spec-popup {
             position: absolute;
             top: 50%; left: 50%;
@@ -89,21 +89,14 @@
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* กำหนดขนาดรูปในป๊อปอัพ */
         .spec-popup img {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            margin-bottom: 15px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+            width: 120px; height: 120px; object-fit: contain;
+            margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;
         }
 
         .card:hover .spec-popup {
             transform: translate(-50%, -85%) scale(1);
-            opacity: 1;
-            pointer-events: auto;
+            opacity: 1; pointer-events: auto;
         }
 
         .spec-header { color: var(--neon-blue); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
@@ -115,9 +108,46 @@
             padding: 10px; border-radius: 50px; font-size: 0.9rem; transition: 0.3s;
         }
 
-        .ar-btn:hover { box-shadow: 0 0 15px var(--neon-blue); }
+        /* --- CSS ส่วนที่เพิ่มใหม่สำหรับปุ่ม Quiz --- */
+        .quiz-container {
+            text-align: center;
+            margin: 20px 0 80px 0;
+        }
 
-        @media (max-width: 850px) { .menu { grid-template-columns: repeat(2, 1fr); } }
+        .quiz-main-btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(45deg, var(--pink-neon), #3333ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            transition: 0.4s;
+            box-shadow: 0 0 20px rgba(255, 0, 204, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+
+        .quiz-main-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 0, 204, 0.7);
+            letter-spacing: 1px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #8892b0;
+            border-top: 1px solid var(--border);
+            background: rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 850px) { 
+            .menu { grid-template-columns: repeat(2, 1fr); }
+            .hero h1 { font-size: 2.2rem; }
+            .quiz-main-btn { font-size: 1.1rem; padding: 15px 30px; }
+        }
     </style>
 </head>
 <body>
@@ -221,6 +251,19 @@
     </div>
 </section>
 
+<div class="quiz-container">
+    <a href="quiz.html" class="quiz-main-btn">
+        🎮 เริ่มแบบทดสอบ Quiz Game (10 ข้อ)
+    </a>
+</div>
+
+<footer>
+    <p style="margin: 0; font-size: 1.1rem; letter-spacing: 1px;">
+        <span style="color: var(--neon-blue); font-weight: bold;">✨ T.Nuch SmartCom</span><br>
+        สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช
+    </p>
+</footer>
+
 <script>
     function playHover() {
         const sound = document.getElementById("hoverSound");
@@ -231,4 +274,3 @@
 
 </body>
 </html>
-
