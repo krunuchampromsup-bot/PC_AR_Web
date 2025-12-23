@@ -10,23 +10,29 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        :root { --neon: #00f2ff; --pink: #ff00cc; }
+        :root { --neon: #00f2ff; --pink: #ff00cc; --success: #2ecc71; --error: #e74c3c; }
         body { font-family: 'Prompt', sans-serif; background: #050a14; color: white; text-align: center; margin: 0; }
         .container { max-width: 600px; margin: 50px auto; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid var(--neon); box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
         input { padding: 12px; border-radius: 10px; border: 1px solid var(--neon); width: 80%; margin: 10px 0; background: #0a1a33; color: white; font-family: 'Prompt'; }
         .btn { padding: 15px 30px; background: var(--neon); color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem; margin: 10px; transition: 0.3s; }
         .btn:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--neon); }
         .choice-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.1); border: 1px solid var(--neon); color: white; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; }
-        .choice-btn:hover { background: var(--neon); color: black; }
+        /* สไตล์ปุ่มเมื่อตรวจคำตอบ */
+        .choice-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .choice-btn.wrong { background: var(--error) !important; color: white; border-color: var(--error); }
+        
         #timer { font-size: 1.5rem; color: var(--pink); font-weight: bold; margin-bottom: 10px; }
         .hidden { display: none; }
-        
         table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; }
         th, td { padding: 12px; border-bottom: 1px solid rgba(0, 242, 255, 0.1); text-align: center; }
         th { background: rgba(0, 242, 255, 0.2); color: var(--neon); }
     </style>
 </head>
 <body>
+
+<audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+<audio id="snd-finish" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
 <div class="container" id="setup-screen">
     <h2 style="color: var(--neon)">🎮 Hardware Quiz Game</h2>
@@ -49,7 +55,6 @@
     <h2 id="result-header" style="color: var(--neon);">ยินดีด้วย! ทำภารกิจสำเร็จ</h2>
     <p id="final-score" style="font-size: 1.2rem;"></p>
     <p id="final-time"></p>
-
     <h3 style="color: var(--pink); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">🏆 อันดับคะแนนล่าสุด</h3>
     <table id="score-table">
         <thead>
@@ -57,7 +62,6 @@
         </thead>
         <tbody id="leaderboard-body"></tbody>
     </table>
-
     <a href="index.html" style="color: white; display: block; margin-top: 20px; text-decoration: none;">← กลับหน้าหลัก</a>
 </div>
 
@@ -74,7 +78,6 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // ✅ ตรวจสอบสถานะการทำ Quiz ทันทีที่โหลดหน้าเว็บ
     window.onload = function() {
         if (localStorage.getItem("hardware_quiz_done") === "true") {
             showAlreadyDone();
@@ -94,7 +97,7 @@
         { q: "Socket บนเมนบอร์ดมีไว้สำหรับใส่สิ่งใด?", c: ["CPU", "Power Cable", "Case Fan"], a: 0 }
     ];
 
-    let currentQ = 0; let score = 0; let seconds = 0; let timerInterval;
+    let currentQ = 0; let score = 0; let seconds = 0; let timerInterval; let isAnswering = false;
 
     function startQuiz() {
         const name = document.getElementById('player-name').value;
@@ -109,6 +112,7 @@
     }
 
     function showQuestion() {
+        isAnswering = false;
         const qData = questions[currentQ];
         document.getElementById('question-text').innerText = qData.q;
         document.getElementById('current-pos').innerText = currentQ + 1;
@@ -118,51 +122,63 @@
             const btn = document.createElement('button');
             btn.className = "choice-btn";
             btn.innerText = choice;
-            btn.onclick = () => checkAnswer(index);
+            btn.onclick = () => checkAnswer(index, btn);
             container.appendChild(btn);
         });
     }
 
-    function checkAnswer(idx) {
-        if(idx === questions[currentQ].a) score++;
-        currentQ++;
-        if(currentQ < 10) showQuestion();
-        else finishGame();
+    function checkAnswer(idx, selectedBtn) {
+        if(isAnswering) return; // ป้องกันการกดเบิ้ล
+        isAnswering = true;
+        
+        const correctIdx = questions[currentQ].a;
+        const allBtns = document.querySelectorAll('.choice-btn');
+
+        if(idx === correctIdx) {
+            score++;
+            selectedBtn.classList.add('correct');
+            document.getElementById('snd-correct').play();
+        } else {
+            selectedBtn.classList.add('wrong');
+            allBtns[correctIdx].classList.add('correct'); // เฉลยข้อที่ถูก
+            document.getElementById('snd-wrong').play();
+        }
+
+        setTimeout(() => {
+            currentQ++;
+            if(currentQ < 10) showQuestion();
+            else finishGame();
+        }, 800); // รอ 0.8 วินาทีให้เด็กดูเฉลยก่อนไปข้อถัดไป
     }
 
     function finishGame() {
         clearInterval(timerInterval);
+        document.getElementById('snd-finish').play();
         const name = document.getElementById('player-name').value;
         
         database.ref('scores/').push({
             name: name, score: score, time: seconds, timestamp: Date.now()
         }).then(() => {
-            // ✅ บันทึกลงเครื่องผู้เล่นว่าทำเสร็จแล้ว
             localStorage.setItem("hardware_quiz_done", "true");
             localStorage.setItem("last_score", score);
             localStorage.setItem("last_time", seconds);
             localStorage.setItem("user_name", name);
-            
             showResultView();
         });
     }
 
-    // ฟังก์ชันแสดงผลคะแนน
     function showResultView() {
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('setup-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        
         const name = localStorage.getItem("user_name");
         const s = localStorage.getItem("last_score");
         const t = localStorage.getItem("last_time");
-        
         document.getElementById('final-score').innerText = `คุณ ${name} ได้คะแนน: ${s} / 10`;
         document.getElementById('final-time').innerText = `ใช้เวลาไปทั้งหมด: ${t} วินาที`;
         loadLeaderboard();
     }
 
-    // ✅ ฟังก์ชันจัดการกรณีผู้ที่เคยทำแล้วกลับเข้ามา
     function showAlreadyDone() {
         document.getElementById('setup-content').innerHTML = `
             <p style="color: var(--pink); font-weight: bold;">⚠️ คุณได้ทำการทดสอบไปแล้ว</p>
