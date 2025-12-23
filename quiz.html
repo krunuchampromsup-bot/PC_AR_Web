@@ -21,6 +21,7 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(0,0,0,0.2); }
         th, td { padding: 12px; border-bottom: 1px solid rgba(0, 242, 255, 0.1); text-align: center; }
         th { background: rgba(0, 242, 255, 0.2); color: var(--neon); }
+        .warning-text { color: var(--pink); font-weight: bold; margin-bottom: 15px; border: 1px dashed var(--pink); padding: 10px; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -39,6 +40,14 @@
         </div>
     </div>
 
+    <div class="container hidden" id="already-done-screen">
+        <h2 style="color: var(--pink)">⚠️ พบประวัติการทำข้อสอบ</h2>
+        <p>คุณได้ทำการทดสอบวิชานี้ไปเรียบร้อยแล้วครับ</p>
+        <p>ระบบอนุญาตให้ส่งคำตอบได้เพียง <b>1 ครั้ง</b> ต่อหนึ่งอุปกรณ์เท่านั้น</p>
+        <hr style="border: 0.5px solid var(--neon); margin: 20px 0;">
+        <button class="btn" onclick="showLeaderboardOnly()">ดูอันดับคะแนนล่าสุด</button>
+    </div>
+
     <div class="container hidden" id="quiz-screen">
         <div id="timer">เวลา: 0 วินาที</div>
         <h3 id="question-text">กำลังโหลดคำถาม...</h3>
@@ -55,11 +64,10 @@
             <thead><tr><th>ชื่อ</th><th>คะแนน</th><th>เวลา</th></tr></thead>
             <tbody id="leaderboard-body"></tbody>
         </table>
-        <button class="btn" style="background:gray; font-size:0.9rem" onclick="location.reload()">ทำใหม่ (ทดสอบ)</button>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: #888;">* ข้อมูลถูกบันทึกลงระบบเรียบร้อยแล้ว</p>
     </div>
 
 <script>
-    // ✅ ใช้ Config เดิมที่คุณครูแคปให้ในรูป
     const firebaseConfig = {
         apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
         authDomain: "smartcom-ar-quiz.firebaseapp.com",
@@ -71,6 +79,14 @@
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
+
+    // ✅ ตรวจสอบทันทีที่เปิดหน้าเว็บว่าเคยสอบหรือยัง
+    window.onload = function() {
+        if (localStorage.getItem("hardware_quiz_done") === "true") {
+            document.getElementById('setup-screen').classList.add('hidden');
+            document.getElementById('already-done-screen').classList.remove('hidden');
+        }
+    };
 
     const rawQuestions = [
         { q: "อุปกรณ์ใดเปรียบเสมือน 'สมอง' ของคอมพิวเตอร์?", c: ["RAM", "CPU", "SSD"], a: "CPU" },
@@ -96,13 +112,25 @@
     }
 
     function startQuiz() {
+        // ตรวจสอบซ้ำอีกรอบเพื่อความชัวร์
+        if (localStorage.getItem("hardware_quiz_done") === "true") {
+            alert("คุณได้ทำข้อสอบไปแล้วครับ");
+            return;
+        }
+
         const name = document.getElementById('player-name').value;
         if(!name) return alert("กรุณาใส่ชื่อก่อนครับ");
+        
         questions = shuffle([...rawQuestions]).slice(0, 10);
         questions.forEach(item => { item.c = shuffle([...item.c]); });
+        
         document.getElementById('setup-screen').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
-        timerInterval = setInterval(() => { seconds++; document.getElementById('timer').innerText = `เวลา: ${seconds} วินาที`; }, 1000);
+        
+        timerInterval = setInterval(() => { 
+            seconds++; 
+            document.getElementById('timer').innerText = `เวลา: ${seconds} วินาที`; 
+        }, 1000);
         showQuestion();
     }
 
@@ -144,7 +172,15 @@
         clearInterval(timerInterval);
         document.getElementById('snd-finish').play().catch(e => {});
         const name = document.getElementById('player-name').value;
+        
+        // ✅ บันทึกลงระบบ Firebase
         database.ref('scores/').push({ name, score, time: seconds, timestamp: Date.now() });
+
+        // ✅ บันทึกลงเครื่องนักเรียนว่าทำเสร็จแล้ว
+        localStorage.setItem("hardware_quiz_done", "true");
+        localStorage.setItem("my_last_score", score);
+        localStorage.setItem("my_last_time", seconds);
+
         showResultView(name, score, seconds);
     }
 
@@ -153,6 +189,19 @@
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('final-score').innerText = `คุณ ${name} ทำได้: ${s} / 10 คะแนน`;
         document.getElementById('final-time').innerText = `ใช้เวลา: ${t} วินาที`;
+        loadLeaderboard();
+    }
+
+    // ฟังก์ชันสำหรับคนที่เคยทำแล้วอยากดูแค่ตารางคะแนน
+    function showLeaderboardOnly() {
+        document.getElementById('already-done-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('result-header').innerText = "อันดับคะแนนปัจจุบัน";
+        
+        const s = localStorage.getItem("my_last_score") || "-";
+        const t = localStorage.getItem("my_last_time") || "-";
+        document.getElementById('final-score').innerText = `คะแนนล่าสุดของคุณ: ${s} / 10`;
+        document.getElementById('final-time').innerText = `เวลาที่เคยทำได้: ${t} วินาที`;
         loadLeaderboard();
     }
 
