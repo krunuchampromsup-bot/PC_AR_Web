@@ -3,67 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hardware Quiz Game - T.Nuch SmartCom</title>
+    <title>Hardware Quiz - T.Nuch SmartCom</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
     <style>
         :root { --neon: #00f2ff; --pink: #ff00cc; --success: #2ecc71; --error: #e74c3c; }
-        body { font-family: 'Prompt', sans-serif; background: #050a14; color: white; text-align: center; margin: 0; }
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid var(--neon); box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
-        input { padding: 12px; border-radius: 10px; border: 1px solid var(--neon); width: 80%; margin: 10px 0; background: #0a1a33; color: white; font-family: 'Prompt'; }
-        .btn { padding: 15px 30px; background: var(--neon); color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem; margin: 10px; transition: 0.3s; }
-        .btn:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--neon); }
+        body { font-family: 'Prompt', sans-serif; background: #050a14; color: white; text-align: center; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 20px auto; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid var(--neon); box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
+        input { padding: 12px; border-radius: 10px; border: 1px solid var(--neon); width: 80%; margin: 10px 0; background: #0a1a33; color: white; font-family: 'Prompt'; font-size: 1rem; }
+        .btn { padding: 15px 30px; background: var(--neon); color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1.1rem; margin: 10px; transition: 0.3s; }
         .choice-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.1); border: 1px solid var(--neon); color: white; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; }
         .choice-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
         .choice-btn.wrong { background: var(--error) !important; color: white; border-color: var(--error); }
         #timer { font-size: 1.5rem; color: var(--pink); font-weight: bold; margin-bottom: 10px; }
         .hidden { display: none; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(0,0,0,0.2); }
         th, td { padding: 12px; border-bottom: 1px solid rgba(0, 242, 255, 0.1); text-align: center; }
         th { background: rgba(0, 242, 255, 0.2); color: var(--neon); }
     </style>
 </head>
 <body>
 
-<audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
-<audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
-<audio id="snd-finish" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+    <audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+    <audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+    <audio id="snd-finish" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
-<div class="container" id="setup-screen">
-    <h2 style="color: var(--neon)">🎮 Hardware Quiz Game</h2>
-    <div id="setup-content">
-        <p>กรุณากรอกชื่อเพื่อเริ่มทดสอบ (10 ข้อ)</p>
-        <input type="text" id="player-name" placeholder="ชื่อของคุณ...">
-        <br>
-        <button class="btn" onclick="startQuiz()">เริ่มเกม!</button>
+    <div class="container" id="setup-screen">
+        <h2 style="color: var(--neon)">🎮 Hardware Quiz Game</h2>
+        <div id="setup-content">
+            <p>กรุณากรอกชื่อเพื่อเริ่มทดสอบ (สุ่มคำถาม 10 ข้อ)</p>
+            <input type="text" id="player-name" placeholder="ใส่ชื่อของคุณที่นี่...">
+            <br>
+            <button class="btn" onclick="startQuiz()">เข้าสู่บททดสอบ</button>
+        </div>
     </div>
-</div>
 
-<div class="container hidden" id="quiz-screen">
-    <div id="timer">เวลา: 0 วินาที</div>
-    <h3 id="question-text">คำถามจะปรากฏที่นี่</h3>
-    <div id="choices-container"></div>
-    <p>ข้อที่ <span id="current-pos">1</span> / 10</p>
-</div>
+    <div class="container hidden" id="quiz-screen">
+        <div id="timer">เวลา: 0 วินาที</div>
+        <h3 id="question-text">กำลังโหลดคำถาม...</h3>
+        <div id="choices-container"></div>
+        <p>ข้อที่ <span id="current-pos">1</span> / 10</p>
+    </div>
 
-<div class="container hidden" id="result-screen">
-    <h2 id="result-header" style="color: var(--neon);">ยินดีด้วย! ทำภารกิจสำเร็จ</h2>
-    <p id="final-score" style="font-size: 1.2rem;"></p>
-    <p id="final-time"></p>
-    <h3 style="color: var(--pink); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">🏆 อันดับคะแนนล่าสุด</h3>
-    <table id="score-table">
-        <thead>
-            <tr><th>ชื่อ</th><th>คะแนน</th><th>เวลา</th></tr>
-        </thead>
-        <tbody id="leaderboard-body"></tbody>
-    </table>
-    <a href="index.html" style="color: white; display: block; margin-top: 20px; text-decoration: none;">← กลับหน้าหลัก</a>
-</div>
+    <div class="container hidden" id="result-screen">
+        <h2 id="result-header" style="color: var(--neon);">ยินดีด้วย!</h2>
+        <p id="final-score" style="font-size: 1.2rem;"></p>
+        <p id="final-time"></p>
+        <h3 style="color: var(--pink); margin-top: 30px;">🏆 อันดับคะแนนล่าสุด</h3>
+        <table>
+            <thead><tr><th>ชื่อ</th><th>คะแนน</th><th>เวลา</th></tr></thead>
+            <tbody id="leaderboard-body"></tbody>
+        </table>
+        <button class="btn" style="background:gray; font-size:0.9rem" onclick="location.reload()">ทำใหม่ (ทดสอบ)</button>
+    </div>
 
 <script>
-    // Config เดิมของคุณครู
+    // ✅ ใช้ Config เดิมที่คุณครูแคปให้ในรูป
     const firebaseConfig = {
         apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
         authDomain: "smartcom-ar-quiz.firebaseapp.com",
@@ -75,12 +71,6 @@
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-
-    window.onload = function() {
-        if (localStorage.getItem("hardware_quiz_done") === "true") {
-            showAlreadyDone();
-        }
-    };
 
     const rawQuestions = [
         { q: "อุปกรณ์ใดเปรียบเสมือน 'สมอง' ของคอมพิวเตอร์?", c: ["RAM", "CPU", "SSD"], a: "CPU" },
@@ -95,8 +85,7 @@
         { q: "Socket บนเมนบอร์ดมีไว้สำหรับใส่สิ่งใด?", c: ["CPU", "Power Cable", "Case Fan"], a: "CPU" }
     ];
 
-    let questions = []; 
-    let currentQ = 0; let score = 0; let seconds = 0; let timerInterval; let isAnswering = false;
+    let questions = []; let currentQ = 0; let score = 0; let seconds = 0; let timerInterval; let isAnswering = false;
 
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -109,14 +98,11 @@
     function startQuiz() {
         const name = document.getElementById('player-name').value;
         if(!name) return alert("กรุณาใส่ชื่อก่อนครับ");
-        questions = shuffle([...rawQuestions]); 
+        questions = shuffle([...rawQuestions]).slice(0, 10);
         questions.forEach(item => { item.c = shuffle([...item.c]); });
         document.getElementById('setup-screen').classList.add('hidden');
         document.getElementById('quiz-screen').classList.remove('hidden');
-        timerInterval = setInterval(() => {
-            seconds++;
-            document.getElementById('timer').innerText = `เวลา: ${seconds} วินาที`;
-        }, 1000);
+        timerInterval = setInterval(() => { seconds++; document.getElementById('timer').innerText = `เวลา: ${seconds} วินาที`; }, 1000);
         showQuestion();
     }
 
@@ -129,26 +115,23 @@
         container.innerHTML = "";
         qData.c.forEach((choice) => {
             const btn = document.createElement('button');
-            btn.className = "choice-btn";
-            btn.innerText = choice;
+            btn.className = "choice-btn"; btn.innerText = choice;
             btn.onclick = () => checkAnswer(choice, btn);
             container.appendChild(btn);
         });
     }
 
     function checkAnswer(userChoice, selectedBtn) {
-        if(isAnswering) return;
-        isAnswering = true;
+        if(isAnswering) return; isAnswering = true;
         const qData = questions[currentQ];
         const allBtns = document.querySelectorAll('.choice-btn');
         if(userChoice === qData.a) {
-            score++;
-            selectedBtn.classList.add('correct');
-            document.getElementById('snd-correct').play();
+            score++; selectedBtn.classList.add('correct');
+            document.getElementById('snd-correct').play().catch(e => {});
         } else {
             selectedBtn.classList.add('wrong');
             allBtns.forEach(btn => { if(btn.innerText === qData.a) btn.classList.add('correct'); });
-            document.getElementById('snd-wrong').play();
+            document.getElementById('snd-wrong').play().catch(e => {});
         }
         setTimeout(() => {
             currentQ++;
@@ -159,49 +142,25 @@
 
     function finishGame() {
         clearInterval(timerInterval);
-        document.getElementById('snd-finish').play();
+        document.getElementById('snd-finish').play().catch(e => {});
         const name = document.getElementById('player-name').value;
-        database.ref('scores/').push({
-            name: name, score: score, time: seconds, timestamp: Date.now()
-        }).then(() => {
-            localStorage.setItem("hardware_quiz_done", "true");
-            localStorage.setItem("last_score", score);
-            localStorage.setItem("last_time", seconds);
-            localStorage.setItem("user_name", name);
-            showResultView();
-        });
+        database.ref('scores/').push({ name, score, time: seconds, timestamp: Date.now() });
+        showResultView(name, score, seconds);
     }
 
-    function showResultView() {
+    function showResultView(name, s, t) {
         document.getElementById('quiz-screen').classList.add('hidden');
-        document.getElementById('setup-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        const name = localStorage.getItem("user_name") || "นักเรียน";
-        const s = localStorage.getItem("last_score") || 0;
-        const t = localStorage.getItem("last_time") || 0;
-        document.getElementById('final-score').innerText = `คุณ ${name} ได้คะแนน: ${s} / 10`;
-        document.getElementById('final-time').innerText = `ใช้เวลาไปทั้งหมด: ${t} วินาที`;
+        document.getElementById('final-score').innerText = `คุณ ${name} ทำได้: ${s} / 10 คะแนน`;
+        document.getElementById('final-time').innerText = `ใช้เวลา: ${t} วินาที`;
         loadLeaderboard();
-    }
-
-    function showAlreadyDone() {
-        document.getElementById('setup-content').innerHTML = `
-            <p style="color: var(--pink); font-weight: bold;">⚠️ คุณได้ทำการทดสอบไปแล้ว</p>
-            <p>ระบบอนุญาตให้เข้าสอบได้เพียงคนละ 1 ครั้งเท่านั้นครับ</p>
-            <button class="btn" onclick="showResultView()">ดูคะแนนของฉัน/อันดับ</button>
-        `;
-        document.getElementById('result-header').innerText = "ผลการทดสอบของคุณ";
     }
 
     function loadLeaderboard() {
         database.ref('scores/').orderByChild('score').limitToLast(10).on('value', (snapshot) => {
-            const list = [];
-            snapshot.forEach((child) => { list.push(child.val()); });
-            list.reverse(); 
-            const tbody = document.getElementById('leaderboard-body');
-            tbody.innerHTML = list.map(item => `
-                <tr><td>${item.name}</td><td>${item.score}</td><td>${item.time} วินาที</td></tr>
-            `).join('');
+            const list = []; snapshot.forEach((child) => { list.push(child.val()); });
+            list.reverse();
+            document.getElementById('leaderboard-body').innerHTML = list.map(i => `<tr><td>${i.name}</td><td>${i.score}</td><td>${i.time}</td></tr>`).join('');
         });
     }
 </script>
