@@ -173,10 +173,24 @@
         document.getElementById('snd-finish').play().catch(e => {});
         const name = document.getElementById('player-name').value;
         
-        // ✅ บันทึกลงระบบ Firebase
+        // --- 1. ส่วนบันทึกลง Firebase (เดิมของคุณครู) ---
         database.ref('scores/').push({ name, score, time: seconds, timestamp: Date.now() });
 
-        // ✅ บันทึกลงเครื่องนักเรียนว่าทำเสร็จแล้ว
+        // --- 2. ส่วนบันทึกลง LocalStorage สำหรับหน้าแอดมิน (เพิ่มใหม่) ---
+        // ดึงข้อมูลเดิมจากเครื่องออกมา ถ้าไม่มีให้สร้างเป็นอาเรย์ว่าง []
+        let allScores = JSON.parse(localStorage.getItem('studentScores')) || [];
+        
+        // เพิ่มข้อมูลผลลัพธ์ใหม่เข้าไป
+        allScores.push({
+            name: name,
+            score: score,
+            time: seconds
+        });
+        
+        // เซฟกลับลงเครื่องในชื่อ 'studentScores' (ต้องตรงกับชื่อที่หน้าแอดมินดึงไปใช้)
+        localStorage.setItem('studentScores', JSON.stringify(allScores));
+
+        // --- 3. ส่วนบันทึกเพื่อป้องกันการทำซ้ำ (เดิมของคุณครู) ---
         localStorage.setItem("hardware_quiz_done", "true");
         localStorage.setItem("my_last_score", score);
         localStorage.setItem("my_last_time", seconds);
