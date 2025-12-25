@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR View - CPU Test</title>
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
@@ -19,6 +19,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            overflow: hidden;
         }
 
         header {
@@ -32,9 +33,9 @@
             width: 100%;
             flex-grow: 1;
             background-color: transparent;
-            --poster-color: transparent;
         }
 
+        /* --- ปุ่มส่อง AR --- */
         .ar-button {
             background-color: var(--neon-blue);
             border-radius: 50px;
@@ -48,8 +49,10 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+            z-index: 10;
         }
 
+        /* --- ปุ่มย้อนกลับ --- */
         .back-btn {
             position: absolute;
             top: 25px;
@@ -61,16 +64,42 @@
             padding: 8px 15px;
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.2);
-            z-index: 10;
+            z-index: 20;
         }
 
-        .back-btn:hover {
+        /* --- ✅ ปุ่มฟังเสียงบรรยาย --- */
+        .audio-control {
+            position: absolute;
+            top: 25px;
+            right: 20px;
+            z-index: 20;
+            background: rgba(0, 242, 255, 0.2);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        .audio-control:hover {
             background: var(--neon-blue);
             color: #050a14;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .audio-control.playing {
+            background: #ff00cc;
+            border-color: #ff00cc;
+            color: white;
         }
 
         .info-panel {
-            padding: 30px;
+            padding: 25px;
             background: rgba(7, 15, 30, 0.9);
             border-top: 2px solid var(--neon-blue);
         }
@@ -78,7 +107,14 @@
 </head>
 <body>
 
+    <audio id="cpuAudio" src="CPU.mp3"></audio>
+
     <a href="index.html" class="back-btn">← ย้อนกลับ</a>
+
+    <button class="audio-control" id="audioBtn">
+        <span id="audioIcon">🔈</span> 
+        <span id="audioText">ฟังเสียงบรรยาย</span>
+    </button>
 
     <header>
         <h2>CPU - Test Model View</h2>
@@ -98,9 +134,37 @@
     </model-viewer>
 
     <div class="info-panel">
-        <h3 style="color: var(--neon-blue); margin-top: 0;">เกร็ดความรู้เรื่อง CPU</h3>
-        <p>CPU (Central Processing Unit) คือหน่วยประมวลผลกลางของคอมพิวเตอร์ ทำหน้าที่คำนวณ ควบคุม และสั่งการการทำงานของอุปกรณ์ต่างๆ ภายในเครื่อง</p>
+        <h3 style="color: var(--neon-blue); margin: 0 0 10px 0;">เกร็ดความรู้เรื่อง CPU</h3>
+        <p style="margin: 0; line-height: 1.6;">CPU (Central Processing Unit) คือหน่วยประมวลผลกลางของคอมพิวเตอร์ ทำหน้าที่คำนวณ ควบคุม และสั่งการการทำงานของอุปกรณ์ต่างๆ ภายในเครื่อง</p>
     </div>
+
+    <script>
+        const audio = document.getElementById('cpuAudio');
+        const audioBtn = document.getElementById('audioBtn');
+        const audioIcon = document.getElementById('audioIcon');
+        const audioText = document.getElementById('audioText');
+
+        audioBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                audioBtn.classList.add('playing');
+                audioIcon.innerText = '🔊';
+                audioText.innerText = 'กำลังเล่น...';
+            } else {
+                audio.pause();
+                audioBtn.classList.remove('playing');
+                audioIcon.innerText = '🔈';
+                audioText.innerText = 'ฟังเสียงบรรยาย';
+            }
+        });
+
+        // เมื่อเล่นจบให้รีเซ็ตปุ่ม
+        audio.onended = () => {
+            audioBtn.classList.remove('playing');
+            audioIcon.innerText = '🔈';
+            audioText.innerText = 'ฟังเสียงบรรยาย';
+        };
+    </script>
 
 </body>
 </html>
