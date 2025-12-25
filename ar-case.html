@@ -10,6 +10,7 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
+            --glass: rgba(255, 255, 255, 0.1);
         }
         body {
             margin: 0;
@@ -19,72 +20,108 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            overflow: hidden;
         }
 
         header {
-            padding: 20px;
+            padding: 15px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            background: linear-gradient(to bottom, rgba(0, 242, 255, 0.1), transparent);
         }
 
-        /* 2. กำหนดความสูงให้ชัดเจนเพื่อป้องกันหน้าจอวูบ */
         model-viewer {
             width: 100%;
-            height: 60vh; /* กำหนดความสูงแน่นอน */
-            background-color: #050a14;
-            --poster-color: transparent;
+            flex-grow: 1;
+            background: radial-gradient(circle, #0a1931 0%, #050a14 100%);
         }
 
-        .ar-button {
-            background-color: var(--neon-blue);
-            border-radius: 50px;
-            border: none;
-            padding: 12px 24px;
+        /* ปุ่มฟังเสียงแบบวงกลม (มุมขวาบน) - ตำแหน่งที่เหมาะสมที่สุด */
+        .audio-control {
             position: absolute;
-            bottom: 20px;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            color: var(--neon-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: 0.3s all ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .audio-control.playing {
+            border-color: #ff00cc;
+            color: #ff00cc;
+            box-shadow: 0 0 15px rgba(255, 0, 204, 0.4);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* ปุ่มส่อง AR (ลอยเด่นด้านล่าง) */
+        .ar-button {
+            background: linear-gradient(45deg, var(--neon-blue), #00a2ff);
+            border-radius: 30px;
+            border: none;
+            padding: 12px 30px;
+            position: absolute;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             color: #050a14;
-            font-weight: bold;
+            font-weight: 700;
+            letter-spacing: 1px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
-            z-index: 20;
+            box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4);
+            z-index: 10;
         }
 
         .back-btn {
             position: absolute;
-            top: 25px;
+            top: 20px;
             left: 20px;
+            z-index: 100;
             color: white;
             text-decoration: none;
-            font-size: 0.9rem;
-            background: rgba(255,255,255,0.1);
-            padding: 8px 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.2);
-            z-index: 100;
-        }
-
-        .back-btn:hover {
-            background: var(--neon-blue);
-            color: #050a14;
+            background: var(--glass);
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .info-panel {
-            padding: 20px;
-            background: rgba(7, 15, 30, 0.9);
-            border-top: 2px solid var(--neon-blue);
-            flex-grow: 1;
+            padding: 20px 30px;
+            background: rgba(7, 15, 30, 0.95);
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px 20px 0 0;
         }
     </style>
 </head>
 <body>
 
+    <audio id="caseAudio" src="case.mp3"></audio>
+
     <a href="index.html" class="back-btn">← ย้อนกลับ</a>
 
+    <button class="audio-control" id="audioBtn" title="ฟังเสียงบรรยาย">
+        <span id="audioIcon">🔈</span>
+    </button>
+
     <header>
-        <h2>Computer Case</h2>
+        <h2 style="margin:0; font-weight:300; letter-spacing: 2px;">COMPUTER CASE</h2>
     </header>
 
     <model-viewer 
@@ -93,18 +130,40 @@
         ar-modes="webxr scene-viewer quick-look" 
         camera-controls 
         auto-rotate 
-        shadow-intensity="1"
-        alt="โมเดล 3D เคสคอมพิวเตอร์">
+        shadow-intensity="2"
+        exposure="1">
         
         <button slot="ar-button" class="ar-button">
-            ✨ ส่องดู Case ในโลกจริง (AR)
+            VIEW IN AR
         </button>
     </model-viewer>
 
     <div class="info-panel">
-        <h3 style="color: var(--neon-blue); margin-top: 0;">เกร็ดความรู้เรื่อง Case</h3>
-        <p>เคสคอมพิวเตอร์ (Case) ทำหน้าที่เป็นเกราะป้องกันอุปกรณ์ภายในจากฝุ่นและความชื้น รวมถึงช่วยจัดระเบียบการวางอุปกรณ์ต่างๆ และที่สำคัญที่สุดคือการออกแบบทิศทางลม (Airflow) เพื่อระบายความร้อนออกจากตัวเครื่องอย่างมีประสิทธิภาพครับ</p>
+        <h3 style="color: var(--neon-blue); margin: 0 0 8px 0;">เกร็ดความรู้เรื่อง Case</h3>
+        <p style="margin: 0; font-size: 14px; color: #a0aab8; line-height: 1.5;">เคสทำหน้าที่ปกป้องอุปกรณ์ภายใน จัดระเบียบชิ้นส่วน และช่วยระบายความร้อนผ่านทิศทางลม (Airflow) ครับ</p>
     </div>
 
+    <script>
+        const audio = document.getElementById('caseAudio');
+        const audioBtn = document.getElementById('audioBtn');
+        const audioIcon = document.getElementById('audioIcon');
+
+        audioBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                audioBtn.classList.add('playing');
+                audioIcon.innerText = '🔊';
+            } else {
+                audio.pause();
+                audioBtn.classList.remove('playing');
+                audioIcon.innerText = '🔈';
+            }
+        });
+
+        audio.onended = () => {
+            audioBtn.classList.remove('playing');
+            audioIcon.innerText = '🔈';
+        };
+    </script>
 </body>
 </html>
