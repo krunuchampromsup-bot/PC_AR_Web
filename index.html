@@ -25,32 +25,51 @@
             min-height: 100vh;
         }
 
-        /* --- ส่วนที่เพิ่มใหม่: โลโก้ลิขสิทธิ์มุมจอ --- */
+        /* --- ✅ ส่วนลิขสิทธิ์: ปรับขนาดใหญ่และสวยงาม --- */
         .copyright-badge {
             position: fixed;
-            top: 15px;
-            right: 15px;
+            top: 25px;
+            right: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 9999;
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            pointer-events: none;
+        }
+
+        .copyright-badge img {
+            width: 80px; 
+            height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px var(--neon-blue));
+        }
+
+        .copyright-text-group {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            z-index: 1000;
-            pointer-events: none;
-            opacity: 0.7;
+            text-align: left;
         }
-        .copyright-badge img {
-            width: 60px; /* ปรับขนาดโลโก้ที่นี่ */
-            height: auto;
-            filter: drop-shadow(0 0 5px var(--neon-blue));
-            margin-bottom: 5px;
+
+        .copyright-text-group .brand-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.1;
         }
-        .copyright-badge span {
-            font-size: 0.6rem;
+
+        .copyright-text-group .brand-sub {
+            font-size: 1rem;
             color: var(--neon-blue);
-            font-weight: bold;
-            text-transform: uppercase;
+            font-weight: 500;
             letter-spacing: 1px;
         }
 
+        /* --- ส่วนเนื้อหา --- */
         .hero {
             text-align: center;
             padding: 60px 20px;
@@ -134,10 +153,7 @@
             padding: 10px; border-radius: 50px; font-size: 0.9rem; transition: 0.3s;
         }
 
-        .quiz-container {
-            text-align: center;
-            margin: 20px 0 80px 0;
-        }
+        .quiz-container { text-align: center; margin: 20px 0 80px 0; }
 
         .quiz-main-btn {
             display: inline-block;
@@ -157,7 +173,6 @@
         .quiz-main-btn:hover {
             transform: scale(1.1);
             box-shadow: 0 0 40px rgba(255, 0, 204, 0.7);
-            letter-spacing: 1px;
         }
 
         footer {
@@ -168,24 +183,33 @@
             background: rgba(0,0,0,0.3);
         }
 
-        /* ลิงก์ลับที่จุด */
-        .secret-link {
+        /* ✅ ลิงก์ลับรูป ✨ ใน Footer */
+        .secret-sparkle {
             text-decoration: none;
-            color: inherit;
-            cursor: default;
+            display: inline-block;
+            transition: 0.5s ease;
+            cursor: default; /* เนียนเป็นข้อความปกติ */
+        }
+
+        .secret-sparkle:hover {
+            transform: rotate(180deg) scale(1.5); /* หมุนและขยายเมื่อครูชี้ */
+            filter: drop-shadow(0 0 10px var(--neon-blue));
+            cursor: pointer;
         }
 
         @media (max-width: 850px) { 
             .menu { grid-template-columns: repeat(2, 1fr); }
             .hero h1 { font-size: 2.2rem; }
-            .quiz-main-btn { font-size: 1.1rem; padding: 15px 30px; }
+            .copyright-badge { top: 10px; right: 10px; padding: 8px 12px; }
+            .copyright-badge img { width: 50px; height: 50px; }
+            .copyright-text-group .brand-name { font-size: 1.1rem; }
+            .copyright-text-group .brand-sub { font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
 
 <div class="copyright-badge">
-    <span class="tag">copyright badge</span>
     <img src="logo.png" alt="T.Nuch Logo">
     <div class="copyright-text-group">
         <span class="brand-name">T.Nuch</span>
@@ -300,8 +324,9 @@
 
 <footer>
     <p style="margin: 0; font-size: 1.1rem; letter-spacing: 1px;">
-        <span style="color: var(--neon-blue); font-weight: bold;">✨ T.Nuch SmartCom</span><br>
-        สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช<a href="admin.html" class="secret-link">.</a>
+        <a href="admin.html" class="secret-sparkle">✨</a> 
+        <span style="color: var(--neon-blue); font-weight: bold;">T.Nuch SmartCom</span><br>
+        สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช
     </p>
 </footer>
 
@@ -315,4 +340,3 @@
 
 </body>
 </html>
-
