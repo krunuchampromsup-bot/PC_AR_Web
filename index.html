@@ -25,59 +25,49 @@
             min-height: 100vh;
         }
 
-        /* --- ✅ ส่วนลิขสิทธิ์: ปรับขนาดใหญ่และสวยงาม --- */
+        /* --- ✅ ส่วนลิขสิทธิ์: ปรับให้รองรับ Mobile --- */
         .copyright-badge {
-            position: fixed;
-            top: 25px;
-            right: 25px;
+            position: absolute; /* เปลี่ยนเป็น absolute เพื่อไม่ให้บังเนื้อหาเวลาเลื่อนบนมือถือ */
+            top: 20px;
+            right: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             z-index: 9999;
-            padding: 12px 20px;
+            padding: 10px 15px;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 15px;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(0, 242, 255, 0.2);
-            pointer-events: none;
         }
 
         .copyright-badge img {
-            width: 80px; 
-            height: 80px;
+            width: 60px; height: 60px;
             object-fit: contain;
             filter: drop-shadow(0 0 8px var(--neon-blue));
         }
 
-        .copyright-text-group {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
         .copyright-text-group .brand-name {
-            font-size: 1.6rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #ffffff;
             line-height: 1.1;
         }
 
         .copyright-text-group .brand-sub {
-            font-size: 1rem;
+            font-size: 0.8rem;
             color: var(--neon-blue);
-            font-weight: 500;
-            letter-spacing: 1px;
         }
 
         /* --- ส่วนเนื้อหา --- */
         .hero {
             text-align: center;
-            padding: 60px 20px;
+            padding: 100px 20px 40px 20px; /* เพิ่ม padding top เพื่อหลบ badge */
             position: relative;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: clamp(1.8rem, 5vw, 3rem); /* ปรับขนาดอัตโนมัติตามหน้าจอ */
             font-weight: 700;
             margin: 0;
             background: linear-gradient(to bottom, #fff, var(--neon-blue));
@@ -86,12 +76,14 @@
             text-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
         }
 
+        /* --- ✅ ปรับ Grid ให้รองรับทุกหน้าจอ --- */
         .menu {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            max-width: 1050px;
-            margin: 40px auto 50px auto;
+            /* PC: 3 คอลัมน์ | Tablet: 2 คอลัมน์ | Mobile: 1 คอลัมน์ (ปรับผ่าน Media Query) */
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px;
+            max-width: 1100px;
+            margin: 20px auto 50px auto;
             padding: 0 20px;
         }
 
@@ -99,7 +91,7 @@
             background: var(--glass);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 35px 20px;
+            padding: 30px 15px;
             text-decoration: none;
             color: white;
             text-align: center;
@@ -107,21 +99,23 @@
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             backdrop-filter: blur(10px);
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .card:hover {
             border-color: var(--neon-blue);
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2);
         }
 
-        .card > img { width: 90px; height: 90px; margin-bottom: 10px; }
-        .card span { font-size: 1.2rem; font-weight: 600; display: block; }
+        .card > img { width: 80px; height: 80px; margin-bottom: 10px; }
+        .card span { font-size: 1.1rem; font-weight: 600; display: block; }
 
+        /* --- ✅ ปรับ Pop-up ให้แสดงผลดีบนมือถือ --- */
         .spec-popup {
             position: absolute;
             top: 50%; left: 50%;
-            width: 260px;
+            width: 280px;
             transform: translate(-50%, -50%) scale(0);
             background: rgba(7, 15, 30, 0.98);
             border: 2px solid var(--neon-blue);
@@ -134,27 +128,23 @@
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
-        .spec-popup img {
-            width: 120px; height: 120px; object-fit: contain;
-            margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;
-        }
-
-        .card:hover .spec-popup {
+        /* เมื่อ Hover หรือคลิกในมือถือ (ใช้คลาส active ช่วย) */
+        .card:hover .spec-popup, .card.active .spec-popup {
             transform: translate(-50%, -85%) scale(1);
             opacity: 1; pointer-events: auto;
         }
 
         .spec-header { color: var(--neon-blue); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .spec-list { font-size: 0.85rem; text-align: left; margin-bottom: 15px; color: #ccd6f6; line-height: 1.6; }
+        .spec-list { font-size: 0.9rem; text-align: left; margin-bottom: 15px; color: #ccd6f6; line-height: 1.6; }
 
         .ar-btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             background: var(--btn-grad); color: white; text-decoration: none;
-            padding: 10px; border-radius: 50px; font-size: 0.9rem; transition: 0.3s;
+            padding: 12px; border-radius: 50px; font-size: 0.95rem; font-weight: bold;
         }
 
-        .quiz-container { text-align: center; margin: 20px 0 80px 0; }
-
+        /* --- ✅ ปุ่ม Quiz Responsive --- */
+        .quiz-container { text-align: center; margin: 40px 20px 80px 20px; }
         .quiz-main-btn {
             display: inline-block;
             padding: 18px 45px;
@@ -162,17 +152,12 @@
             color: white;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 4vw, 1.4rem);
             font-weight: bold;
             transition: 0.4s;
             box-shadow: 0 0 20px rgba(255, 0, 204, 0.4);
             border: 2px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-        }
-
-        .quiz-main-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 40px rgba(255, 0, 204, 0.7);
+            width: 100%; max-width: 400px; /* เต็มจอในมือถือ */
         }
 
         footer {
@@ -183,27 +168,26 @@
             background: rgba(0,0,0,0.3);
         }
 
-        /* ✅ ลิงก์ลับรูป ✨ ใน Footer */
-        .secret-sparkle {
-            text-decoration: none;
-            display: inline-block;
-            transition: 0.5s ease;
-            cursor: default; /* เนียนเป็นข้อความปกติ */
+        /* --- ✅ Media Queries สำหรับ Tablet และ Mobile --- */
+        
+        /* แท็บเล็ต (หน้าจอไม่เกิน 992px) */
+        @media (max-width: 992px) {
+            .menu { grid-template-columns: repeat(2, 1fr); gap: 15px; }
         }
 
-        .secret-sparkle:hover {
-            transform: rotate(180deg) scale(1.5); /* หมุนและขยายเมื่อครูชี้ */
-            filter: drop-shadow(0 0 10px var(--neon-blue));
-            cursor: pointer;
-        }
-
-        @media (max-width: 850px) { 
-            .menu { grid-template-columns: repeat(2, 1fr); }
-            .hero h1 { font-size: 2.2rem; }
-            .copyright-badge { top: 10px; right: 10px; padding: 8px 12px; }
-            .copyright-badge img { width: 50px; height: 50px; }
-            .copyright-text-group .brand-name { font-size: 1.1rem; }
-            .copyright-text-group .brand-sub { font-size: 0.7rem; }
+        /* มือถือ (หน้าจอไม่เกิน 600px) */
+        @media (max-width: 600px) {
+            .hero { padding-top: 120px; }
+            .menu { grid-template-columns: 1fr; } /* แสดงคอลัมน์เดียว */
+            .copyright-badge { top: 15px; right: 15px; gap: 8px; padding: 6px 12px; }
+            .copyright-badge img { width: 45px; height: 45px; }
+            .copyright-text-group .brand-name { font-size: 1rem; }
+            
+            /* ปรับตำแหน่ง popup ในมือถือให้ไม่อยู่สูงเกินไป */
+            .card:hover .spec-popup, .card.active .spec-popup {
+                transform: translate(-50%, -50%) scale(1);
+                top: 50%;
+            }
         }
     </style>
 </head>
@@ -221,15 +205,14 @@
 
 <header class="hero">
     <h1>Smart Computer Hardware AR</h1>
-    <p>สื่อการเรียนรู้อัจฉริยะ สำหรับนักเรียน นักศึกษา </p>
+    <p>สื่อการเรียนรู้อัจฉริยะ สำหรับนักเรียน นักศึกษา</p>
 </header>
 
 <section class="menu">
-    <div class="card" onmouseover="playHover()">
+    <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="cpu.png" alt="CPU">
         <span>CPU</span>
         <div class="spec-popup">
-            <img src="cpu.png">
             <div class="spec-header">Central Processing Unit</div>
             <div class="spec-list">
                 • หัวใจหลักในการประมวลผล<br>
@@ -240,11 +223,10 @@
         </div>
     </div>
 
-    <div class="card" onmouseover="playHover()">
+    <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="ram.png" alt="RAM">
         <span>RAM</span>
         <div class="spec-popup">
-            <img src="ram.png">
             <div class="spec-header">Memory (RAM)</div>
             <div class="spec-list">
                 • หน่วยความจำชั่วคราว<br>
@@ -255,11 +237,10 @@
         </div>
     </div>
 
-    <div class="card" onmouseover="playHover()">
+    <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="ssd.png" alt="SSD">
         <span>SSD</span>
         <div class="spec-popup">
-            <img src="ssd.png">
             <div class="spec-header">Solid State Drive</div>
             <div class="spec-list">
                 • เก็บข้อมูลถาวรความเร็วสูง<br>
@@ -270,11 +251,10 @@
         </div>
     </div>
 
-    <div class="card" onmouseover="playHover()">
+    <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="psu.png" alt="PSU">
         <span>PSU</span>
         <div class="spec-popup">
-            <img src="psu.png">
             <div class="spec-header">Power Supply Unit</div>
             <div class="spec-list">
                 • แหล่งจ่ายไฟให้อุปกรณ์ทั้งหมด<br>
@@ -285,11 +265,10 @@
         </div>
     </div>
 
-    <div class="card" onmouseover="playHover()">
+    <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="case.png" alt="CASE">
         <span>CASE</span>
         <div class="spec-popup">
-            <img src="case.png">
             <div class="spec-header">Computer Case</div>
             <div class="spec-list">
                 • กล่องบรรจุอุปกรณ์ภายใน<br>
@@ -300,11 +279,10 @@
         </div>
     </div>
 
-    <div class="card" onmouseover="playHover()">
+    <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="mainboard.png" alt="MAINBOARD">
         <span>MAINBOARD</span>
         <div class="spec-popup">
-            <img src="mainboard.png">
             <div class="spec-header">Mainboard</div>
             <div class="spec-list">
                 • แผงวงจรหลักเชื่อมทุกส่วนเข้าด้วยกัน<br>
@@ -323,8 +301,7 @@
 </div>
 
 <footer>
-    <p style="margin: 0; font-size: 1.1rem; letter-spacing: 1px;">
-        <a href="admin.html" class="secret-sparkle">✨</a> 
+    <p style="margin: 0; font-size: 1rem; letter-spacing: 1px;">
         <span style="color: var(--neon-blue); font-weight: bold;">T.Nuch SmartCom</span><br>
         สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช
     </p>
@@ -334,8 +311,15 @@
     function playHover() {
         const sound = document.getElementById("hoverSound");
         sound.currentTime = 0;
-        sound.play();
+        sound.play().catch(e => console.log("Audio play prevented by browser"));
     }
+
+    // แก้ปัญหา Hover ในมือถือโดยการให้คลิกเพื่อเปิด/ปิด Popup
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
 </script>
 
 </body>
