@@ -25,6 +25,32 @@
             min-height: 100vh;
         }
 
+        /* --- ส่วนที่เพิ่มใหม่: โลโก้ลิขสิทธิ์มุมจอ --- */
+        .copyright-badge {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .copyright-badge img {
+            width: 60px; /* ปรับขนาดโลโก้ที่นี่ */
+            height: auto;
+            filter: drop-shadow(0 0 5px var(--neon-blue));
+            margin-bottom: 5px;
+        }
+        .copyright-badge span {
+            font-size: 0.6rem;
+            color: var(--neon-blue);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .hero {
             text-align: center;
             padding: 60px 20px;
@@ -46,7 +72,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 25px;
             max-width: 1050px;
-            margin: 40px auto 50px auto; /* ลดระยะห่างด้านล่างลงเพื่อรับกับปุ่ม Quiz */
+            margin: 40px auto 50px auto;
             padding: 0 20px;
         }
 
@@ -108,7 +134,6 @@
             padding: 10px; border-radius: 50px; font-size: 0.9rem; transition: 0.3s;
         }
 
-        /* --- CSS ส่วนที่เพิ่มใหม่สำหรับปุ่ม Quiz --- */
         .quiz-container {
             text-align: center;
             margin: 20px 0 80px 0;
@@ -143,6 +168,13 @@
             background: rgba(0,0,0,0.3);
         }
 
+        /* ลิงก์ลับที่จุด */
+        .secret-link {
+            text-decoration: none;
+            color: inherit;
+            cursor: default;
+        }
+
         @media (max-width: 850px) { 
             .menu { grid-template-columns: repeat(2, 1fr); }
             .hero h1 { font-size: 2.2rem; }
@@ -151,6 +183,11 @@
     </style>
 </head>
 <body>
+
+<div class="copyright-badge">
+    <img src="logo.png" alt="T.Nuch Logo">
+    <span>© T.Nuch SmartCom</span>
+</div>
 
 <audio id="hoverSound" src="https://www.soundjay.com/buttons/sounds/button-28.mp3" preload="auto"></audio>
 
@@ -260,7 +297,7 @@
 <footer>
     <p style="margin: 0; font-size: 1.1rem; letter-spacing: 1px;">
         <span style="color: var(--neon-blue); font-weight: bold;">✨ T.Nuch SmartCom</span><br>
-        สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช
+        สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช<a href="admin.html" class="secret-link">.</a>
     </p>
 </footer>
 
@@ -274,5 +311,3 @@
 
 </body>
 </html>
-
-
