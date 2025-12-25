@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR View - CPU Professional</title>
+    <title>AR View - CPU Test</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --neon-blue: #00f2ff;
-            --glass: rgba(255, 255, 255, 0.1);
         }
         body {
             margin: 0;
@@ -23,92 +22,86 @@
             overflow: hidden;
         }
 
-        /* --- Header --- */
         header {
-            padding: 15px;
+            padding: 20px;
             text-align: center;
-            background: linear-gradient(to bottom, rgba(0, 242, 255, 0.1), transparent);
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
         }
 
         model-viewer {
             width: 100%;
             flex-grow: 1;
-            background: radial-gradient(circle, #0a1931 0%, #050a14 100%);
+            background-color: transparent;
         }
 
-        /* --- ✅ ปุ่มฟังเสียงแบบวงกลม (มุมขวาบน) --- */
-        .audio-control {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--glass);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            color: var(--neon-blue);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            transition: 0.3s all ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .audio-control.playing {
-            border-color: #ff00cc;
-            color: #ff00cc;
-            box-shadow: 0 0 15px rgba(255, 0, 204, 0.4);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* --- ปุ่มส่อง AR (ลอยเด่นด้านล่าง) --- */
+        /* --- ปุ่มส่อง AR --- */
         .ar-button {
-            background: linear-gradient(45deg, var(--neon-blue), #00a2ff);
-            border-radius: 30px;
+            background-color: var(--neon-blue);
+            border-radius: 50px;
             border: none;
-            padding: 12px 30px;
+            padding: 12px 24px;
             position: absolute;
-            bottom: 40px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
             color: #050a14;
-            font-weight: 700;
-            letter-spacing: 1px;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
             z-index: 10;
         }
 
         /* --- ปุ่มย้อนกลับ --- */
         .back-btn {
             position: absolute;
-            top: 20px;
+            top: 25px;
             left: 20px;
-            z-index: 100;
             color: white;
             text-decoration: none;
-            background: var(--glass);
-            padding: 10px 15px;
-            border-radius: 12px;
-            font-size: 14px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            z-index: 20;
+        }
+
+        /* --- ✅ ปุ่มฟังเสียงบรรยาย --- */
+        .audio-control {
+            position: absolute;
+            top: 25px;
+            right: 20px;
+            z-index: 20;
+            background: rgba(0, 242, 255, 0.2);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        .audio-control:hover {
+            background: var(--neon-blue);
+            color: #050a14;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .audio-control.playing {
+            background: #ff00cc;
+            border-color: #ff00cc;
+            color: white;
         }
 
         .info-panel {
-            padding: 20px 30px;
-            background: rgba(7, 15, 30, 0.95);
-            border-top: 1px solid rgba(0, 242, 255, 0.2);
-            border-radius: 20px 20px 0 0;
+            padding: 25px;
+            background: rgba(7, 15, 30, 0.9);
+            border-top: 2px solid var(--neon-blue);
         }
     </style>
 </head>
@@ -118,12 +111,13 @@
 
     <a href="index.html" class="back-btn">← ย้อนกลับ</a>
 
-    <button class="audio-control" id="audioBtn" title="ฟังเสียงบรรยาย">
-        <span id="audioIcon">🔈</span>
+    <button class="audio-control" id="audioBtn">
+        <span id="audioIcon">🔈</span> 
+        <span id="audioText">ฟังเสียงบรรยาย</span>
     </button>
 
     <header>
-        <h2 style="margin:0; font-weight:300; letter-spacing: 2px;">CPU UNIT</h2>
+        <h2>CPU - Test Model View</h2>
     </header>
 
     <model-viewer 
@@ -132,40 +126,45 @@
         ar-modes="webxr scene-viewer quick-look" 
         camera-controls 
         auto-rotate 
-        shadow-intensity="2"
-        exposure="1">
+        shadow-intensity="1">
         
         <button slot="ar-button" class="ar-button">
-            VIEW IN AR
+            ✨ ส่องดูโมเดลในโลกจริง (AR)
         </button>
     </model-viewer>
 
     <div class="info-panel">
-        <h3 style="color: var(--neon-blue); margin: 0 0 8px 0;">เกร็ดความรู้เรื่อง CPU</h3>
-        <p style="margin: 0; font-size: 14px; color: #a0aab8; line-height: 1.5;">สมองหลักของคอมพิวเตอร์ ทำหน้าที่ประมวลผลข้อมูลและควบคุมคำสั่งทุกอย่างในระบบ</p>
+        <h3 style="color: var(--neon-blue); margin: 0 0 10px 0;">เกร็ดความรู้เรื่อง CPU</h3>
+        <p style="margin: 0; line-height: 1.6;">CPU (Central Processing Unit) คือหน่วยประมวลผลกลางของคอมพิวเตอร์ ทำหน้าที่คำนวณ ควบคุม และสั่งการการทำงานของอุปกรณ์ต่างๆ ภายในเครื่อง</p>
     </div>
 
     <script>
         const audio = document.getElementById('cpuAudio');
         const audioBtn = document.getElementById('audioBtn');
         const audioIcon = document.getElementById('audioIcon');
+        const audioText = document.getElementById('audioText');
 
         audioBtn.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
                 audioBtn.classList.add('playing');
                 audioIcon.innerText = '🔊';
+                audioText.innerText = 'กำลังเล่น...';
             } else {
                 audio.pause();
                 audioBtn.classList.remove('playing');
                 audioIcon.innerText = '🔈';
+                audioText.innerText = 'ฟังเสียงบรรยาย';
             }
         });
 
+        // เมื่อเล่นจบให้รีเซ็ตปุ่ม
         audio.onended = () => {
             audioBtn.classList.remove('playing');
             audioIcon.innerText = '🔈';
+            audioText.innerText = 'ฟังเสียงบรรยาย';
         };
     </script>
+
 </body>
 </html>
