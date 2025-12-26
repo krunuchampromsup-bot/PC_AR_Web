@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Computer Hardware AR - Professional</title>
+    
+    <title>Smart ComClass | เรียนรู้ฮาร์ดแวร์กับครูนุช</title>
+    <meta name="description" content="เปิดประสบการณ์เรียนรู้ฮาร์ดแวร์คอมพิวเตอร์รูปแบบใหม่กับ Smart ComClass โดยครูนุช สัมผัสอุปกรณ์จริงผ่านเทคโนโลยี AR 3D ที่ช่วยให้เรื่องคอมพิวเตอร์เข้าใจง่าย">
+    <meta property="og:title" content="Smart ComClass - สื่อเรียนรู้ฮาร์ดแวร์อัจฉริยะ">
+    <meta property="og:description" content="ส่องโลกคอมพิวเตอร์ 3 มิติ กับครูนุช เรียนรู้อย่างเข้าใจในแบบของครูนุช">
+    <meta property="og:image" content="https://krunuchampromsup-bot.github.io/PC_AR_Web/logo.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg-dark: #050a14;
@@ -14,21 +21,6 @@
             --btn-grad: linear-gradient(45deg, #00d2ff, #3a7bd5);
             --pink-neon: #ff00cc;
         }
-
-        <title>Smart ComClass | เรียนรู้ฮาร์ดแวร์กับครูนุช</title>
-<meta name="description" content="เปิดประสบการณ์เรียนรู้ฮาร์ดแวร์คอมพิวเตอร์รูปแบบใหม่กับ Smart ComClass โดยครูนุช สัมผัสอุปกรณ์จริงผ่านเทคโนโลยี AR 3D">
-
-<header class="hero">
-    <div class="logo-container">
-        <img src="logo.png" alt="T.Nuch Smart Com" style="width: 80px; margin-bottom: 10px;">
-    </div>
-    <h1>Smart ComClass</h1>
-    <h2 style="color: var(--neon-blue); font-weight: 500;">ส่องโลกฮาร์ดแวร์อัจฉริยะกับครูนุช</h2>
-    <p style="max-width: 600px; margin: 20px auto; line-height: 1.6; font-size: 1rem; opacity: 0.9;">
-        "เปลี่ยนการเรียนรู้แบบเดิมให้เป็นโลกเสมือนจริง ศึกษาโครงสร้างและหน้าที่ของอุปกรณ์คอมพิวเตอร์ผ่านเทคโนโลยี AR 
-        เพราะการเห็นภาพชัดเจน คือจุดเริ่มต้นของความเข้าใจ"
-    </p>
-</header>
 
         body {
             font-family: 'Prompt', sans-serif;
@@ -40,9 +32,9 @@
             min-height: 100vh;
         }
 
-        /* --- ✅ ส่วนลิขสิทธิ์: ปรับให้รองรับ Mobile --- */
+        /* --- Copyright Badge --- */
         .copyright-badge {
-            position: absolute; /* เปลี่ยนเป็น absolute เพื่อไม่ให้บังเนื้อหาเวลาเลื่อนบนมือถือ */
+            position: absolute;
             top: 20px;
             right: 20px;
             display: flex;
@@ -57,44 +49,44 @@
         }
 
         .copyright-badge img {
-            width: 60px; height: 60px;
+            width: 50px; height: 50px;
             object-fit: contain;
             filter: drop-shadow(0 0 8px var(--neon-blue));
         }
 
         .copyright-text-group .brand-name {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #ffffff;
             line-height: 1.1;
+            display: block;
         }
 
         .copyright-text-group .brand-sub {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--neon-blue);
         }
 
-        /* --- ส่วนเนื้อหา --- */
+        /* --- Hero Section --- */
         .hero {
             text-align: center;
-            padding: 100px 20px 40px 20px; /* เพิ่ม padding top เพื่อหลบ badge */
+            padding: 120px 20px 40px 20px;
             position: relative;
         }
 
         .hero h1 {
-            font-size: clamp(1.8rem, 5vw, 3rem); /* ปรับขนาดอัตโนมัติตามหน้าจอ */
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
             font-weight: 700;
             margin: 0;
             background: linear-gradient(to bottom, #fff, var(--neon-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
+            text-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
         }
 
-        /* --- ✅ ปรับ Grid ให้รองรับทุกหน้าจอ --- */
+        /* --- Hardware Grid --- */
         .menu {
             display: grid;
-            /* PC: 3 คอลัมน์ | Tablet: 2 คอลัมน์ | Mobile: 1 คอลัมน์ (ปรับผ่าน Media Query) */
             grid-template-columns: repeat(3, 1fr); 
             gap: 20px;
             max-width: 1100px;
@@ -124,9 +116,9 @@
         }
 
         .card > img { width: 80px; height: 80px; margin-bottom: 10px; }
-        .card span { font-size: 1.1rem; font-weight: 600; display: block; }
+        .card span { font-size: 1.2rem; font-weight: 600; display: block; color: var(--neon-blue); }
 
-        /* --- ✅ ปรับ Pop-up ให้แสดงผลดีบนมือถือ --- */
+        /* --- Pop-up Spec --- */
         .spec-popup {
             position: absolute;
             top: 50%; left: 50%;
@@ -143,7 +135,6 @@
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* เมื่อ Hover หรือคลิกในมือถือ (ใช้คลาส active ช่วย) */
         .card:hover .spec-popup, .card.active .spec-popup {
             transform: translate(-50%, -85%) scale(1);
             opacity: 1; pointer-events: auto;
@@ -158,8 +149,8 @@
             padding: 12px; border-radius: 50px; font-size: 0.95rem; font-weight: bold;
         }
 
-        /* --- ✅ ปุ่ม Quiz Responsive --- */
-        .quiz-container { text-align: center; margin: 40px 20px 80px 20px; }
+        /* --- Quiz & About --- */
+        .quiz-container { text-align: center; margin: 40px 20px; }
         .quiz-main-btn {
             display: inline-block;
             padding: 18px 45px;
@@ -167,38 +158,40 @@
             color: white;
             text-decoration: none;
             border-radius: 50px;
-            font-size: clamp(1rem, 4vw, 1.4rem);
+            font-size: 1.3rem;
             font-weight: bold;
             transition: 0.4s;
             box-shadow: 0 0 20px rgba(255, 0, 204, 0.4);
             border: 2px solid rgba(255, 255, 255, 0.2);
-            width: 100%; max-width: 400px; /* เต็มจอในมือถือ */
+            width: 100%; max-width: 400px;
+        }
+
+        .about-section {
+            max-width: 900px; 
+            margin: 80px auto; 
+            padding: 40px; 
+            background: var(--glass); 
+            border-radius: 20px; 
+            border: 1px dashed var(--border); 
+            text-align: center;
         }
 
         footer {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             color: #8892b0;
             border-top: 1px solid var(--border);
             background: rgba(0,0,0,0.3);
         }
 
-        /* --- ✅ Media Queries สำหรับ Tablet และ Mobile --- */
-        
-        /* แท็บเล็ต (หน้าจอไม่เกิน 992px) */
+        /* --- Media Queries --- */
         @media (max-width: 992px) {
-            .menu { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .menu { grid-template-columns: repeat(2, 1fr); }
         }
 
-        /* มือถือ (หน้าจอไม่เกิน 600px) */
         @media (max-width: 600px) {
-            .hero { padding-top: 120px; }
-            .menu { grid-template-columns: 1fr; } /* แสดงคอลัมน์เดียว */
-            .copyright-badge { top: 15px; right: 15px; gap: 8px; padding: 6px 12px; }
-            .copyright-badge img { width: 45px; height: 45px; }
-            .copyright-text-group .brand-name { font-size: 1rem; }
-            
-            /* ปรับตำแหน่ง popup ในมือถือให้ไม่อยู่สูงเกินไป */
+            .hero { padding-top: 140px; }
+            .menu { grid-template-columns: 1fr; }
             .card:hover .spec-popup, .card.active .spec-popup {
                 transform: translate(-50%, -50%) scale(1);
                 top: 50%;
@@ -219,8 +212,12 @@
 <audio id="hoverSound" src="https://www.soundjay.com/buttons/sounds/button-28.mp3" preload="auto"></audio>
 
 <header class="hero">
-    <h1>Smart Computer Hardware AR</h1>
-    <p>สื่อการเรียนรู้อัจฉริยะ สำหรับนักเรียน นักศึกษา</p>
+    <h1>Smart ComClass</h1>
+    <h2 style="color: var(--neon-blue); font-weight: 500; margin-top: 10px;">ส่องโลกฮาร์ดแวร์อัจฉริยะกับครูนุช</h2>
+    <p style="max-width: 700px; margin: 20px auto; line-height: 1.6; opacity: 0.9; color: #ccd6f6;">
+        เปลี่ยนการเรียนรู้แบบเดิมให้เป็นโลกเสมือนจริง ศึกษาโครงสร้างและหน้าที่ของอุปกรณ์คอมพิวเตอร์ผ่านเทคโนโลยี AR 
+        ที่ออกแบบมาเพื่อนักเรียนยุคใหม่ เพราะการเห็นภาพชัดเจน คือจุดเริ่มต้นของความเข้าใจ
+    </p>
 </header>
 
 <section class="menu">
@@ -310,39 +307,45 @@
 </section>
 
 <div class="quiz-container">
+    <p style="margin-bottom: 15px; color: var(--neon-blue);">เรียนครบแล้ว? มาทดสอบความรู้กัน!</p>
     <a href="quiz.html" class="quiz-main-btn">
         🎮 เริ่มแบบทดสอบ Quiz Game 🎮
     </a>
 </div>
-    
-<section class="about-section" style="max-width: 900px; margin: 60px auto; padding: 40px; background: var(--glass); border-radius: 20px; border: 1px dashed var(--border); text-align: center;">
+
+<section class="about-section">
     <h3 style="color: var(--neon-blue); margin-bottom: 20px;">ทำไมต้อง Smart ComClass?</h3>
     <p style="font-size: 0.95rem; color: #ccd6f6; line-height: 1.8; text-align: left;">
-        เว็บไซต์นี้เป็นส่วนหนึ่งของนวัตกรรมการจัดการเรียนการสอนในรายวิชาฮาร์ดแวร์คอมพิวเตอร์ พัฒนาโดย <strong>ครูนุช (T.Nuch)</strong> 
-        เพื่อแก้ปัญหาความซับซ้อนของอุปกรณ์ภายในที่ยากต่อการมองเห็น โดยใช้เทคโนโลยี <strong>Augmented Reality (AR)</strong> 
-        สร้างโมเดล 3 มิติให้นักเรียนสำรวจได้ทุกซอกทุกมุมผ่านสมาร์ทโฟน เพื่อสร้างความเข้าใจ "ในแบบของครูนุช" ที่เน้นความง่ายและสนุกสนาน
+        เว็บไซต์นี้พัฒนาขึ้นโดย <strong>ครูนุช (T.Nuch)</strong> เพื่อสร้างนวัตกรรมการจัดการเรียนการสอนในรายวิชาฮาร์ดแวร์คอมพิวเตอร์ 
+        โดยการนำเทคโนโลยี <strong>Augmented Reality (AR)</strong> มาช่วยให้นักเรียนสามารถสำรวจชิ้นส่วนอุปกรณ์ที่ซับซ้อนได้ทุกซอกทุกมุม 
+        สร้างประสบการณ์การเรียนรู้ที่สนุกสนานและเข้าถึงง่าย "ในแบบของครูนุช"
     </p>
 </section>
-    
-<footer>
-    <p style="margin: 0; font-size: 1.1rem; letter-spacing: 1px;">
-        <a href="admin.html" class="secret-sparkle">✨</a> 
-        <span style="color: var(--neon-blue); font-weight: bold;">T.Nuch SmartCom</span><br>
-        สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช
-    </p>
-</footer>
 
+<footer>
+    <p style="margin: 0; font-size: 1.1rem; letter-spacing: 1px;">
+        <a href="admin.html" style="text-decoration: none;">✨</a> 
+        <span style="color: var(--neon-blue); font-weight: bold;">T.Nuch SmartCom</span><br>
+        <span style="font-size: 0.9rem;">สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช</span>
+    </p>
+</footer>
 
 <script>
     function playHover() {
         const sound = document.getElementById("hoverSound");
         sound.currentTime = 0;
-        sound.play().catch(e => console.log("Audio play prevented by browser"));
+        sound.play().catch(e => console.log("Audio play prevented"));
     }
 
-    // แก้ปัญหา Hover ในมือถือโดยการให้คลิกเพื่อเปิด/ปิด Popup
+    // สำหรับมือถือ: คลิก Card เพื่อเปิด Popup
     document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function(e) {
+            // ป้องกันการคลิกปุ่ม AR แล้ว popup ปิด
+            if (e.target.classList.contains('ar-btn')) return;
+            
+            document.querySelectorAll('.card').forEach(c => {
+                if (c !== this) c.classList.remove('active');
+            });
             this.classList.toggle('active');
         });
     });
@@ -350,5 +353,3 @@
 
 </body>
 </html>
-
-
