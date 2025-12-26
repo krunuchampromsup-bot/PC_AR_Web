@@ -51,11 +51,11 @@
 </head>
 <body>
 
-    <audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" preload="auto"></audio>
-    <audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" preload="auto"></audio>
-    <audio id="snd-gameover" src="https://assets.mixkit.co/active_storage/sfx/143/143-preview.mp3" preload="auto"></audio>
-    <audio id="snd-finish" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
-    <audio id="bg-music" src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibe-130.mp3" loop></audio>
+    <audio id="snd-correct" src="https://actions.google.com/sounds/v1/cartoon/clink_vibrant.ogg" preload="auto"></audio>
+    <audio id="snd-wrong" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+    <audio id="snd-gameover" src="https://actions.google.com/sounds/v1/horror/lose_fbc.ogg" preload="auto"></audio>
+    <audio id="snd-finish" src="https://actions.google.com/sounds/v1/human_voices/applause.ogg" preload="auto"></audio>
+    <audio id="bg-music" src="https://actions.google.com/sounds/v1/science_fiction/techno_logic.ogg" loop></audio>
 
     <div class="music-ctrl" onclick="toggleMusic()">
         <i id="music-icon" class="fas fa-volume-mute"></i> ดนตรี Sci-Fi
@@ -175,19 +175,24 @@
         }
     }
 
-    function startPreTest() {
-        const name = document.getElementById('player-name').value;
-        if(!name) return alert("กรุณาใส่ชื่อก่อนเริ่มภารกิจครับ");
+   function startPreTest() {
+    const name = document.getElementById('player-name').value;
+    if(!name) return alert("กรุณาใส่ชื่อก่อนเริ่มภารกิจครับ");
 
-        questions = shuffle([...rawQuestions]).slice(0, 5);
-        questions.forEach(item => { item.c = shuffle([...item.c]); });
-        
-        document.getElementById('setup-screen').classList.add('hidden');
-        document.getElementById('quiz-screen').classList.remove('hidden');
-        
-        if(!isMusicPlaying) toggleMusic(); // เริ่มเพลงอัตโนมัติ
-        showQuestion();
-    }
+    // สั่งเล่นเพลงทันทีที่กดปุ่มเริ่ม
+    bgMusic.play().then(() => {
+        isMusicPlaying = true;
+        document.getElementById('music-icon').className = "fas fa-volume-up";
+    }).catch(e => console.log("รอการคลิกจากผู้ใช้"));
+
+    questions = shuffle([...rawQuestions]).slice(0, 5);
+    questions.forEach(item => { item.c = shuffle([...item.c]); });
+    
+    document.getElementById('setup-screen').classList.add('hidden');
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    
+    showQuestion();
+}
 
     function startGameReal() {
         alert("ยินดีด้วย! คุณผ่าน Pre-test ต่อไปเป็น Game Mode 10 ข้อ (ระวัง HP นะ!)");
