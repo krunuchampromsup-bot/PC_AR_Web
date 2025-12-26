@@ -6,12 +6,10 @@
     
     <title>Smart ComClass | เรียนรู้ฮาร์ดแวร์กับครูนุช</title>
     <meta name="description" content="เปิดประสบการณ์เรียนรู้ฮาร์ดแวร์คอมพิวเตอร์รูปแบบใหม่กับ Smart ComClass โดยครูนุช สัมผัสอุปกรณ์จริงผ่านเทคโนโลยี AR 3D ที่ช่วยให้เรื่องคอมพิวเตอร์เข้าใจง่าย">
-    <meta property="og:title" content="Smart ComClass - สื่อเรียนรู้ฮาร์ดแวร์อัจฉริยะ">
-    <meta property="og:description" content="ส่องโลกคอมพิวเตอร์ 3 มิติ กับครูนุช เรียนรู้อย่างเข้าใจในแบบของครูนุช">
-    <meta property="og:image" content="https://krunuchampromsup-bot.github.io/PC_AR_Web/logo.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
         :root {
             --bg-dark: #050a14;
@@ -32,10 +30,44 @@
             min-height: 100vh;
         }
 
+        /* --- New: Navbar --- */
+        .navbar {
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 1000;
+            background: rgba(5, 10, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 0;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .nav-logo {
+            height: 45px;
+            filter: drop-shadow(0 0 8px var(--neon-blue));
+            animation: logoGlow 3s infinite alternate;
+        }
+        .nav-brand {
+            margin-left: 15px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            letter-spacing: 1px;
+            font-size: 1.2rem;
+        }
+        @keyframes logoGlow {
+            from { filter: drop-shadow(0 0 5px var(--neon-blue)); }
+            to { filter: drop-shadow(0 0 15px var(--neon-blue)); }
+        }
+
         /* --- Hero Section --- */
         .hero {
             text-align: center;
-            padding: 80px 20px 40px 20px;
+            padding: 140px 20px 40px 20px; /* เพิ่ม padding-top เพื่อหลบ Navbar */
             position: relative;
         }
 
@@ -49,12 +81,12 @@
             text-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
         }
 
-        /* --- Hardware Grid: ปรับให้ใหญ่ขึ้นบน PC --- */
+        /* --- Hardware Grid --- */
         .menu {
             display: grid;
             grid-template-columns: repeat(3, 1fr); 
-            gap: 30px; /* เพิ่มระยะห่าง */
-            max-width: 1200px; /* ขยายความกว้างรวม */
+            gap: 30px;
+            max-width: 1200px;
             margin: 40px auto 60px auto;
             padding: 0 20px;
         }
@@ -63,7 +95,7 @@
             background: var(--glass);
             border: 1px solid var(--border);
             border-radius: 25px;
-            padding: 45px 25px; /* เพิ่มพื้นที่ภายใน Card */
+            padding: 45px 25px;
             text-decoration: none;
             color: white;
             text-align: center;
@@ -80,28 +112,21 @@
             box-shadow: 0 15px 40px rgba(0, 242, 255, 0.3);
         }
 
-        /* ปรับรูปอุปกรณ์ให้ใหญ่ขึ้น */
         .card > img { 
-            width: 120px; 
-            height: 120px; 
+            width: 120px; height: 120px; 
             margin-bottom: 20px; 
             filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.2));
         }
 
         .card span { 
-            font-size: 1.5rem; 
-            font-weight: 700; 
-            display: block; 
-            color: var(--neon-blue);
+            font-size: 1.5rem; font-weight: 700; 
+            display: block; color: var(--neon-blue);
             margin-bottom: 8px;
         }
 
-        /* สไตล์คำโปรยสั้นๆ ใต้ชื่อ */
         .card .card-desc {
-            font-size: 0.9rem;
-            color: #ccd6f6;
-            line-height: 1.4;
-            opacity: 0.8;
+            font-size: 0.9rem; color: #ccd6f6;
+            line-height: 1.4; opacity: 0.8;
         }
 
         /* --- Pop-up Spec --- */
@@ -141,13 +166,9 @@
             display: inline-block;
             padding: 20px 50px;
             background: linear-gradient(45deg, var(--pink-neon), #3333ff);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.4rem;
-            font-weight: bold;
-            transition: 0.4s;
-            box-shadow: 0 0 25px rgba(255, 0, 204, 0.4);
+            color: white; text-decoration: none;
+            border-radius: 50px; font-size: 1.4rem; font-weight: bold;
+            transition: 0.4s; box-shadow: 0 0 25px rgba(255, 0, 204, 0.4);
             border: 2px solid rgba(255, 255, 255, 0.2);
             width: 100%; max-width: 450px;
         }
@@ -162,9 +183,9 @@
             text-align: center;
         }
 
-         /* --- Footer & Socials (ส่วนที่เพิ่มใหม่) --- */
+        /* --- Footer --- */
         footer {
-            padding: 80px 20px 40px;
+            padding: 60px 20px 40px;
             background: linear-gradient(to top, rgba(0, 242, 255, 0.05), transparent);
             border-top: 1px solid var(--border);
             text-align: center;
@@ -178,14 +199,8 @@
             align-items: center;
         }
 
-        .footer-logo-container img {
-            width: 80px;
-            filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.4));
-            margin-bottom: 15px;
-        }
-
         .footer-brand {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--neon-blue);
             margin-bottom: 5px;
@@ -237,20 +252,28 @@
 
         .admin-link { text-decoration: none; opacity: 0.5; }
 
-        /* Responsive */
         @media (max-width: 992px) { .menu { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 650px) { .menu { grid-template-columns: 1fr; } }
-
-        .social-btn i {
-    font-style: normal; /* ป้องกันตัวเอียง */
-    display: inline-block;
-    line-height: 1;
-}
     </style>
 </head>
 <body>
 
 <audio id="hoverSound" src="https://www.soundjay.com/buttons/sounds/button-28.mp3" preload="auto"></audio>
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+<audio id="bgMusic" loop>
+    <source src="bgm.mp3" type="audio/mpeg">
+</audio>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <img src="logo.png" alt="Logo" class="nav-logo">
+        <span class="nav-brand">T.NUCH SMARTCOM</span>
+        
+        <div style="margin-left: auto; cursor: pointer;" onclick="toggleBGM()">
+            <i id="bgmIcon" class="fas fa-volume-mute" style="color: var(--neon-blue); font-size: 1.2rem;"></i>
+        </div>
+    </div>
+</nav>
 
 <header class="hero">
     <h1>Smart ComClass</h1>
@@ -294,128 +317,3 @@
 
     <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="ssd.png" alt="SSD">
-        <span>SSD</span>
-        <p class="card-desc">พื้นที่เก็บข้อมูลความเร็วสูง ช่วยให้บูตเครื่องได้ทันใจ</p>
-        <div class="spec-popup">
-            <div class="spec-header">Solid State Drive</div>
-            <div class="spec-list">
-                • เก็บข้อมูลถาวร (OS, เกม, ไฟล์งาน)<br>
-                • อ่านเขียนข้อมูลไวกว่า Hard Disk<br>
-                • ทนทานและประหยัดไฟ
-            </div>
-            <a href="ar-ssd.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
-        </div>
-    </div>
-
-    <div class="card" onclick="void(0)" onmouseover="playHover()">
-        <img src="psu.png" alt="PSU">
-        <span>PSU</span>
-        <p class="card-desc">แหล่งจ่ายพลังงานไฟฟ้าที่เสถียรให้กับชิ้นส่วนทั้งหมด</p>
-        <div class="spec-popup">
-            <div class="spec-header">Power Supply Unit</div>
-            <div class="spec-list">
-                • แปลงไฟบ้านเป็นไฟคอมพิวเตอร์<br>
-                • วัดกำลังเป็น Watt (W)<br>
-                • มาตรฐาน 80 Plus คือคุณภาพที่ดี
-            </div>
-            <a href="ar-psu.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
-        </div>
-    </div>
-
-    <div class="card" onclick="void(0)" onmouseover="playHover()">
-        <img src="case.png" alt="CASE">
-        <span>CASE</span>
-        <p class="card-desc">ตัวถังบรรจุอุปกรณ์ภายในและช่วยระบายความร้อน</p>
-        <div class="spec-popup">
-            <div class="spec-header">Computer Case</div>
-            <div class="spec-list">
-                • กล่องปกป้องชิ้นส่วนภายใน<br>
-                • ช่วยจัดระเบียบทิศทางลม<br>
-                • มีช่องพอร์ตเชื่อมต่อที่สะดวก
-            </div>
-            <a href="ar-case.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
-        </div>
-    </div>
-
-    <div class="card" onclick="void(0)" onmouseover="playHover()">
-        <img src="mainboard.png" alt="MAINBOARD">
-        <span>MAINBOARD</span>
-        <p class="card-desc">แผงวงจรหลักที่เป็นศูนย์กลางการเชื่อมต่ออุปกรณ์</p>
-        <div class="spec-popup">
-            <div class="spec-header">Mainboard / Motherboard</div>
-            <div class="spec-list">
-                • แผงวงจรเชื่อมต่อทุกชิ้นส่วน<br>
-                • มี Socket สำหรับ CPU<br>
-                • ควบคุมการรับส่งข้อมูลระหว่างอุปกรณ์
-            </div>
-            <a href="ar-mainboard.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
-        </div>
-    </div>
-</section>
-
-<div class="quiz-container">
-    <p style="margin-bottom: 20px; color: var(--neon-blue); font-size: 1.1rem;">เรียนครบแล้ว? มาทดสอบความรู้กัน!</p>
-    <a href="quiz.html" class="quiz-main-btn">
-        🎮 เริ่มแบบทดสอบ Quiz Game 🎮
-    </a>
-</div>
-
-<section class="about-section">
-    <h3 style="color: var(--neon-blue); margin-bottom: 25px; font-size: 1.8rem;">ทำไมต้อง Smart ComClass?</h3>
-    <p style="font-size: 1.05rem; color: #ccd6f6; line-height: 2; text-align: left;">
-        เว็บไซต์นี้พัฒนาขึ้นโดย <strong>ครูนุช (T.Nuch)</strong> เพื่อสร้างนวัตกรรมการจัดการเรียนการสอนในรายวิชาฮาร์ดแวร์คอมพิวเตอร์ 
-        โดยนำเทคโนโลยี <strong>Augmented Reality (AR)</strong> มาช่วยให้นักเรียนสามารถสำรวจชิ้นส่วนอุปกรณ์ที่ซับซ้อนได้ทุกซอกทุกมุม 
-        สร้างประสบการณ์การเรียนรู้ที่สนุกสนานและเข้าถึงง่าย "ในแบบของครูนุช"
-    </p>
-</section>
-
-<footer>
-    <div class="footer-content">
-        <div class="footer-logo-container">
-            <img src="logo.png" alt="T.Nuch Logo">
-        </div>
-        <div class="footer-brand">T.Nuch SmartCom</div>
-        <div class="footer-tagline">“ สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช ”</div>
-
-        <div class="footer-socials">
-    <a href="#" class="social-btn btn-fb" title="Facebook" target="_blank">
-        <i class="fa-brands fa-facebook-f"></i>
-    </a>
-    <a href="#" class="social-btn btn-yt" title="YouTube" target="_blank">
-        <i class="fa-brands fa-youtube"></i>
-    </a>
-    <a href="#" class="social-btn btn-line" title="Line" target="_blank">
-        <i class="fa-brands fa-line"></i>
-    </a>
-</div>
-
-        <div class="footer-divider"></div>
-        <div class="footer-copy">
-            &copy; 2025 Smart ComClass. All Rights Reserved. 
-            <a href="admin.html" class="admin-link">✨</a>
-        </div>
-    </div>
-</footer>
-<script>
-    function playHover() {
-        const sound = document.getElementById("hoverSound");
-        sound.currentTime = 0;
-        sound.play().catch(e => console.log("Audio play prevented"));
-    }
-
-    document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('click', function(e) {
-            if (e.target.classList.contains('ar-btn')) return;
-            
-            document.querySelectorAll('.card').forEach(c => {
-                if (c !== this) c.classList.remove('active');
-            });
-            this.classList.toggle('active');
-        });
-    });
-</script>
-
-</body>
-</html>
-
-
