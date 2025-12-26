@@ -32,50 +32,15 @@
             min-height: 100vh;
         }
 
-        /* --- Copyright Badge --- */
-        .copyright-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 9999;
-            padding: 10px 15px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 15px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-        }
-
-        .copyright-badge img {
-            width: 50px; height: 50px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px var(--neon-blue));
-        }
-
-        .copyright-text-group .brand-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1.1;
-            display: block;
-        }
-
-        .copyright-text-group .brand-sub {
-            font-size: 0.75rem;
-            color: var(--neon-blue);
-        }
-
         /* --- Hero Section --- */
         .hero {
             text-align: center;
-            padding: 120px 20px 40px 20px;
+            padding: 80px 20px 40px 20px;
             position: relative;
         }
 
         .hero h1 {
-            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 700;
             margin: 0;
             background: linear-gradient(to bottom, #fff, var(--neon-blue));
@@ -84,21 +49,21 @@
             text-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
         }
 
-        /* --- Hardware Grid --- */
+        /* --- Hardware Grid: ปรับให้ใหญ่ขึ้นบน PC --- */
         .menu {
             display: grid;
             grid-template-columns: repeat(3, 1fr); 
-            gap: 20px;
-            max-width: 1100px;
-            margin: 20px auto 50px auto;
+            gap: 30px; /* เพิ่มระยะห่าง */
+            max-width: 1200px; /* ขยายความกว้างรวม */
+            margin: 40px auto 60px auto;
             padding: 0 20px;
         }
 
         .card {
             background: var(--glass);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 30px 15px;
+            border-radius: 25px;
+            padding: 45px 25px; /* เพิ่มพื้นที่ภายใน Card */
             text-decoration: none;
             color: white;
             text-align: center;
@@ -111,23 +76,44 @@
 
         .card:hover {
             border-color: var(--neon-blue);
-            transform: translateY(-8px);
-            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2);
+            transform: translateY(-12px);
+            box-shadow: 0 15px 40px rgba(0, 242, 255, 0.3);
         }
 
-        .card > img { width: 80px; height: 80px; margin-bottom: 10px; }
-        .card span { font-size: 1.2rem; font-weight: 600; display: block; color: var(--neon-blue); }
+        /* ปรับรูปอุปกรณ์ให้ใหญ่ขึ้น */
+        .card > img { 
+            width: 120px; 
+            height: 120px; 
+            margin-bottom: 20px; 
+            filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.2));
+        }
+
+        .card span { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            display: block; 
+            color: var(--neon-blue);
+            margin-bottom: 8px;
+        }
+
+        /* สไตล์คำโปรยสั้นๆ ใต้ชื่อ */
+        .card .card-desc {
+            font-size: 0.9rem;
+            color: #ccd6f6;
+            line-height: 1.4;
+            opacity: 0.8;
+        }
 
         /* --- Pop-up Spec --- */
         .spec-popup {
             position: absolute;
             top: 50%; left: 50%;
-            width: 280px;
+            width: 300px;
             transform: translate(-50%, -50%) scale(0);
             background: rgba(7, 15, 30, 0.98);
             border: 2px solid var(--neon-blue);
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px;
             opacity: 0;
             z-index: 100;
             pointer-events: none;
@@ -136,62 +122,72 @@
         }
 
         .card:hover .spec-popup, .card.active .spec-popup {
-            transform: translate(-50%, -85%) scale(1);
+            transform: translate(-50%, -90%) scale(1);
             opacity: 1; pointer-events: auto;
         }
 
-        .spec-header { color: var(--neon-blue); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .spec-list { font-size: 0.9rem; text-align: left; margin-bottom: 15px; color: #ccd6f6; line-height: 1.6; }
+        .spec-header { color: var(--neon-blue); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-size: 1.1rem; }
+        .spec-list { font-size: 0.95rem; text-align: left; margin-bottom: 15px; color: #ccd6f6; line-height: 1.6; }
 
         .ar-btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             background: var(--btn-grad); color: white; text-decoration: none;
-            padding: 12px; border-radius: 50px; font-size: 0.95rem; font-weight: bold;
+            padding: 12px; border-radius: 50px; font-size: 1rem; font-weight: bold;
         }
 
         /* --- Quiz & About --- */
-        .quiz-container { text-align: center; margin: 40px 20px; }
+        .quiz-container { text-align: center; margin: 60px 20px; }
         .quiz-main-btn {
             display: inline-block;
-            padding: 18px 45px;
+            padding: 20px 50px;
             background: linear-gradient(45deg, var(--pink-neon), #3333ff);
             color: white;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: bold;
             transition: 0.4s;
-            box-shadow: 0 0 20px rgba(255, 0, 204, 0.4);
+            box-shadow: 0 0 25px rgba(255, 0, 204, 0.4);
             border: 2px solid rgba(255, 255, 255, 0.2);
-            width: 100%; max-width: 400px;
+            width: 100%; max-width: 450px;
         }
 
         .about-section {
             max-width: 900px; 
             margin: 80px auto; 
-            padding: 40px; 
+            padding: 50px; 
             background: var(--glass); 
-            border-radius: 20px; 
+            border-radius: 30px; 
             border: 1px dashed var(--border); 
             text-align: center;
         }
 
+        /* --- Footer & Logo Bottom --- */
         footer {
             text-align: center;
             padding: 60px 20px;
             color: #8892b0;
             border-top: 1px solid var(--border);
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.4);
+        }
+
+        .footer-logo {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 8px var(--neon-blue));
         }
 
         /* --- Media Queries --- */
         @media (max-width: 992px) {
-            .menu { grid-template-columns: repeat(2, 1fr); }
+            .menu { grid-template-columns: repeat(2, 1fr); gap: 20px; }
         }
 
-        @media (max-width: 600px) {
-            .hero { padding-top: 140px; }
+        @media (max-width: 650px) {
+            .hero { padding-top: 60px; }
             .menu { grid-template-columns: 1fr; }
+            .card { padding: 35px 20px; }
+            .card > img { width: 100px; height: 100px; }
             .card:hover .spec-popup, .card.active .spec-popup {
                 transform: translate(-50%, -50%) scale(1);
                 top: 50%;
@@ -201,21 +197,13 @@
 </head>
 <body>
 
-<div class="copyright-badge">
-    <img src="logo.png" alt="T.Nuch Logo">
-    <div class="copyright-text-group">
-        <span class="brand-name">T.Nuch</span>
-        <span class="brand-sub">SmartCom</span>
-    </div>
-</div>
-
 <audio id="hoverSound" src="https://www.soundjay.com/buttons/sounds/button-28.mp3" preload="auto"></audio>
 
 <header class="hero">
     <h1>Smart ComClass</h1>
     <h2 style="color: var(--neon-blue); font-weight: 500; margin-top: 10px;">ส่องโลกฮาร์ดแวร์อัจฉริยะกับครูนุช</h2>
-    <p style="max-width: 700px; margin: 20px auto; line-height: 1.6; opacity: 0.9; color: #ccd6f6;">
-        เปลี่ยนการเรียนรู้แบบเดิมให้เป็นโลกเสมือนจริง ศึกษาโครงสร้างและหน้าที่ของอุปกรณ์คอมพิวเตอร์ผ่านเทคโนโลยี AR 
+    <p style="max-width: 750px; margin: 25px auto; line-height: 1.8; opacity: 0.9; color: #ccd6f6; font-size: 1.1rem;">
+        เปิดประสบการณ์เรียนรู้รูปแบบใหม่ ศึกษาโครงสร้างและหน้าที่ของอุปกรณ์คอมพิวเตอร์ผ่านเทคโนโลยี AR 
         ที่ออกแบบมาเพื่อนักเรียนยุคใหม่ เพราะการเห็นภาพชัดเจน คือจุดเริ่มต้นของความเข้าใจ
     </p>
 </header>
@@ -224,12 +212,13 @@
     <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="cpu.png" alt="CPU">
         <span>CPU</span>
+        <p class="card-desc">หัวใจหลักในการประมวลผลคำสั่งของคอมพิวเตอร์</p>
         <div class="spec-popup">
             <div class="spec-header">Central Processing Unit</div>
             <div class="spec-list">
-                • หัวใจหลักในการประมวลผล<br>
+                • หน่วยประมวลผลกลาง<br>
                 • วัดความเร็วเป็น GHz<br>
-                • ยิ่ง Core เยอะ ยิ่งทำงานเร็ว
+                • ยิ่ง Core เยอะ ยิ่งทำงานพร้อมกันได้เร็ว
             </div>
             <a href="ar-cpu.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
@@ -238,12 +227,13 @@
     <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="ram.png" alt="RAM">
         <span>RAM</span>
+        <p class="card-desc">หน่วยความจำชั่วคราวเพื่อความรวดเร็วในการเปิดแอป</p>
         <div class="spec-popup">
             <div class="spec-header">Memory (RAM)</div>
             <div class="spec-list">
-                • หน่วยความจำชั่วคราว<br>
+                • พักข้อมูลเพื่อส่งต่อให้ CPU<br>
                 • ช่วยให้เปิดหลายแอปพร้อมกันได้<br>
-                • ความเร็ววัดเป็น Bus (MHz)
+                • ข้อมูลจะหายไปเมื่อปิดเครื่อง
             </div>
             <a href="ar-ram.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
@@ -252,12 +242,13 @@
     <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="ssd.png" alt="SSD">
         <span>SSD</span>
+        <p class="card-desc">พื้นที่เก็บข้อมูลความเร็วสูง ช่วยให้บูตเครื่องได้ทันใจ</p>
         <div class="spec-popup">
             <div class="spec-header">Solid State Drive</div>
             <div class="spec-list">
-                • เก็บข้อมูลถาวรความเร็วสูง<br>
-                • บูต Windows ภายในไม่กี่วินาที<br>
-                • ทนทานกว่า Hard Disk ทั่วไป
+                • เก็บข้อมูลถาวร (OS, เกม, ไฟล์งาน)<br>
+                • อ่านเขียนข้อมูลไวกว่า Hard Disk<br>
+                • ทนทานและประหยัดไฟ
             </div>
             <a href="ar-ssd.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
@@ -266,12 +257,13 @@
     <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="psu.png" alt="PSU">
         <span>PSU</span>
+        <p class="card-desc">แหล่งจ่ายพลังงานไฟฟ้าที่เสถียรให้กับชิ้นส่วนทั้งหมด</p>
         <div class="spec-popup">
             <div class="spec-header">Power Supply Unit</div>
             <div class="spec-list">
-                • แหล่งจ่ายไฟให้อุปกรณ์ทั้งหมด<br>
+                • แปลงไฟบ้านเป็นไฟคอมพิวเตอร์<br>
                 • วัดกำลังเป็น Watt (W)<br>
-                • มาตรฐานความคุ้มค่า 80 Plus
+                • มาตรฐาน 80 Plus คือคุณภาพที่ดี
             </div>
             <a href="ar-psu.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
@@ -280,12 +272,13 @@
     <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="case.png" alt="CASE">
         <span>CASE</span>
+        <p class="card-desc">ตัวถังบรรจุอุปกรณ์ภายในและช่วยระบายความร้อน</p>
         <div class="spec-popup">
             <div class="spec-header">Computer Case</div>
             <div class="spec-list">
-                • กล่องบรรจุอุปกรณ์ภายใน<br>
-                • ช่วยจัดระเบียบและระบายความร้อน<br>
-                • มีช่องพอร์ตเชื่อมต่อหน้าเครื่อง
+                • กล่องปกป้องชิ้นส่วนภายใน<br>
+                • ช่วยจัดระเบียบทิศทางลม<br>
+                • มีช่องพอร์ตเชื่อมต่อที่สะดวก
             </div>
             <a href="ar-case.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
@@ -294,12 +287,13 @@
     <div class="card" onclick="void(0)" onmouseover="playHover()">
         <img src="mainboard.png" alt="MAINBOARD">
         <span>MAINBOARD</span>
+        <p class="card-desc">แผงวงจรหลักที่เป็นศูนย์กลางการเชื่อมต่ออุปกรณ์</p>
         <div class="spec-popup">
-            <div class="spec-header">Mainboard</div>
+            <div class="spec-header">Mainboard / Motherboard</div>
             <div class="spec-list">
-                • แผงวงจรหลักเชื่อมทุกส่วนเข้าด้วยกัน<br>
-                • มี Socket สำหรับ CPU และ RAM<br>
-                • ควบคุมการรับส่งข้อมูลทั้งหมด
+                • แผงวงจรเชื่อมต่อทุกชิ้นส่วน<br>
+                • มี Socket สำหรับ CPU<br>
+                • ควบคุมการรับส่งข้อมูลระหว่างอุปกรณ์
             </div>
             <a href="ar-mainboard.html" class="ar-btn">🧊 ดูโมเดล AR 3D</a>
         </div>
@@ -307,26 +301,26 @@
 </section>
 
 <div class="quiz-container">
-    <p style="margin-bottom: 15px; color: var(--neon-blue);">เรียนครบแล้ว? มาทดสอบความรู้กัน!</p>
+    <p style="margin-bottom: 20px; color: var(--neon-blue); font-size: 1.1rem;">เรียนครบแล้ว? มาทดสอบความรู้กัน!</p>
     <a href="quiz.html" class="quiz-main-btn">
         🎮 เริ่มแบบทดสอบ Quiz Game 🎮
     </a>
 </div>
 
 <section class="about-section">
-    <h3 style="color: var(--neon-blue); margin-bottom: 20px;">ทำไมต้อง Smart ComClass?</h3>
-    <p style="font-size: 0.95rem; color: #ccd6f6; line-height: 1.8; text-align: left;">
+    <h3 style="color: var(--neon-blue); margin-bottom: 25px; font-size: 1.8rem;">ทำไมต้อง Smart ComClass?</h3>
+    <p style="font-size: 1.05rem; color: #ccd6f6; line-height: 2; text-align: left;">
         เว็บไซต์นี้พัฒนาขึ้นโดย <strong>ครูนุช (T.Nuch)</strong> เพื่อสร้างนวัตกรรมการจัดการเรียนการสอนในรายวิชาฮาร์ดแวร์คอมพิวเตอร์ 
-        โดยการนำเทคโนโลยี <strong>Augmented Reality (AR)</strong> มาช่วยให้นักเรียนสามารถสำรวจชิ้นส่วนอุปกรณ์ที่ซับซ้อนได้ทุกซอกทุกมุม 
+        โดยนำเทคโนโลยี <strong>Augmented Reality (AR)</strong> มาช่วยให้นักเรียนสามารถสำรวจชิ้นส่วนอุปกรณ์ที่ซับซ้อนได้ทุกซอกทุกมุม 
         สร้างประสบการณ์การเรียนรู้ที่สนุกสนานและเข้าถึงง่าย "ในแบบของครูนุช"
     </p>
 </section>
 
 <footer>
-    <p style="margin: 0; font-size: 1.1rem; letter-spacing: 1px;">
-        <a href="admin.html" style="text-decoration: none;">✨</a> 
+    <img src="logo.png" alt="T.Nuch Logo" class="footer-logo">
+    <p style="margin: 0; font-size: 1.2rem; letter-spacing: 1px;">
         <span style="color: var(--neon-blue); font-weight: bold;">T.Nuch SmartCom</span><br>
-        <span style="font-size: 0.9rem;">สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช</span>
+        <span style="font-size: 1rem;">สอนคอมพิวเตอร์อย่างเข้าใจ ในแบบของครูนุช</span>
     </p>
 </footer>
 
@@ -337,10 +331,8 @@
         sound.play().catch(e => console.log("Audio play prevented"));
     }
 
-    // สำหรับมือถือ: คลิก Card เพื่อเปิด Popup
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', function(e) {
-            // ป้องกันการคลิกปุ่ม AR แล้ว popup ปิด
             if (e.target.classList.contains('ar-btn')) return;
             
             document.querySelectorAll('.card').forEach(c => {
