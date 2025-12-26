@@ -420,35 +420,45 @@
 <script>
     const bgMusic = document.getElementById("bgMusic");
     const clickSound = document.getElementById("clickSound");
+    const hoverSound = document.getElementById("hoverSound");
     const bgmIcon = document.getElementById("bgmIcon");
     let isPlaying = false;
 
+    // ปรับปรุงฟังก์ชันเล่นเสียง Hover ให้เสถียรขึ้น
     function playHover() {
-        const sound = document.getElementById("hoverSound");
-        sound.currentTime = 0;
-        sound.play().catch(e => console.log("Audio play prevented"));
+        if (hoverSound.paused || hoverSound.currentTime > 0) {
+            hoverSound.currentTime = 0;
+            // ใส่ .catch เพื่อป้องกัน Error ใน Console
+            hoverSound.play().catch(() => { /* บล็อกเสียงไว้ก่อนจนกว่าจะมีการคลิก */ });
+        }
     }
 
-    // ฟังก์ชันเปิด-ปิดเพลงพื้นหลัง
     function toggleBGM() {
         if (isPlaying) {
             bgMusic.pause();
             bgmIcon.className = "fas fa-volume-mute";
         } else {
-            bgMusic.play().catch(e => alert("กรุณาคลิกที่หน้าเว็บก่อนเพื่ออนุญาตให้เล่นเพลง"));
-            bgmIcon.className = "fas fa-volume-up";
+            // เล่นเพลงและเปลี่ยนไอคอน
+            bgMusic.play().then(() => {
+                bgmIcon.className = "fas fa-volume-up";
+            }).catch(e => {
+                alert("กรุณาคลิกที่หน้าเว็บก่อนเพื่ออนุญาตให้เล่นเพลง");
+            });
         }
         isPlaying = !isPlaying;
     }
 
+    // จัดการการคลิก Card สำหรับมือถือ
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', function(e) {
             // เล่นเสียงคลิก
             clickSound.currentTime = 0;
-            clickSound.play();
+            clickSound.play().catch(() => {});
 
-            if (e.target.classList.contains('ar-btn')) return;
+            // ถ้าคลิกโดนปุ่ม AR ให้ปล่อยไปตามลิงก์
+            if (e.target.closest('.ar-btn')) return;
             
+            // เปิด/ปิด Popup สำหรับจอสัมผัส
             document.querySelectorAll('.card').forEach(c => {
                 if (c !== this) c.classList.remove('active');
             });
@@ -456,14 +466,15 @@
         });
     });
 
-    // เพิ่มเสียงคลิกให้ปุ่มอื่นๆ
+    // เพิ่มเสียงคลิกให้ปุ่มอื่นๆ ทั้งหมด
     document.querySelectorAll('.quiz-main-btn, .ar-btn, .social-btn').forEach(btn => {
         btn.addEventListener('mousedown', () => {
             clickSound.currentTime = 0;
-            clickSound.play();
+            clickSound.play().catch(() => {});
         });
     });
 </script>
-
+    
 </body>
 </html>
+
