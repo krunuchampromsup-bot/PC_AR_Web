@@ -51,15 +51,16 @@
 </head>
 <body>
 
+    
+   <audio id="bg-music" src="https://actions.google.com/sounds/v1/science_fiction/techno_logic.ogg" loop></audio>
     <audio id="snd-correct" src="https://actions.google.com/sounds/v1/cartoon/clink_vibrant.ogg" preload="auto"></audio>
     <audio id="snd-wrong" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
     <audio id="snd-gameover" src="https://actions.google.com/sounds/v1/horror/lose_fbc.ogg" preload="auto"></audio>
-    <audio id="snd-finish" src="https://actions.google.com/sounds/v1/human_voices/applause.ogg" preload="auto"></audio>
-    <audio id="bg-music" src="https://actions.google.com/sounds/v1/science_fiction/techno_logic.ogg" loop></audio>
 
-    <div class="music-ctrl" onclick="toggleMusic()">
-        <i id="music-icon" class="fas fa-volume-mute"></i> ดนตรี Sci-Fi
-    </div>
+    <div id="music-btn" onclick="toggleMusic()" style="position: fixed; top: 15px; right: 15px; z-index: 999; background: rgba(0,242,255,0.2); border: 1px solid var(--neon); padding: 8px 15px; border-radius: 20px; cursor: pointer; color: var(--neon); font-size: 0.8rem;">
+    <i id="music-icon" class="fas fa-volume-mute"></i> เปิดเพลงประกอบ
+</div>
+
 
     <div class="container" id="setup-screen">
         <h2 style="color: var(--neon)">🎮 Smart Hardware Quiz</h2>
