@@ -8,43 +8,111 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS เดิมของคุณครู (คงไว้และปรับปรุง) */
-        :root { --bg-dark: #050a14; --neon-blue: #00f2ff; --glass: rgba(255, 255, 255, 0.05); --border: rgba(0, 242, 255, 0.3); --btn-grad: linear-gradient(45deg, #00d2ff, #3a7bd5); --pink-neon: #ff00cc; }
-        body { font-family: 'Prompt', sans-serif; background: var(--bg-dark); color: white; margin: 0; overflow-x: hidden; background-image: radial-gradient(circle at 50% 50%, #10213d 0%, #050a14 100%); min-height: 100vh; }
+        :root { 
+            --bg-dark: #050a14; 
+            --neon-blue: #00f2ff; 
+            --glass: rgba(255, 255, 255, 0.05); 
+            --border: rgba(0, 242, 255, 0.3); 
+            --btn-grad: linear-gradient(45deg, #00d2ff, #3a7bd5); 
+            --pink-neon: #ff00cc; 
+        }
+
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            background: var(--bg-dark); 
+            color: white; 
+            margin: 0; 
+            overflow-x: hidden; 
+            background-image: radial-gradient(circle at 50% 50%, #10213d 0%, #050a14 100%); 
+            min-height: 100vh; 
+        }
+
+        /* --- Navigation --- */
         .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(5, 10, 20, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 10px 0; }
         .nav-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 20px; }
         .nav-logo { height: 45px; filter: drop-shadow(0 0 8px var(--neon-blue)); animation: logoGlow 3s infinite alternate; }
         .nav-brand { margin-left: 15px; font-weight: 700; color: var(--neon-blue); letter-spacing: 1px; font-size: 1.2rem; }
         @keyframes logoGlow { from { filter: drop-shadow(0 0 5px var(--neon-blue)); } to { filter: drop-shadow(0 0 15px var(--neon-blue)); } }
-        
+
+        /* --- Hero Section --- */
         .hero { text-align: center; padding: 140px 20px 40px 20px; position: relative; }
         .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 700; margin: 0; background: linear-gradient(to bottom, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
-        
-        /* Menu Grid ปรับเป็น 3 คอลัมน์ (และ 2 หรือ 1 ในมือถือ) */
+
+        /* --- Menu Grid --- */
         .menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 40px auto 60px auto; padding: 0 20px; }
         .card { background: var(--glass); border: 1px solid var(--border); border-radius: 25px; padding: 45px 25px; text-decoration: none; color: white; text-align: center; position: relative; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); backdrop-filter: blur(10px); cursor: pointer; }
         .card:hover { border-color: var(--neon-blue); transform: translateY(-12px); box-shadow: 0 15px 40px rgba(0, 242, 255, 0.3); }
         .card > img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.2)); }
         .card span { font-size: 1.5rem; font-weight: 700; display: block; color: var(--neon-blue); margin-bottom: 8px; }
         .card .card-desc { font-size: 0.9rem; color: #ccd6f6; line-height: 1.4; opacity: 0.8; }
-        
-        /* Popup Detail */
+
+        /* --- Popup Detail --- */
         .spec-popup { position: absolute; top: 50%; left: 50%; width: 280px; transform: translate(-50%, -50%) scale(0); background: rgba(7, 15, 30, 0.98); border: 2px solid var(--neon-blue); border-radius: 20px; padding: 25px; opacity: 0; z-index: 100; pointer-events: none; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 50px rgba(0, 0, 0, 0.9); }
         .card:hover .spec-popup, .card.active .spec-popup { transform: translate(-50%, -90%) scale(1); opacity: 1; pointer-events: auto; }
         .spec-header { color: var(--neon-blue); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-size: 1.1rem; }
         .spec-list { font-size: 0.9rem; text-align: left; margin-bottom: 15px; color: #ccd6f6; line-height: 1.6; }
         .ar-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--btn-grad); color: white; text-decoration: none; padding: 10px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; }
 
+        /* --- Quiz Section --- */
         .quiz-container { text-align: center; margin: 60px 20px; }
         .quiz-main-btn { display: inline-block; padding: 20px 50px; background: linear-gradient(45deg, var(--pink-neon), #3333ff); color: white; text-decoration: none; border-radius: 50px; font-size: 1.4rem; font-weight: bold; transition: 0.4s; box-shadow: 0 0 25px rgba(255, 0, 204, 0.4); border: 2px solid rgba(255, 255, 255, 0.2); width: 100%; max-width: 450px; }
 
+        /* --- Footer & Admin Link --- */
         footer { padding: 60px 20px 40px; background: linear-gradient(to top, rgba(0, 242, 255, 0.05), transparent); border-top: 1px solid var(--border); text-align: center; }
         .footer-socials { display: flex; gap: 20px; margin-bottom: 30px; justify-content: center; }
         .social-btn { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: white; text-decoration: none; transition: 0.3s; font-size: 1.2rem; }
-        
-        /* สไตล์ปุ่ม Admin ลับ */
         .admin-access { margin-top: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.2); cursor: help; border: none; background: none; transition: 0.3s; }
         .admin-access:hover { color: var(--neon-blue); opacity: 1; }
+
+        /* --- Password Modal --- */
+        #adminModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #0f172a;
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid var(--neon-blue);
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+        }
+        .modal-content h3 { color: var(--neon-blue); margin-top: 0; font-weight: 600; }
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            text-align: center;
+            font-size: 1.2rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .modal-content input:focus { border-color: var(--neon-blue); }
+        .modal-btns { display: flex; gap: 10px; }
+        .modal-btns button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Prompt';
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-confirm { background: var(--btn-grad); color: white; }
+        .btn-cancel { background: #334155; color: white; }
+        .modal-btns button:hover { opacity: 0.9; transform: scale(1.02); }
 
         @media (max-width: 992px) { .menu { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 650px) { .menu { grid-template-columns: 1fr; } }
@@ -152,9 +220,20 @@
         </div>
         <div class="footer-copy">&copy; 2025 Smart ComClass. All Rights Reserved.</div>
         
-        <button class="admin-access" onclick="enterAdmin()">Dashboard สำหรับคุณครู</button>
+        <button class="admin-access" onclick="openAdminModal()">Dashboard สำหรับคุณครู</button>
     </div>
 </footer>
+
+<div id="adminModal">
+    <div class="modal-content">
+        <h3>🔑 สำหรับคุณครู</h3>
+        <input type="password" id="adminPassInput" placeholder="ใส่รหัสผ่าน">
+        <div class="modal-btns">
+            <button class="btn-confirm" onclick="checkAdminPassword()">เข้าสู่ระบบ</button>
+            <button class="btn-cancel" onclick="closeAdminModal()">ยกเลิก</button>
+        </div>
+    </div>
+</div>
 
 <script>
     const clickSound = document.getElementById("clickSound");
@@ -165,24 +244,63 @@
         hoverSound.play().catch(() => {});
     }
 
-    // ระบบรหัสผ่านหน้า Admin
-    function enterAdmin() {
-        const password = prompt("กรุณากรอกรหัสผ่านเพื่อเข้าหน้า Dashboard:");
-        if (password === "nuch1234") { // คุณครูสามารถเปลี่ยนรหัสตรงนี้ได้
+    // --- ระบบรหัสผ่านหน้า Admin ---
+    function openAdminModal() {
+        document.getElementById("adminModal").style.display = "flex";
+        document.getElementById("adminPassInput").value = "";
+        document.getElementById("adminPassInput").focus();
+    }
+
+    function closeAdminModal() {
+        document.getElementById("adminModal").style.display = "none";
+    }
+
+    function checkAdminPassword() {
+        const pass = document.getElementById("adminPassInput").value;
+        if (pass === "nuch1234") {
             window.location.href = "admin.html";
-        } else if (password !== null) {
+        } else {
             alert("รหัสผ่านไม่ถูกต้องครับคุณครู!");
+            document.getElementById("adminPassInput").value = "";
         }
     }
 
-    // คลิก Card แสดงสเปก
+    // รองรับการกด Enter ในช่องรหัสผ่าน
+    document.getElementById("adminPassInput").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            checkAdminPassword();
+        }
+    });
+
+    // ปิด Modal เมื่อคลิกข้างนอกกล่อง
+    window.onclick = function(event) {
+        const modal = document.getElementById("adminModal");
+        if (event.target == modal) {
+            closeAdminModal();
+        }
+    }
+
+    // --- คลิก Card แสดงสเปก ---
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', function(e) {
             clickSound.currentTime = 0;
             clickSound.play().catch(() => {});
+            
+            // ถ้าคลิกปุ่ม AR ไม่ต้องเปิด/ปิด Card
             if (e.target.closest('.ar-btn')) return;
-            document.querySelectorAll('.card').forEach(c => { if (c !== this) c.classList.remove('active'); });
+            
+            document.querySelectorAll('.card').forEach(c => { 
+                if (c !== this) c.classList.remove('active'); 
+            });
             this.classList.toggle('active');
+        });
+    });
+
+    // เสียงคลิกสำหรับปุ่มอื่นๆ
+    document.querySelectorAll('.quiz-main-btn, .ar-btn, .social-btn, button').forEach(btn => {
+        btn.addEventListener('mousedown', () => {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(() => {});
         });
     });
 </script>
