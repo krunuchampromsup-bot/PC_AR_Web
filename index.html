@@ -53,9 +53,61 @@
         .spec-list { font-size: 0.9rem; text-align: left; margin-bottom: 15px; color: #ccd6f6; line-height: 1.6; }
         .ar-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--btn-grad); color: white; text-decoration: none; padding: 10px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; }
 
-        /* --- Quiz Section --- */
-        .quiz-container { text-align: center; margin: 60px 20px; }
-        .quiz-main-btn { display: inline-block; padding: 20px 50px; background: linear-gradient(45deg, var(--pink-neon), #3333ff); color: white; text-decoration: none; border-radius: 50px; font-size: 1.4rem; font-weight: bold; transition: 0.4s; box-shadow: 0 0 25px rgba(255, 0, 204, 0.4); border: 2px solid rgba(255, 255, 255, 0.2); width: 100%; max-width: 450px; }
+       /* --- ปรับแต่งปุ่ม Quiz ใหม่แบบ Gaming (วางทับของเดิมได้เลย) --- */
+.quiz-container { text-align: center; margin: 60px 20px; }
+
+.quiz-main-btn { 
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 22px 60px; 
+    /* สีรุ้ง Pink-Blue-Neon ไหลวน */
+    background: linear-gradient(45deg, #ff00cc, #3333ff, #00f2ff, #ff00cc); 
+    background-size: 300% auto; 
+    color: white; 
+    text-decoration: none; 
+    border-radius: 50px; 
+    font-size: 1.6rem; 
+    font-weight: 800; 
+    transition: 0.5s; 
+    box-shadow: 0 0 20px rgba(255, 0, 204, 0.5); 
+    border: 3px solid rgba(255, 255, 255, 0.3); 
+    width: 100%; 
+    max-width: 550px; 
+    position: relative;
+    overflow: hidden; 
+    animation: rainbowShift 3s linear infinite, btnPulse 2s infinite; 
+}
+
+/* แสงสีขาววิ่งพาดผ่าน (Shine Effect) */
+.quiz-main-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+    transform: skewX(-25deg);
+    transition: 0.7s;
+}
+
+.quiz-main-btn:hover::before { left: 150%; }
+
+.quiz-main-btn:hover { 
+    transform: scale(1.08); 
+    box-shadow: 0 0 50px rgba(255, 0, 204, 0.8), 0 0 30px rgba(0, 242, 255, 0.6);
+}
+
+/* คำสั่งแอนิเมชัน (ห้ามลืมก๊อปปี้ส่วนนี้ไปด้วยนะครับ) */
+@keyframes rainbowShift { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+@keyframes btnPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+@keyframes wobble { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
+@keyframes rocketFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+.fa-gamepad-animate { animation: wobble 1s infinite ease-in-out; }
+.fa-rocket-animate { animation: rocketFloat 1.5s infinite ease-in-out; }
 
         /* --- Footer & Admin Link --- */
         footer { padding: 60px 20px 40px; background: linear-gradient(to top, rgba(0, 242, 255, 0.05), transparent); border-top: 1px solid var(--border); text-align: center; }
@@ -207,7 +259,11 @@
 </section>
 
 <div class="quiz-container">
-    <a href="quiz.html" class="quiz-main-btn">🎮 เริ่มแบบทดสอบ Quiz Game 🎮</a>
+    <a href="quiz.html" class="quiz-main-btn">
+        <i class="fas fa-gamepad fa-gamepad-animate"></i> 
+        <span>🎮 เริ่มแบบทดสอบ Quiz Game 🎮</span> 
+        <i class="fas fa-rocket fa-rocket-animate"></i>
+    </a>
 </div>
 
 <footer>
@@ -307,3 +363,4 @@
 
 </body>
 </html>
+
