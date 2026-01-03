@@ -28,39 +28,6 @@
             min-height: 100vh;
         }
 
-        .action-btns {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .btn-action {
-            padding: 10px 18px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-family: 'Prompt';
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-        }
-        .btn-print { background: #334155; color: white; }
-        .btn-excel { background: #107c10; color: white; }
-        .btn-action:hover { transform: translateY(-2px); opacity: 0.9; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-
-        /* ปรับแต่งหน้าตอนสั่งพิมพ์ (Print Mode) */
-        @media print {
-            body { background: white !important; color: black !important; }
-            .admin-card { border: none; box-shadow: none; max-width: 100%; margin: 0; }
-            .btn-delete, .action-btns { display: none !important; }
-            h2 { color: black !important; text-shadow: none !important; }
-            th { background: #eee !important; color: black !important; }
-            td { border-bottom: 1px solid #ccc !important; }
-            .score-badge { background: #ddd !important; border: 1px solid #000; }
-        }
-        
         .admin-card { 
             background: rgba(255, 255, 255, 0.05); 
             padding: 25px; 
@@ -95,6 +62,28 @@
         }
         .btn-delete:hover { background: #ff4d4d; color: white; }
 
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .btn-action {
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Prompt';
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .btn-print { background: #334155; color: white; }
+        .btn-excel { background: #107c10; color: white; }
+        .btn-action:hover { transform: translateY(-2px); opacity: 0.9; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
         .top-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -110,9 +99,7 @@
         }
         
         .table-container { border-radius: 15px; overflow: hidden; }
-
         table { width: 100%; border-collapse: collapse; background: transparent; }
-
         th { 
             background: rgba(0, 242, 255, 0.2); 
             color: var(--neon-blue); 
@@ -120,18 +107,12 @@
             text-transform: uppercase;
             font-size: 0.9rem;
         }
-
         td { padding: 18px 15px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 1.1rem; }
 
-        /* จัดอันดับ 1-3 */
         .rank-1 { color: var(--gold); font-weight: 700; background: rgba(255, 215, 0, 0.05); }
         .rank-2 { color: var(--silver); font-weight: 700; }
         .rank-3 { color: var(--bronze); font-weight: 700; }
-
-        .medal { font-size: 1.4rem; margin-right: 5px; }
-
         .name-cell { text-align: left !important; padding-left: 40px !important; }
-
         .score-badge {
             background: var(--neon-blue);
             color: #000;
@@ -140,24 +121,22 @@
             font-weight: 700;
         }
 
+        @media print {
+            body { background: white !important; color: black !important; }
+            .admin-card { border: none !important; box-shadow: none !important; max-width: 100% !important; margin: 0 !important; }
+            .btn-delete, .action-btns, .header-flex button { display: none !important; }
+            h2 { color: black !important; text-shadow: none !important; }
+            th { background: #eee !important; color: black !important; border: 1px solid #ccc; }
+            td { border: 1px solid #ccc !important; color: black !important; }
+            .score-badge { background: #ddd !important; border: 1px solid #000; }
+            .stat-box { border: 1px solid #ccc; color: black !important; }
+            .stat-box div { color: black !important; }
+        }
+
         @media (max-width: 600px) {
             .name-cell { padding-left: 15px !important; }
             td, th { font-size: 0.9rem; padding: 12px 8px; }
         }
-function exportToExcel() {
-            // ดึงข้อมูลจากตาราง
-            const table = document.querySelector("table");
-            const ws = XLSX.utils.table_to_sheet(table);
-            
-            // สร้าง Workbook
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Leaderboard");
-            
-            // ตั้งชื่อไฟล์ตามวันที่ปัจจุบัน
-            const date = new Date().toLocaleDateString('th-TH').replace(/\//g, '-');
-            XLSX.writeFile(wb, `รายงานคะแนน_SmartCom_${date}.xlsx`);
-        }
-        
     </style>
 </head>
 <body>
@@ -175,7 +154,7 @@ function exportToExcel() {
             </div>
             <div class="stat-box">
                 <small>คะแนนเฉลี่ย</small>
-                <div id="avg-score" style="font-size: 1.5rem; font-weight: bold; color: var(--pink-neon);">0.0</div>
+                <div id="avg-score" style="font-size: 1.5rem; font-weight: bold; color: #ff00cc;">0.0</div>
             </div>
         </div>
         
@@ -189,7 +168,7 @@ function exportToExcel() {
         </div>
         
         <div class="table-container">
-            <table>
+            <table id="scoreTable">
                 <thead>
                     <tr>
                         <th width="15%">อันดับ</th>
@@ -198,8 +177,7 @@ function exportToExcel() {
                         <th width="20%">เวลา (วินาที)</th>
                     </tr>
                 </thead>
-                <tbody id="admin-table-body">
-                    </tbody>
+                <tbody id="admin-table-body"></tbody>
             </table>
         </div>
     </div>
@@ -219,20 +197,15 @@ function exportToExcel() {
         const database = firebase.database();
 
         function loadScores() {
-            // ดึงข้อมูลทั้งหมดมาประมวลผล Top 10
             database.ref('scores/').on('value', (snapshot) => {
                 let allData = [];
                 snapshot.forEach((child) => {
                     allData.push(child.val());
                 });
 
-                // 1. เรียงลำดับ: คะแนนมากที่สุดก่อน ถ้าเท่ากันให้ใช้เวลาน้อยที่สุด
                 allData.sort((a, b) => b.score - a.score || a.time - b.time);
-
-                // 2. ตัดเอาแค่ Top 10
                 const top10 = allData.slice(0, 10);
 
-                // 3. คำนวณสถิติภาพรวม
                 const totalStudents = allData.length;
                 const avgScore = totalStudents > 0 
                     ? (allData.reduce((acc, curr) => acc + curr.score, 0) / totalStudents).toFixed(1) 
@@ -257,7 +230,6 @@ function exportToExcel() {
             list.forEach((item, index) => {
                 let rankClass = "";
                 let medal = "";
-                
                 if(index === 0) { rankClass = "rank-1"; medal = "🥇"; }
                 else if(index === 1) { rankClass = "rank-2"; medal = "🥈"; }
                 else if(index === 2) { rankClass = "rank-3"; medal = "🥉"; }
@@ -273,6 +245,16 @@ function exportToExcel() {
                 `;
                 tbody.innerHTML += row;
             });
+        }
+
+        // --- ฟังก์ชันส่งออก Excel (วางในส่วน Script ถูกต้องแล้ว) ---
+        function exportToExcel() {
+            const table = document.getElementById("scoreTable");
+            const ws = XLSX.utils.table_to_sheet(table);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Leaderboard");
+            const date = new Date().toLocaleDateString('th-TH').replace(/\//g, '-');
+            XLSX.writeFile(wb, `รายงานคะแนน_SmartCom_${date}.xlsx`);
         }
 
         function resetScores() {
