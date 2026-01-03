@@ -39,7 +39,7 @@
             margin-bottom: 20px;
         }
 
-        h2 { margin: 0; color: #333; font-size: 1.4rem; }
+        h2 { margin: 0; color: #333; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
 
         .btn-delete { 
             background: #ff4d4d; 
@@ -56,15 +56,15 @@
 
         .status-bar {
             background: #e0fbfc;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border-radius: 10px;
             margin-bottom: 20px;
             color: #005f73;
-            font-weight: bold;
+            font-weight: 600;
+            border-left: 5px solid var(--neon-blue);
         }
 
-        /* --- ✅ ปรับแต่งตารางให้สวยงามตามรูปภาพ --- */
-        .table-container { overflow-x: auto; }
+        .table-container { overflow-x: auto; border-radius: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
 
         table { 
             width: 100%; 
@@ -83,13 +83,13 @@
             background-color: var(--neon-blue); 
             color: #000; 
             font-weight: 600;
+            position: sticky;
+            top: 0;
         }
 
         tr:nth-child(even) { background-color: #f9f9f9; }
-        
-        tr:hover { background-color: #f1fdff; }
+        tr:hover { background-color: #f1fdff; transition: 0.2s; }
 
-        /* สำหรับมือถือ */
         @media (max-width: 600px) {
             h2 { font-size: 1.1rem; }
             .btn-delete { width: 100%; order: 2; }
@@ -106,7 +106,7 @@
         </div>
 
         <div class="status-bar">
-            นักเรียนที่สอบแล้ว: <span id="student-count">0</span> คน
+            🟢 นักเรียนที่สอบแล้ว: <span id="student-count">0</span> คน
         </div>
 
         <div class="table-container">
@@ -126,11 +126,12 @@
     </div>
 
     <script>
-        // ✅ 1. ตั้งค่า Firebase (คัดลอกมาจาก quiz.html)
+        // ✅ 1. ตั้งค่า Firebase (ต้องมี databaseURL เพื่อความเสถียร)
         const firebaseConfig = {
             apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
             authDomain: "smartcom-ar-quiz.firebaseapp.com",
             projectId: "smartcom-ar-quiz",
+            databaseURL: "https://smartcom-ar-quiz-default-rtdb.firebaseio.com/", // **ตรวจสอบ URL ใน Firebase Console ของคุณครู**
             storageBucket: "smartcom-ar-quiz.appspot.com",
             messagingSenderId: "367243958931", 
             appId: "1:367243958931:web:3e3c66f54668b8ec66b8ec" 
@@ -139,38 +140,51 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // ✅ 2. ฟังก์ชันโหลดข้อมูล (ดึงทั้ง Firebase และ LocalStorage)
+        // ✅ 2. ฟังก์ชันโหลดข้อมูล (ปรับปรุง Logic การ Merge)
         function loadScores() {
-            // ดึงข้อมูลจาก Firebase แบบ Real-time
             database.ref('scores/').orderByChild('score').on('value', (snapshot) => {
-                const tbody = document.getElementById('admin-table-body');
-                const firebaseList = [];
+                let displayList = [];
                 
+                // ดึงจาก Firebase
                 snapshot.forEach((child) => {
-                    firebaseList.push(child.val());
+                    displayList.push(child.val());
                 });
-                
-                // ดึงข้อมูลจาก LocalStorage มาผสม (เผื่อกรณีไม่มีเน็ต)
+
+                // ถ้าใน Firebase ไม่มีข้อมูล ให้ไปลองดึงจาก LocalStorage (เผื่อสอบแบบ Offline)
+                if (displayList.length === 0) {
+                    displayList = JSON.parse(localStorage.getItem('studentScores')) || [];
+                }
+
+                // เรียงคะแนนจากมากไปน้อย (Score Descending)
+                displayList.sort((a, b) => b.score - a.score || a.time - b.time);
+
+                renderTable(displayList);
+            }, (error) => {
+                console.error("Firebase Error: ", error);
+                // หากเชื่อมต่อ Firebase ไม่ได้ ให้ดึง LocalStorage ทันที
                 const localList = JSON.parse(localStorage.getItem('studentScores')) || [];
-                
-                // รวมข้อมูล (กรองเอาที่ชื่อไม่ซ้ำกัน หรือจะแสดงทั้งหมดก็ได้)
-                // ในที่นี้เน้นแสดงจาก Firebase เป็นหลัก
-                renderTable(firebaseList.length > 0 ? firebaseList.reverse() : localList.reverse());
+                renderTable(localList);
             });
         }
 
-        // ✅ 3. ฟังก์ชันสร้างแถวตาราง
+        // ✅ 3. ฟังก์ชันสร้างแถวตาราง (เพิ่มการจัดสไตล์ตัวเลข)
         function renderTable(list) {
             const tbody = document.getElementById('admin-table-body');
             tbody.innerHTML = "";
             
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="color: #999; padding: 40px;">ยังไม่มีข้อมูลผลการทดสอบ</td></tr>`;
+                document.getElementById('student-count').innerText = "0";
+                return;
+            }
+
             list.forEach((item, index) => {
                 const row = `
                     <tr>
                         <td>${index + 1}</td>
                         <td style="text-align: left; padding-left: 30px;">${item.name}</td>
-                        <td style="font-weight: bold; color: #2ecc71;">${item.score}</td>
-                        <td>${item.time}</td>
+                        <td style="font-weight: 600; color: #2ecc71; font-size: 1.1rem;">${item.score}</td>
+                        <td style="color: #666;">${item.time}</td>
                     </tr>
                 `;
                 tbody.innerHTML += row;
@@ -179,19 +193,21 @@
             document.getElementById('student-count').innerText = list.length;
         }
 
-        // ✅ 4. ฟังก์ชันล้างข้อมูล (ลบทั้ง 2 ที่)
+        // ✅ 4. ฟังก์ชันล้างข้อมูล (ลบทั้ง 2 ระบบ)
         function resetScores() {
-            if(confirm("คุณครูต้องการลบคะแนนทั้งหมดเพื่อเริ่มกลุ่มใหม่ใช่ไหม?\n(ข้อมูลในระบบและในเครื่องจะถูกลบทั้งหมด)")) {
-                // ลบใน Firebase
-                database.ref('scores/').remove();
-                // ลบใน LocalStorage
-                localStorage.removeItem('studentScores');
-                alert("ล้างข้อมูลเรียบร้อยแล้ว");
-                location.reload();
+            if(confirm("คุณครูต้องการลบคะแนนทั้งหมดเพื่อเริ่มกลุ่มใหม่ใช่ไหม?\n(ข้อมูลใน Firebase และในเครื่องนี้จะถูกลบถาวร)")) {
+                database.ref('scores/').remove()
+                    .then(() => {
+                        localStorage.removeItem('studentScores');
+                        alert("ล้างข้อมูลสำเร็จ");
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        alert("เกิดข้อผิดพลาดในการลบข้อมูล: " + error.message);
+                    });
             }
         }
 
-        // เริ่มทำงานเมื่อโหลดหน้าเว็บ
         window.onload = loadScores;
     </script>
 </body>
