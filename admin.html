@@ -3,97 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard สำหรับคุณครู - SmartCom</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Top 10 Leaderboard - SmartCom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root {
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
             --neon-blue: #00f2ff;
-            --pink-neon: #ff00cc;
-            --bg-dark: #f4f7f6;
+            --bg-dark: #0f172a;
         }
 
         body { 
             font-family: 'Prompt', sans-serif; 
             background: var(--bg-dark); 
+            color: white;
             padding: 10px; 
             margin: 0;
+            min-height: 100vh;
         }
 
         .admin-card { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-            max-width: 900px; 
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 25px; 
+            border-radius: 20px; 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            max-width: 800px; 
             margin: 20px auto; 
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         }
 
         .header-flex {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--neon-blue);
+            padding-bottom: 15px;
         }
 
-        h2 { margin: 0; color: #333; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+        h2 { margin: 0; font-size: 1.6rem; color: var(--neon-blue); text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
 
         .btn-delete { 
-            background: #ff4d4d; 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
+            background: transparent; 
+            color: #ff4d4d; 
+            border: 1px solid #ff4d4d; 
+            padding: 8px 15px; 
             border-radius: 8px; 
             cursor: pointer; 
-            font-weight: bold;
+            font-size: 0.8rem;
             transition: 0.3s;
         }
-        
-        .btn-delete:hover { background: #e60000; transform: scale(1.05); }
+        .btn-delete:hover { background: #ff4d4d; color: white; }
 
-        .status-bar {
-            background: #e0fbfc;
-            padding: 12px 15px;
-            border-radius: 10px;
+        .top-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             margin-bottom: 20px;
-            color: #005f73;
-            font-weight: 600;
-            border-left: 5px solid var(--neon-blue);
         }
 
-        .table-container { overflow-x: auto; border-radius: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
-
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            background: white;
-            min-width: 500px;
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
         }
 
-        th, td { 
-            padding: 15px; 
-            text-align: center; 
-            border-bottom: 1px solid #eee; 
-        }
+        .table-container { border-radius: 15px; overflow: hidden; }
+
+        table { width: 100%; border-collapse: collapse; background: transparent; }
 
         th { 
-            background-color: var(--neon-blue); 
-            color: #000; 
-            font-weight: 600;
-            position: sticky;
-            top: 0;
+            background: rgba(0, 242, 255, 0.2); 
+            color: var(--neon-blue); 
+            padding: 15px; 
+            text-transform: uppercase;
+            font-size: 0.9rem;
         }
 
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        tr:hover { background-color: #f1fdff; transition: 0.2s; }
+        td { padding: 18px 15px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 1.1rem; }
+
+        /* จัดอันดับ 1-3 */
+        .rank-1 { color: var(--gold); font-weight: 700; background: rgba(255, 215, 0, 0.05); }
+        .rank-2 { color: var(--silver); font-weight: 700; }
+        .rank-3 { color: var(--bronze); font-weight: 700; }
+
+        .medal { font-size: 1.4rem; margin-right: 5px; }
+
+        .name-cell { text-align: left !important; padding-left: 40px !important; }
+
+        .score-badge {
+            background: var(--neon-blue);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
 
         @media (max-width: 600px) {
-            h2 { font-size: 1.1rem; }
-            .btn-delete { width: 100%; order: 2; }
-            .header-flex { flex-direction: column; align-items: flex-start; }
+            .name-cell { padding-left: 15px !important; }
+            td, th { font-size: 0.9rem; padding: 12px 8px; }
         }
     </style>
 </head>
@@ -101,22 +114,29 @@
 
     <div class="admin-card">
         <div class="header-flex">
-            <h2>📊 สรุปผลคะแนนวิชาคอมพิวเตอร์ (ครูนุช)</h2>
-            <button class="btn-delete" onclick="resetScores()">ล้างข้อมูลคะแนนทั้งหมด</button>
+            <h2>🏆 TOP 10 LEADERBOARD</h2>
+            <button class="btn-delete" onclick="resetScores()">ล้างข้อมูล</button>
         </div>
 
-        <div class="status-bar">
-            🟢 นักเรียนที่สอบแล้ว: <span id="student-count">0</span> คน
+        <div class="top-stats">
+            <div class="stat-box">
+                <small>ผู้เข้าสอบทั้งหมด</small>
+                <div id="student-count" style="font-size: 1.5rem; font-weight: bold; color: var(--neon-blue);">0</div>
+            </div>
+            <div class="stat-box">
+                <small>คะแนนเฉลี่ย</small>
+                <div id="avg-score" style="font-size: 1.5rem; font-weight: bold; color: var(--pink-neon);">0.0</div>
+            </div>
         </div>
 
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>ลำดับ</th>
-                        <th>ชื่อนักเรียน</th>
-                        <th>คะแนน (10)</th>
-                        <th>เวลา (วินาที)</th>
+                        <th width="15%">อันดับ</th>
+                        <th width="45%" class="name-cell">ชื่อผู้กล้า</th>
+                        <th width="20%">คะแนน</th>
+                        <th width="20%">เวลา (วินาที)</th>
                     </tr>
                 </thead>
                 <tbody id="admin-table-body">
@@ -126,12 +146,11 @@
     </div>
 
     <script>
-        // ✅ 1. ตั้งค่า Firebase (ต้องมี databaseURL เพื่อความเสถียร)
         const firebaseConfig = {
             apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
             authDomain: "smartcom-ar-quiz.firebaseapp.com",
             projectId: "smartcom-ar-quiz",
-            databaseURL: "https://smartcom-ar-quiz-default-rtdb.firebaseio.com/", // **ตรวจสอบ URL ใน Firebase Console ของคุณครู**
+            databaseURL: "https://smartcom-ar-quiz-default-rtdb.firebaseio.com/",
             storageBucket: "smartcom-ar-quiz.appspot.com",
             messagingSenderId: "367243958931", 
             appId: "1:367243958931:web:3e3c66f54668b8ec66b8ec" 
@@ -140,71 +159,68 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // ✅ 2. ฟังก์ชันโหลดข้อมูล (ปรับปรุง Logic การ Merge)
         function loadScores() {
-            database.ref('scores/').orderByChild('score').on('value', (snapshot) => {
-                let displayList = [];
-                
-                // ดึงจาก Firebase
+            // ดึงข้อมูลทั้งหมดมาประมวลผล Top 10
+            database.ref('scores/').on('value', (snapshot) => {
+                let allData = [];
                 snapshot.forEach((child) => {
-                    displayList.push(child.val());
+                    allData.push(child.val());
                 });
 
-                // ถ้าใน Firebase ไม่มีข้อมูล ให้ไปลองดึงจาก LocalStorage (เผื่อสอบแบบ Offline)
-                if (displayList.length === 0) {
-                    displayList = JSON.parse(localStorage.getItem('studentScores')) || [];
-                }
+                // 1. เรียงลำดับ: คะแนนมากที่สุดก่อน ถ้าเท่ากันให้ใช้เวลาน้อยที่สุด
+                allData.sort((a, b) => b.score - a.score || a.time - b.time);
 
-                // เรียงคะแนนจากมากไปน้อย (Score Descending)
-                displayList.sort((a, b) => b.score - a.score || a.time - b.time);
+                // 2. ตัดเอาแค่ Top 10
+                const top10 = allData.slice(0, 10);
 
-                renderTable(displayList);
-            }, (error) => {
-                console.error("Firebase Error: ", error);
-                // หากเชื่อมต่อ Firebase ไม่ได้ ให้ดึง LocalStorage ทันที
-                const localList = JSON.parse(localStorage.getItem('studentScores')) || [];
-                renderTable(localList);
+                // 3. คำนวณสถิติภาพรวม
+                const totalStudents = allData.length;
+                const avgScore = totalStudents > 0 
+                    ? (allData.reduce((acc, curr) => acc + curr.score, 0) / totalStudents).toFixed(1) 
+                    : 0;
+
+                document.getElementById('student-count').innerText = totalStudents;
+                document.getElementById('avg-score').innerText = avgScore;
+
+                renderTable(top10);
             });
         }
 
-        // ✅ 3. ฟังก์ชันสร้างแถวตาราง (เพิ่มการจัดสไตล์ตัวเลข)
         function renderTable(list) {
             const tbody = document.getElementById('admin-table-body');
             tbody.innerHTML = "";
             
             if (list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="color: #999; padding: 40px;">ยังไม่มีข้อมูลผลการทดสอบ</td></tr>`;
-                document.getElementById('student-count').innerText = "0";
+                tbody.innerHTML = `<tr><td colspan="4" style="color: #666; padding: 50px;">รอผู้ท้าชิงคนแรก...</td></tr>`;
                 return;
             }
 
             list.forEach((item, index) => {
+                let rankClass = "";
+                let medal = "";
+                
+                if(index === 0) { rankClass = "rank-1"; medal = "🥇"; }
+                else if(index === 1) { rankClass = "rank-2"; medal = "🥈"; }
+                else if(index === 2) { rankClass = "rank-3"; medal = "🥉"; }
+                else { medal = (index + 1); }
+
                 const row = `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td style="text-align: left; padding-left: 30px;">${item.name}</td>
-                        <td style="font-weight: 600; color: #2ecc71; font-size: 1.1rem;">${item.score}</td>
-                        <td style="color: #666;">${item.time}</td>
+                    <tr class="${rankClass}">
+                        <td>${medal}</td>
+                        <td class="name-cell">${item.name}</td>
+                        <td><span class="score-badge">${item.score}</span></td>
+                        <td style="opacity: 0.7">${item.time}s</td>
                     </tr>
                 `;
                 tbody.innerHTML += row;
             });
-            
-            document.getElementById('student-count').innerText = list.length;
         }
 
-        // ✅ 4. ฟังก์ชันล้างข้อมูล (ลบทั้ง 2 ระบบ)
         function resetScores() {
-            if(confirm("คุณครูต้องการลบคะแนนทั้งหมดเพื่อเริ่มกลุ่มใหม่ใช่ไหม?\n(ข้อมูลใน Firebase และในเครื่องนี้จะถูกลบถาวร)")) {
-                database.ref('scores/').remove()
-                    .then(() => {
-                        localStorage.removeItem('studentScores');
-                        alert("ล้างข้อมูลสำเร็จ");
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        alert("เกิดข้อผิดพลาดในการลบข้อมูล: " + error.message);
-                    });
+            if(confirm("🚨 คำเตือน: คุณครูต้องการรีเซ็ต Leaderboard ทั้งหมดใช่หรือไม่?")) {
+                database.ref('scores/').remove().then(() => {
+                    alert("ล้างข้อมูลเรียบร้อยแล้ว");
+                });
             }
         }
 
