@@ -22,13 +22,12 @@
         #timer { font-size: 1.5rem; color: var(--pink); font-weight: bold; margin-bottom: 10px; }
         .hidden { display: none !important; }
         
-        /* สไตล์หน้าคำแนะนำ */
         .how-to-play { background: rgba(0, 242, 255, 0.1); padding: 15px; border-radius: 15px; margin: 15px 0; text-align: left; border-left: 4px solid var(--neon); }
         .how-to-play ul { padding-left: 20px; margin: 5px 0; font-size: 0.9rem; color: #ccc; }
-        .high-score-tag { color: var(--neon); font-size: 0.8rem; margin-top: 5px; display: block; }
     </style>
 </head>
 <body>
+
 <audio id="bgMusic" src="https://www.soundjay.com/clock/sounds/clock-ticking-2.mp3" loop preload="auto"></audio>
 <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-37.mp3" preload="auto"></audio>
 <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3" preload="auto"></audio>
@@ -84,6 +83,13 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        // ✅ 2. อ้างอิงไฟล์เสียง
+        const bgMusic = document.getElementById("bgMusic");
+        const correctSound = document.getElementById("correctSound");
+        const wrongSound = document.getElementById("wrongSound");
+        const finishSound = document.getElementById("finishSound");
+        const comboSound = document.getElementById("comboSound");
+
         const rawQuestions = [
             { q: "อุปกรณ์ใดเปรียบเสมือน 'สมอง' ของคอมพิวเตอร์?", c: ["RAM", "CPU", "SSD"], a: "CPU" },
             { q: "หน่วยความจำสำรองที่ช่วยให้เปิดเครื่องเร็วขึ้นคือ?", c: ["SSD", "PSU", "Mainboard"], a: "SSD" },
@@ -97,13 +103,21 @@
             { q: "Socket บนเมนบอร์ดมีไว้สำหรับใส่สิ่งใด?", c: ["CPU", "Power Cable", "Case Fan"], a: "CPU" }
         ];
 
-        let questions = []; let currentQ = 0; let score = 0; let seconds = 0; let timerInterval;
-        let comboCount = 0; // <--- เพิ่มตัวแปรนี้ครับ
+        let questions = []; 
+        let currentQ = 0; 
+        let score = 0; 
+        let seconds = 0; 
+        let timerInterval;
+        let comboCount = 0; 
         
         function startQuiz() {
             const name = document.getElementById('player-name').value.trim();
             if(!name) return alert("กรุณาใส่ชื่อก่อนเริ่มนะครับ");
             
+            // เริ่มเล่นเพลงพื้นหลัง
+            bgMusic.play().catch(() => {});
+            bgMusic.volume = 0.2;
+
             questions = rawQuestions.sort(() => Math.random() - 0.5).slice(0, 10);
             document.getElementById('setup-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
@@ -121,7 +135,11 @@
             document.getElementById('current-pos').innerText = currentQ + 1;
             const container = document.getElementById('choices-container');
             container.innerHTML = "";
-            qData.c.sort(() => Math.random() - 0.5).forEach(choice => {
+            
+            // คัดลอกตัวเลือกและสลับลำดับ
+            const shuffledChoices = [...qData.c].sort(() => Math.random() - 0.5);
+            
+            shuffledChoices.forEach(choice => {
                 const btn = document.createElement('button');
                 btn.className = "choice-btn";
                 btn.innerText = choice;
@@ -130,58 +148,53 @@
             });
         }
 
-function checkAnswer(choice, btn) {
-    const qData = questions[currentQ];
-    const btns = document.querySelectorAll('.choice-btn');
-    const comboSound = document.getElementById("comboSound"); // ดึงเสียงคอมโบมา
-    btns.forEach(b => b.disabled = true);
+        function checkAnswer(choice, btn) {
+            const qData = questions[currentQ];
+            const btns = document.querySelectorAll('.choice-btn');
+            btns.forEach(b => b.disabled = true);
 
-    if(choice === qData.a) {
-        score++;
-        comboCount++; // เพิ่มจำนวนการตอบถูกต่อเนื่อง
-        btn.classList.add('correct');
-        
-        // --- ระบบเสียงเชียร์ (Combo) ---
-        if(comboCount >= 3) {
-            // ถ้าตอบถูกติดต่อกัน 3 ข้อขึ้นไป ให้เล่นเสียงเชียร์
-            comboSound.currentTime = 0;
-            comboSound.volume = 0.5;
-            comboSound.play().catch(() => {});
-            // เพิ่มเอฟเฟกต์สุ่มปลอบใจให้นักเรียนรู้สึกเก่ง (Optional: alert หรือแสดงข้อความก็ได้)
-        } else {
-            // ถ้ายังไม่ถึงคอมโบ เล่นเสียงตอบถูกปกติ
-            correctSound.currentTime = 0;
-            correctSound.play().catch(() => {});
+            if(choice === qData.a) {
+                score++;
+                comboCount++; 
+                btn.classList.add('correct');
+                
+                if(comboCount >= 3) {
+                    comboSound.currentTime = 0;
+                    comboSound.play().catch(() => {});
+                } else {
+                    correctSound.currentTime = 0;
+                    correctSound.play().catch(() => {});
+                }
+                
+            } else {
+                comboCount = 0; 
+                btn.classList.add('wrong');
+                btns.forEach(b => { if(b.innerText === qData.a) b.classList.add('correct'); });
+                
+                wrongSound.currentTime = 0;
+                wrongSound.play().catch(() => {});
+            }
+            
+            setTimeout(() => {
+                currentQ++;
+                if(currentQ < questions.length) showQuestion();
+                else finishGame();
+            }, 800);
         }
-        
-    } else {
-        comboCount = 0; // ถ้าตอบผิด ให้รีเซ็ต Combo เป็น 0 ทันที
-        btn.classList.add('wrong');
-        btns.forEach(b => { if(b.innerText === qData.a) b.classList.add('correct'); });
-        
-        wrongSound.currentTime = 0;
-        wrongSound.play().catch(() => {});
-    }
-    
-    setTimeout(() => {
-        currentQ++;
-        if(currentQ < questions.length) showQuestion();
-        else finishGame();
-    }, 800);
-}
 
         function finishGame() {
             clearInterval(timerInterval);
-            const name = document.getElementById('player-name').value.trim();
-            const scorePath = 'scores/' + name.replace(/[.#$\[\]]/g, "_"); // จัดการชื่อที่มีอักขระพิเศษ
+            bgMusic.pause();
+            finishSound.play().catch(() => {});
 
-            // ✅ บันทึกเฉพาะ "คะแนนที่ดีที่สุด" (High Score)
+            const name = document.getElementById('player-name').value.trim();
+            const scorePath = 'scores/' + name.replace(/[.#$\[\]]/g, "_");
+
             database.ref(scorePath).once('value').then((snapshot) => {
                 const oldData = snapshot.val();
                 let isNewRecord = false;
 
                 if (!oldData || score > oldData.score || (score === oldData.score && seconds < oldData.time)) {
-                    // อัปเดตถ้า: ยังไม่มีข้อมูล OR คะแนนใหม่สูงกว่า OR คะแนนเท่ากันแต่เวลาน้อยกว่า
                     database.ref(scorePath).set({ name, score, time: seconds });
                     isNewRecord = true;
                 }
