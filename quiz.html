@@ -29,7 +29,12 @@
     </style>
 </head>
 <body>
-
+<audio id="bgMusic" src="https://www.soundjay.com/clock/sounds/clock-ticking-2.mp3" loop preload="auto"></audio>
+<audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-37.mp3" preload="auto"></audio>
+<audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3" preload="auto"></audio>
+<audio id="finishSound" src="https://www.soundjay.com/human/sounds/applause-01.mp3" preload="auto"></audio>
+<audio id="comboSound" src="https://www.soundjay.com/human/sounds/human-crowd-cheer-01.mp3" preload="auto"></audio>
+    
     <div class="container" id="setup-screen">
         <h2 style="color: var(--neon)">🎮 Hardware Quiz Game</h2>
         
@@ -93,7 +98,8 @@
         ];
 
         let questions = []; let currentQ = 0; let score = 0; let seconds = 0; let timerInterval;
-
+        let comboCount = 0; // <--- เพิ่มตัวแปรนี้ครับ
+        
         function startQuiz() {
             const name = document.getElementById('player-name').value.trim();
             if(!name) return alert("กรุณาใส่ชื่อก่อนเริ่มนะครับ");
@@ -124,25 +130,45 @@
             });
         }
 
-        function checkAnswer(choice, btn) {
-            const qData = questions[currentQ];
-            const btns = document.querySelectorAll('.choice-btn');
-            btns.forEach(b => b.disabled = true); // ป้องกันกดซ้ำ
+function checkAnswer(choice, btn) {
+    const qData = questions[currentQ];
+    const btns = document.querySelectorAll('.choice-btn');
+    const comboSound = document.getElementById("comboSound"); // ดึงเสียงคอมโบมา
+    btns.forEach(b => b.disabled = true);
 
-            if(choice === qData.a) {
-                score++;
-                btn.classList.add('correct');
-            } else {
-                btn.classList.add('wrong');
-                btns.forEach(b => { if(b.innerText === qData.a) b.classList.add('correct'); });
-            }
-            
-            setTimeout(() => {
-                currentQ++;
-                if(currentQ < questions.length) showQuestion();
-                else finishGame();
-            }, 800);
+    if(choice === qData.a) {
+        score++;
+        comboCount++; // เพิ่มจำนวนการตอบถูกต่อเนื่อง
+        btn.classList.add('correct');
+        
+        // --- ระบบเสียงเชียร์ (Combo) ---
+        if(comboCount >= 3) {
+            // ถ้าตอบถูกติดต่อกัน 3 ข้อขึ้นไป ให้เล่นเสียงเชียร์
+            comboSound.currentTime = 0;
+            comboSound.volume = 0.5;
+            comboSound.play().catch(() => {});
+            // เพิ่มเอฟเฟกต์สุ่มปลอบใจให้นักเรียนรู้สึกเก่ง (Optional: alert หรือแสดงข้อความก็ได้)
+        } else {
+            // ถ้ายังไม่ถึงคอมโบ เล่นเสียงตอบถูกปกติ
+            correctSound.currentTime = 0;
+            correctSound.play().catch(() => {});
         }
+        
+    } else {
+        comboCount = 0; // ถ้าตอบผิด ให้รีเซ็ต Combo เป็น 0 ทันที
+        btn.classList.add('wrong');
+        btns.forEach(b => { if(b.innerText === qData.a) b.classList.add('correct'); });
+        
+        wrongSound.currentTime = 0;
+        wrongSound.play().catch(() => {});
+    }
+    
+    setTimeout(() => {
+        currentQ++;
+        if(currentQ < questions.length) showQuestion();
+        else finishGame();
+    }, 800);
+}
 
         function finishGame() {
             clearInterval(timerInterval);
