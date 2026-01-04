@@ -104,79 +104,59 @@
             border-top: 2px solid var(--neon-blue);
         }
         
-/* ปรับปรุงส่วน Header ของหน้า AR View ให้รองรับมือถือ */
+/* --- ส่วนสำหรับหน้าจอทุกประเภท (พื้นฐาน) --- */
 .ar-header-container {
     display: flex;
-    flex-direction: column; /* จัดให้ปุ่มกับข้อความอยู่คนละบรรทัดบนมือถือ */
+    flex-direction: column;
     align-items: center;
-    gap: 15px;
-    padding: 20px 10px;
-    margin-top: 50px; /* หลบแถบ Navbar */
+    width: 100%;
+    position: relative;
+    padding-top: 20px;
 }
 
+/* แถวของปุ่มควบคุม */
 .ar-buttons-row {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    max-width: 500px;
-    gap: 10px;
+    width: 95%;
+    max-width: 1200px; /* จำกัดความกว้างบน PC */
+    position: absolute; /* ให้ปุ่มลอยอยู่ด้านบนสุด */
+    top: 20px;
+    z-index: 10;
 }
 
-/* ปรับแต่งปุ่มให้เล็กลงเล็กน้อยและอ่านง่ายบนมือถือ */
-.btn-back, .btn-audio {
-    flex: 1;
-    padding: 10px 15px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    text-decoration: none;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--neon-blue);
-    color: white;
-    backdrop-filter: blur(5px);
-}
-
-/* ส่วนหัวข้อ (Title) */
+/* ส่วนข้อความหัวข้อ */
 .ar-title-section {
     text-align: center;
+    margin-top: 20px; /* ระยะเริ่มต้นบน PC */
+    transition: all 0.3s ease;
 }
 
-.ar-title-section h1 {
-    font-size: 1.8rem;
-    margin: 0;
-    color: white;
-    line-height: 1.2;
+/* --- สำหรับมือถือเท่านั้น (หน้าจอเล็กกว่า 768px) --- */
+@media (max-width: 768px) {
+    .ar-header-container {
+        padding-top: 80px; /* เว้นที่ว่างด้านบนไว้ให้ปุ่ม */
+    }
+
+    .ar-buttons-row {
+        width: 90%;
+        top: 15px; /* จัดตำแหน่งปุ่มให้สูงขึ้น */
+    }
+
+    .ar-title-section {
+        margin-top: 40px; /* ดันข้อความ Computer Case ลงมาเพิ่มเพื่อไม่ให้ปุ่มทับ */
+    }
+
+    .ar-title-section h1 {
+        font-size: 1.5rem; /* ลดขนาดตัวอักษรบนมือถือไม่ให้กินพื้นที่ */
+    }
 }
 
-.ar-title-section p {
-    font-size: 1.2rem;
-    color: var(--neon-blue);
-    margin: 5px 0 0 0;
-}
-
-@media (max-width: 480px) {
-    .ar-title-section h1 { font-size: 1.5rem; }
-    .ar-title-section p { font-size: 1rem; }
-    .btn-back, .btn-audio { font-size: 0.85rem; }
-}
-
-        /* แก้ไขที่ตัวคุมรอบนอก (Container) */
-.ar-header-container {
-    display: flex;
-    flex-direction: column; /* จัดให้ปุ่มอยู่บน ข้อความอยู่ล่าง */
-    align-items: center;
-    padding-top: 60px;      /* เว้นระยะจากขอบบนสุดของจอลงมา */
-    gap: 20px;              /* สร้างระยะห่างระหว่าง "แถวปุ่ม" กับ "ข้อความหัวข้อ" */
-}
-
-/* หรือเพิ่มระยะที่ตัวหัวข้อโดยตรง */
-.ar-title-section {
-    margin-top: 15px;       /* เพิ่มช่องว่างด้านบนของข้อความ */
-    text-align: center;
+/* --- สำหรับ PC เท่านั้น (หน้าจอใหญ่) --- */
+@media (min-width: 769px) {
+    .ar-title-section {
+        margin-top: 10px; /* บน PC ให้ขยับขึ้นไปใกล้ปุ่มมากขึ้นเพื่อลดช่องว่างที่กว้างเกินไป */
+    }
 }
         
     </style>
@@ -185,7 +165,7 @@
     <audio id="caseAudio" src="CASE.mp3"></audio>
 
     <div class="ar-header-container">
-    <div class="ar-buttons-row" style="display: flex; gap: 10px; width: 100%; justify-content: center;">
+    <div class="ar-buttons-row">
    <a href="index.html" class="back-btn">← ย้อนกลับ</a>
     <button class="audio-control" id="audioBtn">
         <span id="audioIcon">🔈</span> 
