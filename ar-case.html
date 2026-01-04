@@ -103,6 +103,7 @@
             background: rgba(7, 15, 30, 0.9);
             border-top: 2px solid var(--neon-blue);
         }
+        
 /* ปรับปรุงส่วน Header ของหน้า AR View ให้รองรับมือถือ */
 .ar-header-container {
     display: flex;
@@ -169,15 +170,13 @@
 
     <audio id="caseAudio" src="CASE.mp3"></audio>
 
-  <div class="ar-header-container">
-    <div class="ar-buttons-row">
-        <a href="index.html" class="btn-back">
-            <i class="fas fa-arrow-left"></i> ย้อนกลับ
-        </a>
-        <button class="btn-audio" onclick="playAudio()">
-            <i class="fas fa-volume-up"></i> ฟังเสียงบรรยาย
-        </button>
-    </div>
+   <a href="index.html" class="back-btn">← ย้อนกลับ</a>
+
+    <button class="audio-control" id="audioBtn">
+        <span id="audioIcon">🔈</span> 
+        <span id="audioText">ฟังเสียงบรรยาย</span>
+    </button>
+
 
     <div class="ar-title-section">
         <h1>Computer Case</h1>
