@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - SmartCom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --gold: #ffd700; --silver: #c0c0c0; --bronze: #cd7f32; --neon-blue: #00f2ff; --bg-dark: #0f172a; }
+        body { font-family: 'Prompt', sans-serif; background: var(--bg-dark); color: white; padding: 10px; margin: 0; }
+        .card { background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 20px; border: 1px solid rgba(0, 242, 255, 0.2); max-width: 600px; margin: 20px auto; }
+        h2 { text-align: center; color: var(--neon-blue); text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: rgba(0, 242, 255, 0.2); color: var(--neon-blue); padding: 12px; font-size: 0.9rem; }
+        td { padding: 15px 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .rank-1 { color: var(--gold); font-weight: bold; }
+        .score-badge { background: var(--neon-blue); color: #000; padding: 3px 10px; border-radius: 15px; font-weight: 700; }
+        .btn-back { display: block; text-align: center; margin-top: 20px; color: #666; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🏆 อันดับผู้กล้า SmartCom</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>อันดับ</th>
+                    <th style="text-align:left">ชื่อ</th>
+                    <th>คะแนน</th>
+                </tr>
+            </thead>
+            <tbody id="student-table-body"></tbody>
+        </table>
+        <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
+    </div>
+
+    <script>
+        // ใส่ Firebase Config เดิมของคุณครูตรงนี้
+        const firebaseConfig = {
+            apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
+            authDomain: "smartcom-ar-quiz.firebaseapp.com",
+            databaseURL: "https://smartcom-ar-quiz-default-rtdb.firebaseio.com/",
+            projectId: "smartcom-ar-quiz",
+            storageBucket: "smartcom-ar-quiz.appspot.com",
+            messagingSenderId: "367243958931",
+            appId: "1:367243958931:web:3e3c66f54668b8ec66b8ec"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        database.ref('scores/').on('value', (snapshot) => {
+            let data = [];
+            snapshot.forEach(child => data.push(child.val()));
+            data.sort((a, b) => b.score - a.score || a.time - b.time);
+            
+            const tbody = document.getElementById('student-table-body');
+            tbody.innerHTML = "";
+            data.slice(0, 10).forEach((item, index) => {
+                let medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : (index + 1);
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${medal}</td>
+                        <td style="text-align:left">${item.name}</td>
+                        <td><span class="score-badge">${item.score}</span></td>
+                    </tr>`;
+            });
+        });
+    </script>
+</body>
+</html>
