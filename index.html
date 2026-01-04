@@ -168,6 +168,49 @@
 
         @media (max-width: 992px) { .menu { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 650px) { .menu { grid-template-columns: 1fr; } }
+/* --- เพิ่มเติม: แก้ไขการแสดงผลบนมือถือไม่ให้ล้นจอ --- */
+        @media (max-width: 600px) {
+            /* 1. แก้ไขปุ่ม Quiz Game ให้พอดีจอ */
+            .quiz-main-btn {
+                width: 90% !important;        /* บังคับความกว้างไม่ให้เกินจอ */
+                max-width: none !important;
+                padding: 15px 20px !important; /* ลดความหนาปุ่มลง */
+                font-size: 1.1rem !important;  /* ลดขนาดตัวอักษรลง */
+                gap: 10px !important;
+                margin: 0 auto;
+            }
+
+            /* 2. ปรับระยะห่างของ Menu และ Card */
+            .menu {
+                grid-template-columns: 1fr !important; /* แสดง 1 แถวต่อ 1 ชิ้น */
+                gap: 20px !important;
+                margin-top: 20px auto !important;
+            }
+
+            .card {
+                padding: 30px 20px !important;
+            }
+
+            /* 3. ปรับขนาดตัวอักษรหัวข้อใหญ่ */
+            .hero h1 {
+                font-size: 2rem !important;
+            }
+
+            .hero h2 {
+                font-size: 1.1rem !important;
+            }
+
+            /* 4. ปรับหน้าต่าง Popup สเปกไม่ให้เบียดกัน */
+            .spec-popup {
+                width: 250px !important;
+                padding: 20px !important;
+            }
+
+            .card.active .spec-popup {
+                transform: translate(-50%, -85%) scale(1) !important;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -363,5 +406,6 @@
 
 </body>
 </html>
+
 
 
