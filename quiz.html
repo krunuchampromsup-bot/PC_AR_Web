@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root { --neon: #00f2ff; --pink: #ff00cc; --success: #2ecc71; --error: #e74c3c; }
@@ -64,13 +66,22 @@
         <p id="final-score" style="font-size: 1.5rem; margin: 10px 0;"></p>
         <p id="final-time"></p>
         <p id="record-status" style="color: var(--pink); font-weight: bold;"></p>
+
+        <div id="cert-section" style="display:none; text-align: center; margin: 20px 0; padding: 15px; border: 2px dashed #fbbf24; border-radius: 15px; background: rgba(251, 191, 36, 0.1);">
+            <h3 style="color: #fbbf24; margin-bottom: 10px; font-size: 1.1rem;">🎖️ ยินดีด้วย! คุณผ่านเกณฑ์</h3>
+            <button onclick="generateCertificate()" style="background: #fbbf24; color: #000; padding: 10px 20px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; font-family: 'Prompt';">
+                <i class="fa-solid fa-download"></i> ดาวน์โหลดเกียรติบัตร
+            </button>
+        </div>
+
         <hr style="border: 0.5px solid var(--neon); opacity: 0.3; margin: 20px 0;">
         <button class="btn" onclick="location.reload()">🎮 ลองใหม่อีกครั้ง</button>
         <button class="btn" style="background: var(--pink); color: white;" onclick="location.href='index.html'">กลับหน้าหลัก</button>
     </div>
 
+    <canvas id="certCanvas" width="1200" height="848" style="display:none;"></canvas>
+
     <script>
-        // ✅ 1. ตั้งค่า Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
             authDomain: "smartcom-ar-quiz.firebaseapp.com",
@@ -83,7 +94,6 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // ✅ 2. อ้างอิงไฟล์เสียง
         const bgMusic = document.getElementById("bgMusic");
         const correctSound = document.getElementById("correctSound");
         const wrongSound = document.getElementById("wrongSound");
@@ -114,7 +124,9 @@
             const name = document.getElementById('player-name').value.trim();
             if(!name) return alert("กรุณาใส่ชื่อก่อนเริ่มนะครับ");
             
-            // เริ่มเล่นเพลงพื้นหลัง
+            // ✅ บันทึกชื่อลง LocalStorage เพื่อใช้ทำเกียรติบัตร
+            localStorage.setItem('studentName', name);
+
             bgMusic.play().catch(() => {});
             bgMusic.volume = 0.2;
 
@@ -136,9 +148,7 @@
             const container = document.getElementById('choices-container');
             container.innerHTML = "";
             
-            // คัดลอกตัวเลือกและสลับลำดับ
             const shuffledChoices = [...qData.c].sort(() => Math.random() - 0.5);
-            
             shuffledChoices.forEach(choice => {
                 const btn = document.createElement('button');
                 btn.className = "choice-btn";
@@ -157,7 +167,6 @@
                 score++;
                 comboCount++; 
                 btn.classList.add('correct');
-                
                 if(comboCount >= 3) {
                     comboSound.currentTime = 0;
                     comboSound.play().catch(() => {});
@@ -165,12 +174,10 @@
                     correctSound.currentTime = 0;
                     correctSound.play().catch(() => {});
                 }
-                
             } else {
                 comboCount = 0; 
                 btn.classList.add('wrong');
                 btns.forEach(b => { if(b.innerText === qData.a) b.classList.add('correct'); });
-                
                 wrongSound.currentTime = 0;
                 wrongSound.play().catch(() => {});
             }
@@ -187,18 +194,16 @@
             bgMusic.pause();
             finishSound.play().catch(() => {});
 
-            const name = document.getElementById('player-name').value.trim();
+            const name = localStorage.getItem('studentName');
             const scorePath = 'scores/' + name.replace(/[.#$\[\]]/g, "_");
 
             database.ref(scorePath).once('value').then((snapshot) => {
                 const oldData = snapshot.val();
                 let isNewRecord = false;
-
                 if (!oldData || score > oldData.score || (score === oldData.score && seconds < oldData.time)) {
                     database.ref(scorePath).set({ name, score, time: seconds });
                     isNewRecord = true;
                 }
-
                 document.getElementById('record-status').innerText = isNewRecord ? "✨ สถิติใหม่ของคุณถูกบันทึกแล้ว!" : "พยายามอีกนิด! เพื่อทำลายสถิติเดิม";
             });
 
@@ -206,6 +211,72 @@
             document.getElementById('result-screen').classList.remove('hidden');
             document.getElementById('final-score').innerText = `คุณได้คะแนน ${score} / 10`;
             document.getElementById('final-time').innerText = `ใช้เวลา ${seconds} วินาที`;
+
+            // ✅ เรียกใช้ฟังก์ชันเช็คเกณฑ์ผ่าน
+            checkQuizPass(score);
+        }
+
+        function checkQuizPass(finalScore) {
+            const passCriteria = 5; // เกณฑ์ผ่าน 5 คะแนน
+            if (finalScore >= passCriteria) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#00f2ff', '#fbbf24'] });
+                document.getElementById('cert-section').style.display = 'block';
+                localStorage.setItem('lastScore', finalScore);
+            }
+        }
+
+        function generateCertificate() {
+            const canvas = document.getElementById('certCanvas');
+            const ctx = canvas.getContext('2d');
+            const studentName = localStorage.getItem('studentName') || "ผู้กล้า SmartCom";
+            const studentScore = localStorage.getItem('lastScore') || "0";
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#fbbf24'; 
+            ctx.lineWidth = 25;
+            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+            ctx.strokeStyle = '#1e293b'; 
+            ctx.lineWidth = 2;
+            ctx.strokeRect(65, 65, canvas.width - 130, canvas.height - 130);
+            
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 50px Prompt';
+            ctx.fillText('เกียรติบัตรฉบับนี้ให้ไว้เพื่อแสดงว่า', canvas.width / 2, 220);
+            
+            ctx.fillStyle = '#b45309'; 
+            ctx.font = 'bold 85px Prompt';
+            ctx.fillText(studentName, canvas.width / 2, 380);
+            
+            ctx.fillStyle = '#334155';
+            ctx.font = '35px Prompt';
+            ctx.fillText('ได้ผ่านการทดสอบวัดความรู้เรื่ององค์ประกอบ Computer Case', canvas.width / 2, 480);
+            ctx.font = 'bold 42px Prompt';
+            ctx.fillText(`ได้รับคะแนนสะสมรวมทั้งสิ้น ${studentScore} คะแนน`, canvas.width / 2, 550);
+            
+            const date = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+            ctx.font = '28px Prompt';
+            ctx.fillStyle = '#64748b';
+            ctx.fillText(`ออกให้ ณ วันที่ ${date}`, canvas.width / 2, 630);
+            
+            ctx.font = 'italic 45px cursive';
+            ctx.fillStyle = '#1e3a8a';
+            ctx.fillText('Nuch_Ampromsup', canvas.width - 300, 700); 
+            ctx.beginPath();
+            ctx.strokeStyle = '#1e3a8a';
+            ctx.lineWidth = 3;
+            ctx.moveTo(canvas.width - 450, 720);
+            ctx.lineTo(canvas.width - 150, 720);
+            ctx.stroke();
+            ctx.font = '24px Prompt';
+            ctx.fillStyle = '#334155';
+            ctx.fillText('(นางสาวนุช อัมพรมทรัพย์)', canvas.width - 300, 760);
+
+            const link = document.createElement('a');
+            link.download = `เกียรติบัตร_${studentName}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
         }
     </script>
 </body>
