@@ -163,19 +163,35 @@
     .ar-title-section p { font-size: 1rem; }
     .btn-back, .btn-audio { font-size: 0.85rem; }
 }
+
+        /* แก้ไขที่ตัวคุมรอบนอก (Container) */
+.ar-header-container {
+    display: flex;
+    flex-direction: column; /* จัดให้ปุ่มอยู่บน ข้อความอยู่ล่าง */
+    align-items: center;
+    padding-top: 60px;      /* เว้นระยะจากขอบบนสุดของจอลงมา */
+    gap: 20px;              /* สร้างระยะห่างระหว่าง "แถวปุ่ม" กับ "ข้อความหัวข้อ" */
+}
+
+/* หรือเพิ่มระยะที่ตัวหัวข้อโดยตรง */
+.ar-title-section {
+    margin-top: 15px;       /* เพิ่มช่องว่างด้านบนของข้อความ */
+    text-align: center;
+}
         
     </style>
 </head>
 <body>
-
     <audio id="caseAudio" src="CASE.mp3"></audio>
 
-   <a href="index.html" class="back-btn">← BACK</a>
+    <div class="ar-header-container">
+    <div class="ar-buttons-row" style="display: flex; gap: 10px; width: 100%; justify-content: center;">
+   <a href="index.html" class="back-btn">← ย้อนกลับ</a>
     <button class="audio-control" id="audioBtn">
         <span id="audioIcon">🔈</span> 
-        <span id="audioText">SOUND</span>
+        <span id="audioText">ฟังเสียงบรรยาย</span>
     </button>
-
+</div>
 
     <div class="ar-title-section">
         <h1>Computer Case</h1>
