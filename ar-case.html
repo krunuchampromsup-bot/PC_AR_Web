@@ -103,18 +103,87 @@
             background: rgba(7, 15, 30, 0.9);
             border-top: 2px solid var(--neon-blue);
         }
+/* ปรับปรุงส่วน Header ของหน้า AR View ให้รองรับมือถือ */
+.ar-header-container {
+    display: flex;
+    flex-direction: column; /* จัดให้ปุ่มกับข้อความอยู่คนละบรรทัดบนมือถือ */
+    align-items: center;
+    gap: 15px;
+    padding: 20px 10px;
+    margin-top: 50px; /* หลบแถบ Navbar */
+}
+
+.ar-buttons-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 500px;
+    gap: 10px;
+}
+
+/* ปรับแต่งปุ่มให้เล็กลงเล็กน้อยและอ่านง่ายบนมือถือ */
+.btn-back, .btn-audio {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--neon-blue);
+    color: white;
+    backdrop-filter: blur(5px);
+}
+
+/* ส่วนหัวข้อ (Title) */
+.ar-title-section {
+    text-align: center;
+}
+
+.ar-title-section h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: white;
+    line-height: 1.2;
+}
+
+.ar-title-section p {
+    font-size: 1.2rem;
+    color: var(--neon-blue);
+    margin: 5px 0 0 0;
+}
+
+@media (max-width: 480px) {
+    .ar-title-section h1 { font-size: 1.5rem; }
+    .ar-title-section p { font-size: 1rem; }
+    .btn-back, .btn-audio { font-size: 0.85rem; }
+}
+        
     </style>
 </head>
 <body>
 
     <audio id="caseAudio" src="CASE.mp3"></audio>
 
-    <a href="index.html" class="back-btn">← ย้อนกลับ</a>
+  <div class="ar-header-container">
+    <div class="ar-buttons-row">
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i> ย้อนกลับ
+        </a>
+        <button class="btn-audio" onclick="playAudio()">
+            <i class="fas fa-volume-up"></i> ฟังเสียงบรรยาย
+        </button>
+    </div>
 
-    <button class="audio-control" id="audioBtn">
-        <span id="audioIcon">🔈</span> 
-        <span id="audioText">ฟังเสียงบรรยาย</span>
-    </button>
+    <div class="ar-title-section">
+        <h1>Computer Case</h1>
+        <p>Model View</p>
+    </div>
+</div>
 
     <header>
         <h2>Computer Case - Test Model View</h2>
