@@ -475,11 +475,19 @@
     }, 600);
 }
 
+    // ตัวอย่าง: โค้ดที่วางในหน้า index.html ตอนกดส่งคะแนน
+function saveScore(name, score) {
+    localStorage.setItem('studentName', name); // บันทึกชื่อไว้ในเครื่อง
+    localStorage.setItem('lastScore', score); // บันทึกคะแนนไว้ในเครื่อง
+    
+    // โค้ดส่ง Firebase เดิมของคุณครู...
+}
     
 </script>
 
 </body>
 </html>
+
 
 
 
