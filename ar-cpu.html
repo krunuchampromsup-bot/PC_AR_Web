@@ -103,22 +103,85 @@
             background: rgba(7, 15, 30, 0.9);
             border-top: 2px solid var(--neon-blue);
         }
+
+        /* --- ส่วนสำหรับหน้าจอทุกประเภท (พื้นฐาน) --- */
+.ar-header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    padding-top: 20px;
+}
+
+/* แถวของปุ่มควบคุม */
+.ar-buttons-row {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    max-width: 1200px; /* จำกัดความกว้างบน PC */
+    position: absolute; /* ให้ปุ่มลอยอยู่ด้านบนสุด */
+    top: 20px;
+    z-index: 10;
+}
+
+/* ส่วนข้อความหัวข้อ */
+.ar-title-section {
+    text-align: center;
+    margin-top: 20px; /* ระยะเริ่มต้นบน PC */
+    transition: all 0.3s ease;
+}
+
+/* --- สำหรับมือถือเท่านั้น (หน้าจอเล็กกว่า 768px) --- */
+@media (max-width: 768px) {
+    .ar-header-container {
+        padding-top: 80px; /* เว้นที่ว่างด้านบนไว้ให้ปุ่ม */
+    }
+
+    .ar-buttons-row {
+        width: 90%;
+        top: 15px; /* จัดตำแหน่งปุ่มให้สูงขึ้น */
+    }
+
+    .ar-title-section {
+        margin-top: 40px; /* ดันข้อความ Computer Case ลงมาเพิ่มเพื่อไม่ให้ปุ่มทับ */
+    }
+
+    .ar-title-section h1 {
+        font-size: 1.5rem; /* ลดขนาดตัวอักษรบนมือถือไม่ให้กินพื้นที่ */
+    }
+}
+
+/* --- สำหรับ PC เท่านั้น (หน้าจอใหญ่) --- */
+@media (min-width: 769px) {
+    .ar-title-section {
+        margin-top: 10px; /* บน PC ให้ขยับขึ้นไปใกล้ปุ่มมากขึ้นเพื่อลดช่องว่างที่กว้างเกินไป */
+    }
+}
+
+        
     </style>
 </head>
 <body>
 
     <audio id="cpuAudio" src="CPU.mp3"></audio>
-
+    
+    <div class="ar-header-container">
+    <div class="ar-buttons-row" style="display: flex; gap: 10px; width: 100%; justify-content: center;">
     <a href="index.html" class="back-btn">← ย้อนกลับ</a>
 
     <button class="audio-control" id="audioBtn">
         <span id="audioIcon">🔈</span> 
         <span id="audioText">ฟังเสียงบรรยาย</span>
     </button>
+    </div>
+        
+    <div class="ar-title-section">
+        <h1 style="color: var(--neon-blue); margin: 0 0 10px 0;">Computer CPU</h1>
+        <p>Model View</p>
+    </div>
+</div>
 
-    <header>
-        <h2>CPU - Test Model View</h2>
-    </header>
 
     <model-viewer 
         src="server_cpu.glb" 
