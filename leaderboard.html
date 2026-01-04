@@ -111,6 +111,16 @@
         </a>
     </div>
 
+    <div id="cert-section" style="display:none; text-align: center; margin-top: 20px; padding: 20px; border-top: 1px dashed rgba(0, 242, 255, 0.3);">
+    <h3 style="color: var(--gold);"><i class="fa-solid fa-medal"></i> ยินดีด้วย! คุณได้รับเกียรติบัตร</h3>
+    <button onclick="generateCertificate()" class="footer-btn" style="background: var(--gold); color: black; padding: 10px 20px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer;">
+        <i class="fa-solid fa-download"></i> ดาวน์โหลดเกียรติบัตรของคุณ
+    </button>
+</div>
+
+<canvas id="certCanvas" width="800" height="565" style="display:none;"></canvas>
+
+    
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAK5UMFATyhnQlq3EDLmG7agFqTKh0BYCM",
@@ -186,6 +196,106 @@
                 }
             }());
         }
+
+        // เพิ่มฟังก์ชันเสียงในจุดที่พลุทำงาน
+function fireConfetti() {
+    // 1. เพิ่มเสียงฉลอง (Success/Cheer)
+    const cheerSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
+    cheerSound.volume = 0.4;
+    cheerSound.play();
+
+    // 2. โค้ดพลุเดิมของคุณครู
+    var duration = 3 * 1000;
+    var end = Date.now() + duration;
+
+    (function frame() {
+        confetti({
+            particleCount: 3,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#00f2ff', '#fbbf24']
+        });
+        confetti({
+            particleCount: 3,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#00f2ff', '#fbbf24']
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
+}
+
+        // ฟังก์ชันสร้างและดาวน์โหลดเกียรติบัตร
+function generateCertificate() {
+    const canvas = document.getElementById('certCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // ดึงชื่อและคะแนนจาก LocalStorage (ที่เก็บไว้ตอนทำข้อสอบหน้าแรก)
+    const studentName = localStorage.getItem('studentName') || "ผู้กล้า SmartCom";
+    const studentScore = localStorage.getItem('lastScore') || "0";
+    
+    // 1. วาดพื้นหลัง (สไตล์ไฮเทค)
+    ctx.fillStyle = '#020617';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // วาดขอบนีออน
+    ctx.strokeStyle = '#00f2ff';
+    ctx.lineWidth = 15;
+    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+    
+    // 2. ใส่หัวข้อ
+    ctx.fillStyle = '#00f2ff';
+    ctx.font = 'bold 40px Prompt';
+    ctx.textAlign = 'center';
+    ctx.fillText('เกียรติบัตรผู้ผ่านการทดสอบ', canvas.width / 2, 100);
+    
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '25px Prompt';
+    ctx.fillText('ขอมอบเกียรติบัตรฉบับนี้เพื่อแสดงว่า', canvas.width / 2, 160);
+    
+    // 3. ใส่ชื่อนักเรียน (ตัวใหญ่และเด่น)
+    ctx.fillStyle = '#fbbf24'; // สีทอง
+    ctx.font = 'bold 50px Prompt';
+    ctx.fillText(studentName, canvas.width / 2, 250);
+    
+    // 4. รายละเอียดเนื้อหา
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '22px Prompt';
+    ctx.fillText('ได้ผ่านการทดสอบเรื่ององค์ประกอบของ Computer Case', canvas.width / 2, 320);
+    ctx.fillText(`ด้วยคะแนนยอดเยี่ยมสะสมรวมทั้งสิ้น ${studentScore} คะแนน`, canvas.width / 2, 360);
+    
+    // 5. ใส่โลโก้หรือไอคอน
+    ctx.font = '60px FontAwesome';
+    ctx.fillStyle = 'rgba(0, 242, 255, 0.2)';
+    ctx.fillText('', canvas.width / 2, 480); // ไอคอนคอมพิวเตอร์
+    
+    // 6. วันที่และลายเซ็นสมมติ
+    ctx.fillStyle = '#64748b';
+    ctx.font = '18px Prompt';
+    const date = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+    ctx.fillText(`ให้ไว้ ณ วันที่ ${date}`, canvas.width / 2, 420);
+    ctx.fillText('SmartCom Digital Learning System', canvas.width / 2, 520);
+
+    // 7. ดาวน์โหลดเป็นรูปภาพ
+    const link = document.createElement('a');
+    link.download = `Certificate_${studentName}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+}
+
+// เช็คเงื่อนไข: ถ้าคะแนนถึงเกณฑ์ (เช่น >= 5) ให้โชว์ปุ่มรับเกียรติบัตร
+window.addEventListener('load', () => {
+    const score = parseInt(localStorage.getItem('lastScore') || "0");
+    if (score >= 5) { // คุณครูเปลี่ยนเลข 5 เป็นคะแนนเกณฑ์ที่ต้องการได้ครับ
+        document.getElementById('cert-section').style.display = 'block';
+    }
+});
+        
     </script>
 </body>
 </html>
