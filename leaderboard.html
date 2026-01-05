@@ -8,14 +8,12 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
             --neon-blue: #00f2ff;
             --deep-dark: #020617;
             --card-bg: rgba(15, 23, 42, 0.9);
-            --gold: #fbbf24;
         }
 
         body {
@@ -48,22 +46,16 @@
             border-radius: 12px;
         }
 
-        #cert-section {
+        .back-link {
+            color: #64748b;
+            text-decoration: none;
+            display: block;
             margin-top: 20px;
-            padding: 20px;
-            border-top: 1px solid rgba(0, 242, 255, 0.2);
-            display: none; /* เริ่มต้นซ่อนไว้ */
+            transition: color 0.3s;
         }
 
-        .btn-download {
-            background: var(--gold);
-            color: black;
-            padding: 12px 24px;
-            border-radius: 10px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
+        .back-link:hover {
+            color: var(--neon-blue);
         }
     </style>
 </head>
@@ -78,19 +70,10 @@
             <p>กำลังโหลดข้อมูลจากระบบ...</p>
         </div>
 
-        <div id="cert-section">
-            <h3 style="color: var(--gold);">🎖️ คุณได้รับเกียรติบัตร!</h3>
-            <button onclick="generateCertificate()" class="btn-download">
-                <i class="fa-solid fa-download"></i> ดาวน์โหลดเกียรติบัตร (A4)
-            </button>
-        </div>
-
-        <a href="index.html" style="color: #64748b; text-decoration: none; display: block; margin-top: 20px;">
+        <a href="index.html" class="back-link">
             <i class="fa-solid fa-chevron-left"></i> กลับไปหน้าเรียนรู้
         </a>
     </div>
-
-    <canvas id="certCanvas" width="1200" height="848" style="display:none;"></canvas>
 
     <script>
         // --- ส่วนที่ 1: ตั้งค่า Firebase ---
@@ -114,6 +97,8 @@
             let data = [];
             
             snapshot.forEach(child => { data.push(child.val()); });
+            
+            // เรียงลำดับคะแนนจากมากไปน้อย
             data.sort((a, b) => b.score - a.score);
 
             if (data.length === 0) {
@@ -130,55 +115,8 @@
             }
         }, (error) => {
             console.error(error);
-            document.getElementById('leaderboard-list').innerHTML = "<p style='color:red'>กรุณาตั้งค่า Rules ใน Firebase เป็น Public</p>";
+            document.getElementById('leaderboard-list').innerHTML = "<p style='color:red'>ไม่สามารถโหลดข้อมูลได้ กรุณาตรวจสอบการตั้งค่า Firebase</p>";
         });
-
-        // --- ส่วนที่ 3: ตรวจสอบสิทธิ์ดาวน์โหลด ---
-        window.onload = () => {
-            const lastScore = parseInt(localStorage.getItem('lastScore') || "0");
-            // ถ้ามีคะแนน หรือ เป็นคุณครูทดสอบ (พิมพ์ชื่อในเครื่องนั้นแล้ว) ให้แสดงปุ่ม
-            if (lastScore >= 5 || localStorage.getItem('studentName')) {
-                document.getElementById('cert-section').style.display = 'block';
-            }
-        };
-
-        // --- ส่วนที่ 4: ฟังก์ชันวาดเกียรติบัตร (A4) ---
-        function generateCertificate() {
-            const canvas = document.getElementById('certCanvas');
-            const ctx = canvas.getContext('2d');
-            const name = localStorage.getItem('studentName') || "ผู้กล้า SmartCom";
-            const score = localStorage.getItem('lastScore') || "0";
-
-            ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // ขอบทอง
-            ctx.strokeStyle = "#fbbf24";
-            ctx.lineWidth = 30;
-            ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
-
-            ctx.textAlign = "center";
-            ctx.fillStyle = "#1e293b";
-            ctx.font = "bold 60px Prompt";
-            ctx.fillText("เกียรติบัตรฉบับนี้ให้ไว้เพื่อแสดงว่า", canvas.width/2, 250);
-
-            ctx.fillStyle = "#b45309";
-            ctx.font = "bold 90px Prompt";
-            ctx.fillText(name, canvas.width/2, 400);
-
-            ctx.fillStyle = "#334155";
-            ctx.font = "40px Prompt";
-            ctx.fillText(`ได้ผ่านการทดสอบ COMPUTER CASE HERO ด้วยคะแนน ${score} แต้ม`, canvas.width/2, 530);
-
-            ctx.font = "italic 30px Prompt";
-            ctx.fillText(`ให้ไว้ ณ วันที่ ${new Date().toLocaleDateString('th-TH')}`, canvas.width/2, 650);
-
-            // ดาวน์โหลด
-            const link = document.createElement('a');
-            link.download = `Cert_${name}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-        }
     </script>
 </body>
 </html>
