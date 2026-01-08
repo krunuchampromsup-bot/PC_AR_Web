@@ -260,18 +260,22 @@
             ctx.fillStyle = '#64748b';
             ctx.fillText(`ออกให้ ณ วันที่ ${date}`, canvas.width / 2, 630);
             
-            ctx.font = 'italic 34px cursive';
+            // --- ส่วนที่แก้ไข: ปรับขนาดฟอนต์และตำแหน่งลายเซ็น ---
+            ctx.font = 'italic 32px cursive'; // ลดขนาดจาก 45px เหลือ 32px
             ctx.fillStyle = '#1e3a8a';
-            ctx.fillText('Computer Hardware AR', canvas.width - 300, 700); 
+            // ปรับตำแหน่งให้ขยับมาทางซ้ายขึ้นเล็กน้อย (จาก -300 เป็น -320) เพื่อความชัวร์
+            ctx.fillText('Computer Hardware AR', canvas.width - 320, 700); 
+            
             ctx.beginPath();
             ctx.strokeStyle = '#1e3a8a';
-            ctx.lineWidth = 3;
-            ctx.moveTo(canvas.width - 450, 720);
-            ctx.lineTo(canvas.width - 150, 720);
+            ctx.lineWidth = 2; // ลดความหนาเส้นลงเล็กน้อยให้ดูสะอาดตา
+            ctx.moveTo(canvas.width - 480, 715); // ปรับตำแหน่งเส้นใต้ให้สัมพันธ์กับข้อความ
+            ctx.lineTo(canvas.width - 160, 715);
             ctx.stroke();
-            ctx.font = '24px Prompt';
+            
+            ctx.font = '22px Prompt'; // ลดขนาดชื่อในวงเล็บลงเล็กน้อย
             ctx.fillStyle = '#334155';
-            ctx.fillText('(T.nuch SmartCom)', canvas.width - 300, 760);
+            ctx.fillText('(T.nuch SmartCom)', canvas.width - 320, 750);
 
             const link = document.createElement('a');
             link.download = `เกียรติบัตร_${studentName}.png`;
